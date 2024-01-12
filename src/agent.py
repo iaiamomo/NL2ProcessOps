@@ -1,7 +1,6 @@
 from langchain_openai import ChatOpenAI
 from langchain.agents import AgentExecutor, create_openai_tools_agent
 from langchain.prompts.chat import ChatPromptTemplate, MessagesPlaceholder
-from langchain import hub
 from src.tools import ToolRepo
 
 '''

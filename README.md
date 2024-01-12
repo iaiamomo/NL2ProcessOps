@@ -1,4 +1,13 @@
+# LLM and processes
 
-<code>
+### Setup:
+```sh
+conda create -n pyllm python=3.10
+conda activate pyllm
 pip install requirements.py
-</code>
+```
+
+#### Create an <code>.env</code> file containing OpenAI key:
+```env
+OPENAI_KEY=<key>
+```
