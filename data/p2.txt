@@ -1,0 +1,3 @@
+The process of calibration in a cardboard production consists of a continuous generation of a photo of the produced cardboard and anlysis of the number of threes present on it until the number of threes is less than 5. After this the process ends.
+
+Instead of ending the process, add an exclusive decision to check wheter the colors of the cardboard are ok or not. Then the process ends.
