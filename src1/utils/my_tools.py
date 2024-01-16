@@ -3,19 +3,24 @@ import numpy as np
 
 
 @tool
-def generate_image(content: str) -> str:
-    """Generate an image from a string of text represeting the content of the image and returns the path."""
-    return f"path of the generated image"
-
-@tool
 def capture_image() -> str:
-    """Capture an image from the camera and returns the path."""
-    return f"path of the captured image"
+    """Capture an image from a camera and returns the path of the image."""
+    return f"path_to_image_{np.random.randint(0, 100)}.png"
 
 @tool
-def count_trees(image_path: str) -> int:
-    """Count the number of trees in an image and returns that number."""
+def check_marker(image_path: str, idx_marker: int) -> bool:
+    """Check if marker idx on the cardboard is ok. If it is ok, return True, otherwise False."""
+    return True
+
+@tool
+def count_markers(image_path: str) -> int:
+    """Count the markers on the cardboard and return the number of markers."""
     return np.random.randint(0, 10)
+
+@tool
+def check_colors(image_path: str) -> bool:
+    """Check if the colors of the printed cardboard are ok."""
+    return True
 
 @tool
 def get_word_length(word: str) -> int:
@@ -28,15 +33,12 @@ def move_the_robot(x: int, y: int) -> str:
     return f"Robot moved to ({x}, {y})"
 
 class ToolRepo():
-
-    def __init__(self) -> None:
-        pass
-
     def get_tools(self):
         self.tools = [
-            generate_image,
             capture_image,
-            count_trees,
+            count_markers,
+            check_marker,
+            check_colors,
             get_word_length,
             move_the_robot,
         ]
