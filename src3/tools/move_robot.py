@@ -13,6 +13,6 @@ class MoveRobot:
         'destination_reached': {'type': 'bool', 'description': 'True if the robot has reached the destination, False otherwise'}
     }
 
-    def call(self, x : int, y : int) -> bool:
+    def call(x : int, y : int) -> bool:
         destination_reached = True
         return destination_reached

@@ -11,6 +11,6 @@ class GetWordLength:
         "length": {"type": "int", "description": "length of the word"}
     }
 
-    def call(self, word: str) -> int:
+    def call(str) -> int:
         length = len(word)
         return length

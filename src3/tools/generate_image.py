@@ -12,6 +12,6 @@ class GenerateImage:
         'image': {'type': 'np.matrix', 'description': 'image generated from the text content'}
     }
 
-    def call(self, content : str) -> np.matrix:
+    def call(content : str) -> np.matrix:
         image = np.matrix([[1, 2], [3, 4]])
         return image

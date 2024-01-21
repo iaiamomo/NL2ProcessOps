@@ -160,6 +160,8 @@ class ToolsManager:
                 #api_name, param_dict = parse_api_call(command)
                 #print(self.api_call(api_name, **param_dict))
 
+
+
 if __name__ == '__main__':
     tools_manager = ToolsManager()
     tools_manager.tool_searcher.plot_embeddings()

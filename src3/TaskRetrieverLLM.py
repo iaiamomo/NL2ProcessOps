@@ -42,7 +42,8 @@ class TaskRetrieverLLM():
 if __name__ == "__main__":
     dotenv.load_dotenv()
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-    llm = TaskRetrieverLLM(OPENAI_API_KEY)
+    model = "gpt-3.5-turbo"
+    llm = TaskRetrieverLLM(model, OPENAI_API_KEY)
     chain_llm = llm.get_chain()
 
     while True:

@@ -13,6 +13,7 @@ class CheckMarkers:
         "markers_ok": {"type": "bool", "description": "boolean indicating if markers are present on the cardboard"}
     }
 
-    def call(self, image: np.matrix) -> bool:
-        markers_ok = True
+    def call(image: np.matrix) -> bool:
+        #randomly return True or False
+        markers_ok = np.random.choice([True, False])
         return markers_ok

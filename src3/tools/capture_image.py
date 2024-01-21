@@ -11,6 +11,6 @@ class CaptureImage:
         'image': {'type': 'np.matrix', 'description': 'image captured from the camera'}
     }
 
-    def call(self) -> np.matrix:
+    def call() -> np.matrix:
         image = np.matrix([[1, 2], [3, 4]])
         return image

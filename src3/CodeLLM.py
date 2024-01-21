@@ -4,7 +4,6 @@ from langchain.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import BaseOutputParser
 from langchain_openai import ChatOpenAI
 from TaskRetrieverLLM import TaskRetrieverLLM
-from ToolsManager import ToolsManager
 from ToolsManagerDB import ToolsManagerDB
 import json
 import dotenv
@@ -157,7 +156,7 @@ class CodeLLM():
         task_list = self.serialize_tasks(task_extraction_chain_output["output"])
         for task in task_list:
             # retrieve the tool
-            res = self.tools_manager.tool_searcher.search(task)
+            res = self.tools_manager.tool_store.search(task)
             tool_desc = {
                 "name": res["output"]["name"],
                 "description": res["output"]["description"],

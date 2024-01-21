@@ -35,9 +35,7 @@ class ToolStore():
     # cls is for instance "capture_image"
     def extract_input_output(self, cls):
         basename = os.path.basename(self.tools_dir)
-        print(basename)
         api_file = cls
-        print(api_file)
         module = importlib.import_module(f'{basename}.{api_file}')
         # retrieve only classes of the api_file module
         classes = [getattr(module, x) for x in dir(module) if isinstance(getattr(module, x), type)]

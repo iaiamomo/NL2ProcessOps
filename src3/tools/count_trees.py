@@ -13,6 +13,6 @@ class CountTrees:
         "number_of_trees": {"type": "int", "description": "number of trees in the image"}
     }
 
-    def call(self, image: np.matrix) -> bool:
+    def call(image: np.matrix) -> bool:
         number_of_trees = 5
         return number_of_trees

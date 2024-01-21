@@ -12,6 +12,6 @@ class SetSpeed:
         'speed_set': {'type': 'bool', 'description': 'True if the speed has been set, False otherwise'}
     }
 
-    def call(self, speed : int) -> bool:
+    def call(speed : int) -> bool:
         speed_set = True
         return speed_set
