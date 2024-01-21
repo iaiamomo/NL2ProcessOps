@@ -9,5 +9,5 @@ pip install requirements.py
 
 #### Create an <code>.env</code> file containing OpenAI key:
 ```env
-OPENAI_KEY=<key>
+OPENAI_API_KEY=<key>
 ```
