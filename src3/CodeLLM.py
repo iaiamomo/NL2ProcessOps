@@ -1,5 +1,5 @@
 from langchain.schema.runnable import Runnable
-from langchain.schema.runnable import RunnableBranch, RunnableLambda, RunnablePassthrough
+from langchain.schema.runnable import RunnableLambda, RunnablePassthrough
 from langchain.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import BaseOutputParser
 from langchain_openai import ChatOpenAI
@@ -15,35 +15,6 @@ TEMPLATE = """
 You are a very proficient Python developer that generates a python function that implements a process description.
 
 The process description is specified after the "Process description:" line. You should extract the start event, end event, tasks, exclusive gateways and parallel gateways from the process description and identify if there are loops and conditions. It is important that you identify the loops and the conditions. Then you should identify the tools able to perform the identified tasks. Finally you should generate the python function.
-
-To generate the python code, you have access to a set of tools able to perform the tasks extracted from the process description. The tools are specified after the "Tools:" line.
-Each tools is represented by a JSON string having the following structure:
-{{
-    "name": <class_name>,
-    "description": <description>,
-    "input_parameters": <input_parameters>,
-    "output_values": <output_values>
-}}
-where:
-    - <class_name> is the class of the tool
-    - <description> is a string describing the tool
-    - <input_parameters> is the list of input parameters of the tool, separated by a comma. Each input parameter has the following structure <name>:<type> where <name> is the name of the input parameter and <type> is the type of the input parameter. 
-    - <output_values> is the list of output values of the tool
-Tools: {tools}
-
-The python function you have to generate, should use the tools provided whenever possible. To use them you need to use the .call() method with the proper input. Make sure to generate a correct and concise python function. You do not have to use all the tools available to you. It is important that you do not have to generate the python code for the identified tools, you can assume that the tools are already imported in the python function you have to generate, so no need to explicitly import them and define them. 
-Generate the python function within the ```python and ``` markdown delimiters after the "Answer:" line. Always end the python function by a newline character and a triple backtick (```). It is important that after the return statement you add a newline character and a triple backtick (```). Do not add any other information after the triple backtick (```). The python function should be indented by 4 spaces.
-
-Generate the python function from the following process description.
-Process description: {input}
-Answer:
-"""
-
-
-TEMPLATE_2 = """
-You are a very proficient Python developer that generates a python function that implements a process description.
-
-The process description is specified after the "Process description:" line. You should extract the start event, end event, tasks, exclusive gateways and parallel gateways from the process description, Then you should identify if there is the need for loops and conditions. It is important that you identify the loops and the conditions. Then you should identify the tools able to perform the extracted tasks. Finally you should generate the python function.
 
 To generate the python code, you have access to a set of tools able to perform the tasks extracted from the process description. The tools are specified after the "Tools:" line.
 Each tools is represented by a JSON string having the following structure:
@@ -88,14 +59,14 @@ class CustomOutputParser(BaseOutputParser):
             raise ValueError("The string should end with a triple backtick")
         # remove the triple backticks at the beginning and at the end and return the string
         # use the strip method to remove the triple backticks
-        return text.strip("```python").strip("```")
+        return text.strip("```python\n").strip("```")
 
 
 class CodeLLM():
 
     def __init__(self, model, openai_key, temperature=0.0):
         self.tr_llm = TaskRetrieverLLM(model=model, openai_key=openai_key, temperature=temperature)
-        
+
         self.tools_manager = ToolsManagerDB()
 
         self.model = ChatOpenAI(model=model, openai_api_key=openai_key, temperature=temperature)
@@ -170,9 +141,33 @@ class CodeLLM():
         return tool_list
 
 
-    def get_chain(self) -> str:
+    def get_chain(self):
+        chain = self.prompt | self.model | self.output_parser
+        return chain
+
+
+    def parse_code_chain(self) -> Runnable:
+        code_chain = self.get_chain()
+
+        code_chain_output = {
+            "code": code_chain,
+            "inputs": RunnablePassthrough(),
+        }
+
+        code_chain_output = code_chain_output | RunnableLambda(lambda x: {
+            "tools": x["inputs"]["tools"],
+            "code": x["code"],
+            "input": x["inputs"]["input"]
+        })
+
+        return code_chain_output
+
+
+    def get_general_chain(self) -> str:
         # given a process description, extract the list of tasks
         task_extraction_chain_output = self.parse_task_extractor_chain()
+        # given the list of tasks and the tools, extract the code
+        code_chain_output = self.parse_code_chain()
 
         chain = (
             task_extraction_chain_output |
@@ -181,12 +176,17 @@ class CodeLLM():
                     "tools": self.parse_tools_to_prompt(x),
                     "input": x["process_description"]
                 }) |
-            self.prompt |
-            self.model |
-            self.output_parser
+            code_chain_output
         )
+        '''
+        output of the chain:
+            - tools: a list of tools
+            - code: a python function
+            - input: a process description
+        '''
 
         return chain
+
 
 if __name__ == "__main__":
     dotenv.load_dotenv()
@@ -195,7 +195,7 @@ if __name__ == "__main__":
     # gpt-3.5-turbo
     model = "gpt-3.5-turbo"
     llm = CodeLLM(model, OPENAI_API_KEY)
-    chain_llm = llm.get_chain()
+    chain_llm = llm.get_general_chain()
 
     while True:
         input_text = input("Enter the process description:\n")

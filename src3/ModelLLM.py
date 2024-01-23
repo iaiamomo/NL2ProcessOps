@@ -22,7 +22,7 @@ Each mermaid node must have the following structure:
             exclusivegateway: {{x}}          i.e., id:exclusivegateway:{{x}}
             parallelgateway: {{AND}}         i.e., id:exclusivegateway:{{AND}}
 All nodes are connected with each other with the help of the direction.
-    direction: --> 
+    direction: -->
 If there are some conditions or annotations it is necessary to use text on links (i.e., edge labels)
     edge label: |condition or annotation|
 Edge label is always located between 2 nodes: id:exclusivegateway:{{x}} --> |condition or annotation|id:task:(task label)

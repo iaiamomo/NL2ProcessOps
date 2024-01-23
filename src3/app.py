@@ -1,6 +1,7 @@
 from fastapi import FastAPI
 from langserve import add_routes
 from CodeLLM import CodeLLM
+from DataLLM import DataLLM
 import os
 import dotenv
 
@@ -12,8 +13,11 @@ OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
 # gpt-3.5-turbo
 model = "gpt-3.5-turbo"
 
-llm_process_agent = CodeLLM(model, OPENAI_API_KEY)
-llm_process_chain = llm_process_agent.get_chain()
+#llm_process_agent = CodeLLM(model, OPENAI_API_KEY)
+#llm_process_chain = llm_process_agent.get_chain()
+
+llm_process_agent = DataLLM(model, OPENAI_API_KEY)
+llm_process_chain = llm_process_agent.get_general_chain()
 
 app = FastAPI(
   title="Process Description to code",
