@@ -7,4 +7,4 @@
 
 ## Notes
 
-What we can achieve is the development of an LLM agent which has access to 3 tools. Such tools are the 3 LLM that generates the process model, the data flow and simulate the process.
+What we can achieve is the development of an LLM agent which has access to 3 tools. These tools are the 3 LLM that generate the process model, the data flow and simulate the process.
