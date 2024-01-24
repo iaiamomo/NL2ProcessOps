@@ -31,7 +31,7 @@ where:
     - <output_values> is the list of output values of the tool
 Tools: {tools}
 
-The python function you have to generate, should use the tools provided whenever possible. To use them you need to use the .call() method with the proper input. Make sure to generate a correct and concise python function. You do not have to use all the tools available to you. It is important that you do not have to generate the python code for the identified tools, you can assume that the tools are already imported in the python function you have to generate, so no need to explicitly import them and define them. 
+The python function you have to generate, should use the tools provided whenever possible. To use them you need to use the .call() method with the proper input. Make sure to generate a correct and concise python function. You do not have to use all the tools available to you. It is important that you do not have to generate the python code for the identified tools, you can assume that the tools are already imported in the python function you have to generate, so no need to explicitly import them and define them.
 Generate the python function within the ```python and ``` markdown delimiters after the "Answer:" line. Always end the python function by a newline character and a triple backtick (```). It is important that after the return statement you add a newline character and a triple backtick (```). Do not add any other information after the triple backtick (```). The python function should be indented by 4 spaces.
 
 Generate the python function from the following process description.
@@ -59,7 +59,7 @@ class CustomOutputParser(BaseOutputParser):
             raise ValueError("The string should end with a triple backtick")
         # remove the triple backticks at the beginning and at the end and return the string
         # use the strip method to remove the triple backticks
-        return text.strip("```python\n").strip("```")
+        return text.strip("```python").strip()
 
 
 class CodeLLM():
@@ -146,6 +146,30 @@ class CodeLLM():
         return chain
 
 
+    def save_code(self, output_chain) -> Runnable:
+        tools = output_chain["tools"]
+        tools_list = tools.split("}}}\n")
+        code = output_chain["code"]
+        input_pd = output_chain["input"]
+        # create a new python file importing the tools and containing the code
+        py_file = ""
+        for elem in range(len(tools_list)-1):
+            tool_str = tools_list[elem] + "}}}"
+            tool = json.loads(tool_str)
+            class_name = tool["name"]
+            py_file += f"from tools.{class_name} import {class_name}\n"
+        py_file += "\n"
+        py_file += code
+        with open("process_code.py", "w+") as f:
+            f.write(py_file)
+        json_output = {
+            "tools": tools,
+            "code": code,
+            "input": input_pd
+        }
+        return json_output
+
+
     def parse_code_chain(self) -> Runnable:
         code_chain = self.get_chain()
 
@@ -154,11 +178,15 @@ class CodeLLM():
             "inputs": RunnablePassthrough(),
         }
 
-        code_chain_output = code_chain_output | RunnableLambda(lambda x: {
-            "tools": x["inputs"]["tools"],
-            "code": x["code"],
-            "input": x["inputs"]["input"]
-        })
+        code_chain_output = (
+            code_chain_output | 
+            RunnableLambda(lambda x: {
+                "tools": x["inputs"]["tools"],
+                "code": x["code"],
+                "input": x["inputs"]["input"]
+            }) |
+            RunnableLambda(lambda x: self.save_code(x))
+        )
 
         return code_chain_output
 

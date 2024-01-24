@@ -61,6 +61,7 @@ sse-starlette==1.8.2
 starlette==0.35.1
 sympy==1.12
 tenacity==8.2.3
+termcolor==2.4.0
 threadpoolctl==3.2.0
 tiktoken==0.5.2
 tokenizers==0.15.0

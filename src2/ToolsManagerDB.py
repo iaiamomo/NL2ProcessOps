@@ -12,7 +12,7 @@ class ToolStore():
         cls_name = cls.__name__
         # split cls_name by capital letters
         #cls_name = ''.join(['_' + i.lower() if i.isupper() else i for i in cls_name]).strip("_")
-        return cls.__name__ + " " + cls.description 
+        return cls.__name__ + " " + cls.description['description']
 
     def __init__(self, openai_key):
         self.tools_dir = ('./tools')
@@ -43,8 +43,8 @@ class ToolStore():
             api_info = {
                 'name': cls.__name__,
                 'description': cls.description,
-                'input_parameters': cls.input_parameters,
-                'output_parameters': cls.output_parameters
+                'input_parameters': cls.description['input_parameters'],
+                'output_parameters': cls.description['output_parameters']
             }
         return api_info
 
@@ -68,10 +68,8 @@ class ToolStore():
 
 class ToolsManagerDB:
 
-    def __init__(self):
-        dotenv.load_dotenv()
-        OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-        self.tool_store = ToolStore(OPENAI_API_KEY)
+    def __init__(self, openai_key):
+        self.tool_store = ToolStore(openai_key)
 
     def command_line(self):
         while True:

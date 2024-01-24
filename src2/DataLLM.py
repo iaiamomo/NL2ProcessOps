@@ -49,19 +49,10 @@ Process description: {input}
 Answer:
 """
 
-class CustomOutputParser(BaseOutputParser):
-    """The output parser for the LLM."""
-    def parse(self, text: str) -> str:
-        out_txt = f"Data Flow:\n{text['dataFlow']}Python code:\n{text['code']}"
-        return  out_txt
-
 class DataLLM:
 
     def __init__(self, model, openai_key, temperature=0.0):
-        self.cg_llm = CodeLLM(model, openai_key, temperature=temperature)
-
         self.model = ChatOpenAI(model=model, openai_api_key=openai_key, temperature=temperature)
-
         self.prompt = ChatPromptTemplate.from_template(TEMPLATE)
         '''
         prompt takes as input:
@@ -69,47 +60,10 @@ class DataLLM:
             - code: a python function
             - input: a process description
         '''
-
         self.output_parser = StrOutputParser()
-
-        self.final_output_parser = CustomOutputParser()
-
 
     def get_chain(self):
         chain = self.prompt | self.model | self.output_parser
-        return chain
-
-
-    def parse_data_chain(self) -> Runnable:
-        data_chain = self.get_chain()
-
-        data_chain_output = {
-            "dataFlow": data_chain,
-            "inputs": RunnablePassthrough()
-        }
-
-        data_chain_output = data_chain_output | RunnableLambda(lambda x: {
-            "dataFlow": x["dataFlow"],
-            "code": x["inputs"]["code"],
-            "input": x["inputs"]["input"]
-        })
-
-        return data_chain_output
-
-
-    def parse_data_chain_output(self, data_chain_output: str) -> str:
-        out_txt = f"Data Flow:\n{data_chain_output['dataFlow']}\nPython code:\n{data_chain_output['code']}"
-        return out_txt
-
-    def get_general_chain(self):
-        cg_chain = self.cg_llm.get_general_chain()
-        df_chain = self.parse_data_chain()
-
-        chain = (
-            cg_chain |
-            df_chain |
-            RunnableLambda(lambda x: self.parse_data_chain_output(x))
-        )
         return chain
 
 
@@ -119,10 +73,37 @@ if __name__ == "__main__":
     model = "gpt-3.5-turbo"
     llm = DataLLM(model, OPENAI_API_KEY)
 
+    user_r = ""
     while True:
-        input_text = input("Enter a process description: ")
-        res = llm.get_general_chain().invoke({"input": input_text})
-        print(res)
+        if user_r == "":
+            user_r = input(f"Enter:\tp -> to enter a process description\n\tt -> to list tools\n\tat -> to add a tool\n\tq -> to quit\n")
+        if user_r == "p":
+            user_r = ""
+            input_text = input("Enter a process description: ")
+            res = llm.get_general_chain().invoke({"input": input_text})
+            print(res)
+            user_r = input(f"Enter:\te -> to simulate the process\n\tr -> to revise the process description\n\tq -> to quit\n")
+            if user_r == "e":
+                print("Executing...")
+                try:
+                    p = os.system("python process_code.py")
+                    print(f"Process run with exit code {p}")
+                except:
+                    print("Error simulating the process")
+                print("Done!")
+            elif user_r == "r":
+                print("Revising...")
+                user_r = "p"
+            elif user_r == "q":
+                print("Quitting...")
+                break
+        elif user_r == "t":
+            user_r = ""
+        elif user_r == "at":
+            user_r = ""
+        elif user_r == "q":
+            print("Quitting...")
+            break
 
 # The calibration process of a cardboard production consists of continuously capturing a photo of the cardboard being produced. Each photo is analyzed to check if all the markers identified are ok. If markers are not ok, the calibration process continues. If the markers are ok, the speed of the die cutting machine is set to 10000 RPM and the process ends.
         
