@@ -1,3 +1,0 @@
-The calibration process in a cardboard production consists of continuously capturing a photo of the cardboard being produced. Each photo is analyzed to check the number of markers. If the number of markers is greater then 4 the process ends.
-
-Instead of ending the process, if the number of markers is greater than 4, set the speed of the die cutting machine to 10000 RPM. Then end the process.

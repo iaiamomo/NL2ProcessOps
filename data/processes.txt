@@ -1,0 +1,20 @@
+The calibration process of a cardboards production consists of continuously capturing a photo of the cardboard being produced. Each photo is analyzed to check if all the identified markers are ok. If markers are not ok, the calibration process continues. If the markers are ok, the speed of the die cutting machine is set to 10000 RPM and the process ends.
+
+When a pallet arrives at the working station, the system empties the scan results. Then the worker scans the order. Afterwards the system displays the scanning UI to the worker and in parallel, the worker assembles the part.
+
+The manufacturing process of spindles in HSD company is fully automated. When a new order for a spindle arrives at the sales department, a new process instance is initiated. The warehouse system processes the part list of the spindle order examining the required quantity of each part and retrieve the requested ones. This process is iterated for each item in the part list. Meanwhile, the L12 lines is set up for the assembly of the ordered spindle. Once the warehouse successfully retrieves every item in the part list, and the L12 lines is set up, the spindle is assembled over the L12 lines. Subsequently, the spindle undergoes testing and running-in in the smart tester. If the outcome is negative, the spindle is sent to the maintenance department and a new spindle is build, otherwise if the outcome of the smart tester is positive the process ends.
+
+graph LR
+    1:startevent:((startevent)) --> 2:task:(New spindle order arrives)
+    2:task:(New spindle order arrives) --> 3:parallelgateway:{AND}
+    3:parallelgateway:{AND} --> 4:task:(Process part list)
+    3:parallelgateway:{AND} --> 5:task:(Set up L12 lines)
+    4:task:(Process part list) --> 6:exclusivegateway:{x}
+    6:exclusivegateway:{x} --> |All items retrieved| 7:task:(Assemble spindle)
+    6:exclusivegateway:{x} --> |Not all items retrieved| 4:task:(Process part list)
+    5:task:(Set up L12 lines) --> 7:task:(Assemble spindle)
+    7:task:(Assemble spindle) --> 8:task:(Test spindle)
+    8:task:(Test spindle) --> 9:exclusivegateway:{x}
+    9:exclusivegateway:{x} --> |Positive outcome| 10:endevent:((endevent))
+    9:exclusivegateway:{x} --> |Negative outcome| 11:task:(Send to maintenance)
+    11:task:(Send to maintenance) --> 2:task:(New spindle order arrives)

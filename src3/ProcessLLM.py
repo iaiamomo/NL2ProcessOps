@@ -1,5 +1,4 @@
-from langchain.schema.runnable import Runnable
-from langchain.schema.runnable import RunnableLambda, RunnablePassthrough, RunnableParallel
+from langchain.schema.runnable import Runnable, RunnableLambda, RunnablePassthrough, RunnableParallel, RunnableBranch
 from ModelLLM import MermaidLLM
 from TaskRetrieverLLM import TaskRetrieverLLM
 from CodeLLM import CodeLLM
@@ -28,6 +27,7 @@ class ProcessLLM:
 
         tool_list = ""
         task_list = ast.literal_eval(task_llm_output["output"])
+        print(task_list)
         for task in task_list:
             # retrieve the tool
             res = self.tools_manager.tool_store.search(task)
@@ -35,7 +35,8 @@ class ProcessLLM:
                 "name": res["output"]["name"],
                 "description": res["output"]["description"],
                 "input_parameters": res["output"]["input_parameters"],
-                "output_parameters": res["output"]["output_parameters"]
+                "output_parameters": res["output"]["output_parameters"],
+                "actor": res["output"]["actor"]
             }
             tool_desc_str = json.dumps(tool_desc)
             if tool_desc_str not in tool_list:
@@ -60,27 +61,32 @@ class ProcessLLM:
 
     def save_code(self, output_chain) -> Runnable:
         tools = output_chain["tools"]
-        tools_list = tools.split("}}}\n")
+        tools_list = tools.split("}\n")
 
         py_file = ""
-        
+
         # import all the used tools
         for elem in range(len(tools_list)-1):
-            tool_str = tools_list[elem] + "}}}"
+            tool_str = tools_list[elem] + "}"
             tool = json.loads(tool_str)
+
+            module = tool["actor"]
             class_name = tool["name"]
-            py_file += f"from tools.{class_name} import {class_name}\n"
+            py_file += f"from tools.{module} import {class_name}\n"
         
         # add the python function
         py_file += "\n"
         py_file += output_chain["code"]
+        print(py_file)
 
+        # TODO: check if the function is called with the right parameters
+        # get the function name
         function_name = ""
         tree = ast.parse(py_file)
         for node in ast.walk(tree):
             if isinstance(node, ast.FunctionDef):
                 function_name = node.name
-
+        # check if the function is called and call it otherwise
         lines_py_file = py_file.strip("\n").split("\n")
         if function_name not in lines_py_file[-1]:
             py_file += f"\n\nif __name__ == '__main__':\n\t{function_name}()"
@@ -191,12 +197,10 @@ class ProcessLLM:
         code_llm_chain_output = self.code_llm_parser()
         data_llm_chain_output = self.data_llm_parser()
 
-        chain = (
-            RunnableParallel({
-                "model": model_llm_chain_output,
-                "tasks": task_llm_chain_output
-                })
-            | RunnableLambda(lambda x: {
+        # general chain that takes as input the process description, the model and the tools
+        # it executes only if there are tasks in the process description
+        general_chain = (
+            RunnableLambda(lambda x: {
                 "model": x["model"]["model"],
                 "tools": self.tools_prompt_parser(x["tasks"]),
                 "input": x["model"]["input"],
@@ -206,6 +210,17 @@ class ProcessLLM:
             | RunnableLambda(lambda x: self.parse_output(x))
         )
 
+        chain = (
+            RunnableParallel({
+                "model": model_llm_chain_output,
+                "tasks": task_llm_chain_output
+                })
+            | RunnableBranch(
+                (lambda x: x["tasks"]["has_tasks"], general_chain),
+                (lambda x: "Your process description does not contain any task. Please try again.")
+            )
+        )
+
         return chain
 
 
@@ -213,11 +228,14 @@ if __name__ == "__main__":
     dotenv.load_dotenv()
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
     model = "gpt-3.5-turbo"
+    model = "gpt-4"
     llm = ProcessLLM(model, OPENAI_API_KEY)
 
     while True:
         print(colored("Enter a process description: ", "green"))
         input_text = input()
+        if input_text == "":
+            continue
         res = llm.get_chain().invoke({"input": input_text})
         print(colored("Answer:\n", "green") + colored(res, "blue"))
         print(colored("Do you want to simulate the process? (s)\nRevise the output? (r)\nQuit? (q)", "green"))
@@ -232,8 +250,11 @@ if __name__ == "__main__":
                     print(colored("Error simulating the process"), "red")
                 print(colored("Simulate again? (s)\nRevise the output? (r)\nQuit? (q)", "green"))
                 input_s = input()
-                if input_s == "r" or input_s == "q":
-                    user_r = input_s
+                if input_s != "s":
+                    if input_s == "r" or input_s == "q":
+                        user_r = input_s
+                        break
+                    user_r = "r"
                     break
             print(colored("Simulation done!", "green"))
         if user_r == "r":
@@ -243,33 +264,5 @@ if __name__ == "__main__":
         if user_r == "q":
             print(colored("Quitting...", "green"))
             break
-
-    '''while True:
-        print("Enter a process description: ")
-        input_text = input()
-        res = llm.get_chain().invoke({"input": input_text})
-        print("Answer:\n" + res)
-        print("Do you want to simulate the process? (s)\nRevise the output? (r)\nQuit? (q)")
-        user_r = input()
-        if user_r == "s":
-            while True:
-                print("Executing...")
-                try:
-                    p = os.system("python process_code.py")
-                    print(f"Process run with exit code {p}")
-                except:
-                    print("Error simulating the process")
-                print("Simulate again? (s)\nRevise the output? (r)\nQuit? (q)")
-                input_s = input()
-                if input_s == "r" or input_s == "q":
-                    user_r = input_s
-                    break
-            print("Simulation done!")
-        if user_r == "r":
-            print("Revising...")
-            continue
-        if user_r == "q":
-            print("Quitting...")
-            break'''
 
 # The calibration process of a cardboard production consists of continuously capturing a photo of the cardboard being produced. Each photo is analyzed to check if all the markers identified are ok. If markers are not ok, the calibration process continues. If the markers are ok, the speed of the die cutting machine is set to 10000 RPM and the process ends.
