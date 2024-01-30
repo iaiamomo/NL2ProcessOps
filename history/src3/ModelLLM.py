@@ -33,8 +33,6 @@ Create the process model in mermaid.js for the following process description: {i
 Answer:
 """
 
-
-
 class CustomOutputParser(StrOutputParser):
     """The output parser for the LLM."""
     def parse(self, text: str) -> str:
@@ -54,25 +52,25 @@ class CustomOutputParser(StrOutputParser):
             raise ValueError("The string should end with a triple backtick")
         # remove the triple backticks at the beginning and at the end and return the string
         # use the strip method to remove the triple backticks
-        return text.strip("```mermaid").strip()
+        return text.strip("```mermaid").strip("```")
 
 class MermaidLLM:
 
     def __init__(self, model, openai_key, temperature=0.0):
         self.model = ChatOpenAI(model=model, openai_api_key=openai_key, temperature=temperature)
+
         self.prompt = PromptTemplate.from_template(TEMPLATE)
+
         self.output_parser = CustomOutputParser()
 
     def get_chain(self) -> str:
         chain = self.prompt | self.model | self.output_parser
         return chain
 
-
 if __name__ == "__main__":
     dotenv.load_dotenv()
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
     model = "gpt-3.5-turbo"
-    #model = "gpt-4"
     llm = MermaidLLM(model, OPENAI_API_KEY)
     chain_llm = llm.get_chain()
 

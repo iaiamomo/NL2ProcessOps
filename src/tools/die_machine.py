@@ -2,7 +2,7 @@
 class SetSpeedDieMachine:
     description = {
         "description": """
-        Useful for setting the speed of the die cutting machine.
+        The speed of the die cutting machine is set.
         It takes as input the speed.
         It returns a boolean value, True if the speed has been set, False otherwise.
         """,

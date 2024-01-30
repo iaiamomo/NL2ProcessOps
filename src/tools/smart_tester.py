@@ -2,7 +2,7 @@
 class TestSpindle:
     description = {
         "description": """
-        Useful for testing the spindle.
+        The smart tester tests and run-ins a spindle.
         It takes as input the identificator of the product to be tested.
         It returns a boolean value, True if the spindle passed the test, False otherwise.
         """,

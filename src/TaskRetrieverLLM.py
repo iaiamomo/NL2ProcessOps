@@ -24,13 +24,29 @@ Process description: {input}
 Response:
 """
 
+TEMPLATE_2 = """You are a very proficient assistant expert in Business Process Management. You are able in taking a natural language process description and extract the underline start event, end event, task, exclusive gateway and parallel gateway, and the actors performing the tasks. List the extracted tasks.
+
+The output is a list of strings. Each string contains a high level description of a task with the actor performing it.
+
+If the process description does not contains any task, the output is an empty list.
+
+Here are a few examples of process descriptions and the expected output:
+
+1. Process description: When a pallet arrives at the working station, the system empties the scan results. Then the worker scans the order. Afterwards the system displays the scanning UI to the worker and in parallel, the worker assembles the part.
+   Response: ["the system empties the scan results", "the worker scans the order", "the system displays the scanning UI", "the worker assemble the part"]
+
+2. Process description: The warehouse of Grimaldi is a warehouse that stores cardboard rolls. A cardboard roll is used to produce cardboards. There exists two types of cardboard: the white cardboard and the brown cardboard. The warehouse stores the cardboard rolls depending on the type of cardboard. When a new cardboard roll arrives at the warehouse, the worker checks the type of cardboard and enter this information inside the WMS system. The system automatically capture an image of the current status of the warehouse. By analyzing the image, the system identifies the location where the cardboard roll should be stored. Then the worker stores the cardboard rool in the warehouse and the system updates the quantity of that cardboard rolls in the warehouse.
+   Response: ["the worker checks the type of cardboard", "the worker enters the information inside the WMS system", "the system captures an image of the current status of the warehouse", "the system identifies the location where the cardboard roll should be stored", "the worker stores the cardboard rool in the warehouse", "the system updates the quantity of that cardboard rolls in the warehouse"]
+
+Process description: {input}
+Response:
+"""
+
 class TaskRetrieverLLM():
 
     def __init__(self, model, openai_key, temperature=0.0):
         self.model = ChatOpenAI(model=model, openai_api_key=openai_key, temperature=temperature)
-
         self.prompt = PromptTemplate.from_template(TEMPLATE)
-
         self.output_parser = StrOutputParser()
 
     def get_chain(self) -> str:
@@ -53,4 +69,6 @@ if __name__ == "__main__":
     
 """
 The calibration process of a cardboard production consists of continuously capturing a photo of the cardboard being produced. Each photo is analyzed to check if all the markers identified are ok. If markers are not ok, the calibration process continues. If the markers are ok, the speed of the die cutting machine is set to 10000 RPM and the process ends.
+
+The manufacturing process of spindles in HSD company is fully automated. When a new order for a spindle arrives at the sales department, a new process instance is initiated. The warehouse system processes the part list of the spindle order examining the required quantity of each part and retrieve the requested ones. This process is iterated for each item in the part list. Meanwhile, the L12 lines is set up for the assembly of the ordered spindle. Once the warehouse successfully retrieves every item in the part list, and the L12 lines is set up, the spindle is assembled over the L12 lines. Subsequently, the spindle undergoes testing and running-in in the smart tester. If the outcome is negative, the spindle is sent to the maintenance department for maintenance. Finally, the process ends.
 """

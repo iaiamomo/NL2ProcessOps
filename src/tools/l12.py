@@ -2,7 +2,7 @@
 class L12SetUp:
     description = {
         "description": """
-        Useful for setting up the L12 line.
+        The L12 line is set up.
         This tool takes no input and returns a boolean indicating if the line has been set up.
         """,
         "input_parameters": {},
@@ -20,7 +20,7 @@ class L12SetUp:
 class L12AssembleSpindle:
     description = {
         "description": """
-        Useful for assembling a spindle.
+        The L12 line assembles a spindle.
         This tool takes as input the part list of a spindle.
         It returns a boolean indicating if the spindle has been assembled.
         """,

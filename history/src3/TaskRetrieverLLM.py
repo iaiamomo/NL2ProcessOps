@@ -28,7 +28,9 @@ class TaskRetrieverLLM():
 
     def __init__(self, model, openai_key, temperature=0.0):
         self.model = ChatOpenAI(model=model, openai_api_key=openai_key, temperature=temperature)
+
         self.prompt = PromptTemplate.from_template(TEMPLATE)
+
         self.output_parser = StrOutputParser()
 
     def get_chain(self) -> str:

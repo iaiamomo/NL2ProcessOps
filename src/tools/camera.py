@@ -3,7 +3,7 @@ import numpy as np
 class CaptureImage:
     description = {
         "description": """
-        Useful for capturing images from the camera in the factory.
+        The camera captures images in the factory.
         This tool takes no input and returns an image captured from the the camera.
         The image is returned as a numpy matrix.
         """,

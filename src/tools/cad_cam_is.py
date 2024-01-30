@@ -2,7 +2,7 @@
 class RecipeTest:
     description = {
         "description": """
-        Useful for retrieving the recipe for testing a product.
+        The design department retrieve the recipe for testing a product.
         It takes as input the identificator of the product.
         It returns the recipe of the product to be tested.
         """,
@@ -12,7 +12,7 @@ class RecipeTest:
         "output_parameters": {
             'recipe': {'type': 'list', 'description': 'recipe of the product to be tested'}
         },
-        "actor": "recipe_test"
+        "actor": "cad_cam_is"
     }
 
     def call(product_id: int) -> list:

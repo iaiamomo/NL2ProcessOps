@@ -1,9 +1,9 @@
 import numpy as np
 
-class ProcessPartList:
+class RetrievePartList:
     description = {
         "description": """
-        Useful for processing the part list of a product.
+        The warehouse system retrieves all parts of a part list of a product.
         This tool takes as input the part list of a product.
         It returns a boolean indicating if all the parts are retrieved.
         """,

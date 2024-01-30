@@ -3,7 +3,7 @@ import numpy as np
 class CheckMarkers:
     description = {
         "description": """
-        Useful for checking if markers are present on the cardboard.
+        The vision system checks if markers are present on the cardboard.
         This tool takes as input an image depicting a cardboard.
         It returns a boolean indicating if markers are present on the cardboard.
         """,
@@ -25,7 +25,7 @@ class CheckMarkers:
 class CountTrees:
     description = {
         "description": """
-        Useful for counting trees in an image.
+        The vision system counts the number of trees in an image.
         It takes as input an image as a numpy matrix.
         It returns the number of trees in the image.
         """,

@@ -3,7 +3,7 @@ import numpy as np
 class GenerateImage:
     description = {
         "description": """
-        Useful for generating images from a text content.
+        Generate an image from a text content.
         This tool takes as input a text content and returns an image as a numpy matrix.
         """,
         "input_parameters": {

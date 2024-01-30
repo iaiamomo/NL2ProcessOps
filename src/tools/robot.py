@@ -2,7 +2,7 @@
 class MoveRobot:
     description = {
         "description": """
-        Useful for moving a robot inside a factory.
+        The robot is moved in the factory.
         It takes as input the coordinates of the destination.
         It return a boolean value, True if the robot has reached the destination, False otherwise.
         """,

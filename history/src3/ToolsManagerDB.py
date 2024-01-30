@@ -5,47 +5,48 @@ import os
 import dotenv
 import json
 
-# TODO: decide if we want to search using similarity_search_with_score that output the score of the similarity
-
 class ToolStore():
     
     @staticmethod
-    def tool_summary(cls, file_name):
-        return cls.__name__ + " " + file_name + " " + cls.description['description']
+    def tool_summary(cls):
+        cls_name = cls.__name__
+        # split cls_name by capital letters
+        #cls_name = ''.join(['_' + i.lower() if i.isupper() else i for i in cls_name]).strip("_")
+        return cls.__name__ + " " + cls.description 
 
     def __init__(self, openai_key):
         self.tools_dir = ('./tools')
         self.openai_key = openai_key
         self.classes_tools = []
         self.tools = []
-        self.except_files = ['__init__.py', '__pycache__']
+        except_files = ['__init__.py', '__pycache__']
         for file in os.listdir(self.tools_dir):
-            if file.endswith('.py') and file not in self.except_files:
-                actor_file = file.split('.')[0]
+            if file.endswith('.py') and file not in except_files:
+                api_file = file.split('.')[0]
                 basename = os.path.basename(self.tools_dir)
-                module = importlib.import_module(f'{basename}.{actor_file}')
+                module = importlib.import_module(f'{basename}.{api_file}')
                 classes = [getattr(module, x) for x in dir(module) if isinstance(getattr(module, x), type)]
                 for cls in classes:
                     self.classes_tools.append(cls)
-                    self.tools.append(ToolStore.tool_summary(cls, actor_file))
+                    self.tools.append(ToolStore.tool_summary(cls))
 
         self.db = FAISS.from_texts(self.tools, OpenAIEmbeddings(api_key=self.openai_key))
 
     # cls is for instance "capture_image"
-    def extract_input_output(self, cls, file_name):
-        tool_info = {}
+    def extract_input_output(self, cls):
         basename = os.path.basename(self.tools_dir)
-        # loop through all the files in the tools directory
-        module = importlib.import_module(f'{basename}.{file_name}')
-        tool_class = getattr(module, cls)
-        tool_info = {
-            'name': tool_class.__name__,
-            'description': tool_class.description['description'],
-            'input_parameters': tool_class.description['input_parameters'],
-            'output_parameters': tool_class.description['output_parameters'],
-            'actor': tool_class.description['actor']
-        }
-        return tool_info
+        api_file = cls
+        module = importlib.import_module(f'{basename}.{api_file}')
+        # retrieve only classes of the api_file module
+        classes = [getattr(module, x) for x in dir(module) if isinstance(getattr(module, x), type)]
+        for cls in classes:
+            api_info = {
+                'name': cls.__name__,
+                'description': cls.description,
+                'input_parameters': cls.input_parameters,
+                'output_parameters': cls.output_parameters
+            }
+        return api_info
 
 
     def search(self, keywords):
@@ -55,11 +56,9 @@ class ToolStore():
         }
         try:
             keywords = OpenAIEmbeddings(api_key=self.openai_key).embed_query(keywords)
-            # L2 distance is used to find the closest vector (Euclidean distance)
             best_match = self.db.similarity_search_by_vector(keywords)[0]
-            tool_name = best_match.page_content.split(' ')[0]
-            file_name = best_match.page_content.split(' ')[1]
-            api_info = self.extract_input_output(tool_name, file_name)
+            api_file_name = best_match.page_content.split(' ')[0]
+            api_info = self.extract_input_output(api_file_name)
         except Exception as e:
             exception = str(e)
             return {'api_name': self.__class__.__name__, 'input': input_parameters, 'output': None, 'exception': exception}
@@ -69,8 +68,10 @@ class ToolStore():
 
 class ToolsManagerDB:
 
-    def __init__(self, openai_key):
-        self.tool_store = ToolStore(openai_key)
+    def __init__(self):
+        dotenv.load_dotenv()
+        OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+        self.tool_store = ToolStore(OPENAI_API_KEY)
 
     def command_line(self):
         while True:
@@ -90,7 +91,5 @@ class ToolsManagerDB:
 
 
 if __name__ == '__main__':
-    dotenv.load_dotenv()
-    openai_key = os.getenv('OPENAI_API_KEY')
-    tools_manager = ToolsManagerDB(openai_key=openai_key)
+    tools_manager = ToolsManagerDB()
     tools_manager.command_line()
