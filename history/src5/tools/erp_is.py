@@ -1,8 +1,8 @@
 
 class ReceiveOrder:
     description = {
-        "description": """
-        The ERP receives an order.
+        "description": "Recevie an order",
+        "more details": """
         It takes no input.
         It returns the part list of the product.
         """,

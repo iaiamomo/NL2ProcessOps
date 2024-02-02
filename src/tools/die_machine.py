@@ -1,17 +1,10 @@
 
 class SetSpeedDieMachine:
     description = {
-        "description": """
-        The speed of the die cutting machine is set.
-        It takes as input the speed.
-        It returns a boolean value, True if the speed has been set, False otherwise.
-        """,
-        "input_parameters": {
-            'speed': {'type': 'int', 'description': 'speed of the die cutting machine'}
-        },
-        "output_parameters": {
-            'speed_set': {'type': 'bool', 'description': 'True if the speed has been set, False otherwise'}
-        },
+        "description": "set the speed of the die cutting machine",
+        "more details": "It takes as input the speed. It returns a boolean value, True if the speed has been set, False otherwise.",
+        "input_parameters": ["speed:int"],
+        "output_parameters": ['speed_set:bool'],
         "actor": "die_machine"
     }
 

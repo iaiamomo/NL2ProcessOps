@@ -2,15 +2,10 @@ import numpy as np
 
 class CaptureImage:
     description = {
-        "description": """
-        The camera captures images in the factory.
-        This tool takes no input and returns an image captured from the the camera.
-        The image is returned as a numpy matrix.
-        """,
-        "input_parameters": {},
-        "output_parameters": {
-            'image': {'type': 'np.matrix', 'description': 'image captured from the camera'}
-        },
+        "description": "Capture of a photo from the camera",
+        "more details": "This tool takes no input and returns an image captured from the the camera. The image is returned as a numpy matrix.",
+        "input_parameters": [],
+        "output_parameters": ['image:np.matrix'],
         "actor": "camera"
     }
 

@@ -3,10 +3,10 @@
 ![architecture](architecture.png)
 
 We have four LLMs chained together to output a python code and extracting the data flow of a process description:
-- `ModelTaskLLM`: extracts from the process description the list of tasks and the process model. The output of this LLM is fed to the `TaskEnhanceLLM` and to the `CodeLLM`.
-- `TaskEnhanceLLM`: better summarizes the list of tasks. The output is given as input to the `ToolManager` which retrieve the matching tools able to perform given tasks. ToolManager follows **RAG** approach.
-- `CodeLLM`: given the process description, the process model and the list of tools, generates a python code able to execute the process. The python code is saved into `llm_process_code.py`.
-- `DataLLM`: extracts the data flow from the given process description, process model and python code.
+- `TaskLLM`: extracts from the process description the list of tasks. The output of this LLM is fed to the ToolManager which retrieve the matching tools able to perform given tasks. ToolManager follows RAG approach.
+- `ModelLLM`: extract the process model from the given process description.
+- `CoodeLLM`: given the process description, the process model and the list of tools, generate a python code able to simulate the process. The python code is saved into `llm_process_code.py` for further execution.
+- `DataLLM`: extract the data flow from the given process description, process model and python code.
 
 ### RAG - https://arxiv.org/abs/2312.10997
 To improve the quality of your indexed data, you should:
@@ -24,7 +24,7 @@ To try:
 - test RAG
     - play with the score outputs
     - store only tool description and actor (which refer to the name of the python file containing the tool definition) and see if the "tool search works better" - we can justify with this https://arxiv.org/abs/1909.09436
-- find how to define tools
+- find how to define tools 
     - refer OpenAPI standard (description, input, output)
 - test with other process description
     - Spindle manufacturing
@@ -32,7 +32,7 @@ To try:
     - ...
 - https://arxiv.org/abs/2104.05310
 
-### Notes
+### IDEA
 We realize a prototype that employs LLMs to interpret process description and generate the data flow of the underlying process (via execution-simulation of the process).
 
 Our goal is to avoid training (fine-tuning) by applying in-context learning.

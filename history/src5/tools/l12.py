@@ -1,10 +1,14 @@
 
 class L12SetUp:
     description = {
-        "description": "Set up the L12 line for spindle assembly",
-        "more details": "This tool takes no input and returns a boolean indicating if the line has been set up.",
-        "input_parameters": [],
-        "output_parameters": ['set_up:bool'],
+        "description": "Set up the L12 line",
+        "more details": """
+        This tool takes no input and returns a boolean indicating if the line has been set up.
+        """,
+        "input_parameters": {},
+        "output_parameters": {
+            'set_up': {'type': 'bool', 'description': 'True if the line has been set up, False otherwise'}
+        },
         "actor": "l12"
     }
 

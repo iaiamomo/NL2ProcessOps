@@ -1,10 +1,11 @@
 from langchain_openai import ChatOpenAI
 from langchain.prompts import PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
+from langchain.schema.runnable import Runnable, RunnableLambda, RunnablePassthrough, RunnableParallel, RunnableBranch
 import dotenv
 import os
+import re
 
-# TODO: realize an llm that extract the mermaid model to see if with the mermaid model we can construct a better python process for simulation
 
 TEMPLATE = """You are a very proficient assistant expert in Business Process Management tasks. You are able to extract the process model in mermaid.js from a process description. To generate the process model you should extract the start event, end event, task, exclusive gateway and parallel gateway from the process description.
 
@@ -32,7 +33,6 @@ Include the mermaid.js process model within the ```mermaid and ``` markdown deli
 Create the process model in mermaid.js for the following process description: {input}
 Answer:
 """
-
 
 
 class CustomOutputParser(StrOutputParser):

@@ -35,6 +35,7 @@ class ToolStore():
     def extract_input_output(self, cls, file_name):
         tool_info = {}
         basename = os.path.basename(self.tools_dir)
+        # loop through all the files in the tools directory
         module = importlib.import_module(f'{basename}.{file_name}')
         tool_class = getattr(module, cls)
         tool_info = {
@@ -52,33 +53,22 @@ class ToolStore():
         input_parameters = {
             'keywords': keywords
         }
-        list_match = []
         try:
             #keywords = OpenAIEmbeddings(api_key=self.openai_key).embed_query(keywords)
-            #best_match = self.db.similarity_search_by_vector(keywords)[0]
-
             # L2 distance is used to find the closest vector (Euclidean distance)
-            # best_match contains the list of the closest vectors (the first element is the closest one)
+            #best_match = self.db.similarity_search_by_vector(keywords)[0]
             best_match = self.db.similarity_search_with_score(keywords)
-            print(f"best_match: {best_match}")
-            for i in range(len(best_match)):
-                match_elem = best_match[i]
-                # if the first element is already above 0.4, we don't need to check the rest
-                if i == 0 and match_elem[1] >= 0.4:
-                    break
-                # if the first element is below 0.4, we count it
-                # it the rest of the elements are below 0.2, we count them
-                elif (i == 0 and match_elem[1] < 0.4) or (i > 0 and match_elem[1] <= 0.2):
-                    tool_name = match_elem[0].page_content.split(' ')[0]
-                    file_name = match_elem[0].page_content.split(' ')[1]
-                    api_info = self.extract_input_output(tool_name, file_name)
-                    list_match.append(api_info)
-                    print(f"name: {match_elem} score: {match_elem[1]}")
+            #for i in range(len(best_match)):
+            #    print(f"name: {best_match[i][0]} score: {best_match[i][1]}")
+            best_match = best_match[0][0]
+            tool_name = best_match.page_content.split(' ')[0]
+            file_name = best_match.page_content.split(' ')[1]
+            api_info = self.extract_input_output(tool_name, file_name)
         except Exception as e:
             exception = str(e)
             return {'api_name': self.__class__.__name__, 'input': input_parameters, 'output': None, 'exception': exception}
         else:
-            return {'api_name': self.__class__.__name__, 'input': input_parameters, 'output': list_match, 'exception': None}
+            return {'api_name': self.__class__.__name__, 'input': input_parameters, 'output': api_info, 'exception': None}
 
 
 class ToolsManagerDB:
@@ -91,17 +81,16 @@ class ToolsManagerDB:
             tool_keywords = input('Please enter the KEYWORDS for the tool you want to use (\'exit\' to exit):\n')
             if tool_keywords == 'exit':
                 break
-            response = self.tool_store.search(tool_keywords)['output']
-            for elem in response:
-                print('The tool you want to use is: \n' + elem['name'] + '\n' + json.dumps(elem))
-            '''while True:
+            response = self.tool_store.search(tool_keywords)
+            print('The tool you want to use is: \n' + response['output']['name'] + '\n' + json.dumps(response['output']))
+            while True:
                 command = input('Please enter the PARAMETERS for the tool you want to use (\'exit\' to exit): \n')
                 if command == 'exit':
                     break
                 else:
                     command = command.replace(' ', '')
                     processed_parameters = command.split(',')
-                    print(f"tool: {response['output']['name']} with ({processed_parameters})")'''
+                    print(f"tool: {response['output']['name']} with ({processed_parameters})")
 
 
 if __name__ == '__main__':

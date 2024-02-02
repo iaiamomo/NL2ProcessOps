@@ -1,17 +1,10 @@
 
 class TestSpindle:
     description = {
-        "description": """
-        The smart tester tests and run-ins a spindle.
-        It takes as input the identificator of the product to be tested.
-        It returns a boolean value, True if the spindle passed the test, False otherwise.
-        """,
-        "input_parameters": {
-            'product_id': {'type': 'int', 'description': 'identificator of the product'}
-        },
-        "output_parameters": {
-            'passed': {'type': 'bool', 'description': 'True if the spindle passed the test, False otherwise'}
-        },
+        "description": "Test and run-in of the spindle",
+        "more details": "It takes as input the identificator of the product to be tested. It returns a boolean value, True if the spindle passed the test, False otherwise.",
+        "input_parameters": ['product_id:int'],
+        "output_parameters": ['passed:bool'],
         "actor": "smart_tester"
     }
 
