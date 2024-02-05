@@ -22,8 +22,10 @@ To try:
 
 ### TODO
 - test RAG
-    - play with the score outputs
-    - store only tool description and actor (which refer to the name of the python file containing the tool definition) and see if the "tool search works better" - we can justify with this https://arxiv.org/abs/1909.09436
+    - play with the score outputs OK
+    - store only tool description and actor (which refer to the name of the python file containing the tool definition) and see if the "tool search works better" - we can justify with this https://arxiv.org/abs/1909.09436 -> OK
+    - test with different embeddings algorithm. https://huggingface.co/spaces/mteb/leaderboard
+    - try with cosine similarity
 - find how to define tools
     - refer OpenAPI standard (description, input, output)
 - test with other process description
