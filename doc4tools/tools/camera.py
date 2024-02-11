@@ -2,7 +2,7 @@ import numpy as np
 
 class CaptureImage:
     description = {
-        "description": "Capture of a photo from the camera.",
+        "description": "Capture of a photo from the camera",
         "more details": "This tool takes no input and returns an image captured from the the camera. The image is returned as a numpy matrix.",
         "input_parameters": [],
         "output_parameters": ['image:np.matrix'],

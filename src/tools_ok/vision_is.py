@@ -2,8 +2,8 @@ import numpy as np
 
 class CheckMarkers:
     description = {
-        "description": "Analysis of the markers on an image",
-        "more details": "This tool takes as input an image. It returns a boolean indicating if markers are present.",
+        "description": "Analysis of the markers on a cardboard image",
+        "more details": "This tool takes as input an image depicting a cardboard. It returns a boolean indicating if markers are present on the cardboard.",
         "input_parameters": ["image:np.matrix"],
         "output_parameters": ["markers_ok:bool"],
         "actor": "vision_is"

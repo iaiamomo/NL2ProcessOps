@@ -1,12 +1,11 @@
-from langchain_openai import OpenAIEmbeddings
-from langchain_community.vectorstores.faiss import FAISS
+from langchain_community.vectorstores.chroma import Chroma
 import importlib.util
 import os
 import dotenv
 import json
 
 class ToolStore():
-    
+
     @staticmethod
     def tool_summary(cls, file_name):
         return cls.__name__ + " " + file_name + " " + cls.description['description']
@@ -27,7 +26,9 @@ class ToolStore():
                     self.classes_tools.append(cls)
                     self.tools.append(ToolStore.tool_summary(cls, actor_file))
 
-        self.db = FAISS.from_texts(self.tools, OpenAIEmbeddings(api_key=self.openai_key))
+    def embed_tools(self, embedding_function):
+        self.embedding_function = embedding_function
+        self.db = Chroma.from_texts(self.tools, embedding_function)
 
     # cls is for instance "capture_image"
     def extract_input_output(self, cls, file_name):
@@ -52,10 +53,7 @@ class ToolStore():
         }
         list_match = []
         try:
-            #keywords = OpenAIEmbeddings(api_key=self.openai_key).embed_query(keywords)
-            #best_match = self.db.similarity_search_by_vector(keywords)[0]
-
-            # L2 distance is used to find the closest vector (Euclidean distance)
+            # cosine distance is used to find the closest vector
             # best_match contains the list of the closest vectors (the first element is the closest one)
             best_match = self.db.similarity_search_with_score(keywords)
             print(f"best_match: {best_match}")
@@ -66,12 +64,18 @@ class ToolStore():
                     break
                 # if the first element is below 0.4, we count it
                 # it the rest of the elements are below 0.2, we count them
-                elif (i == 0 and match_elem[1] < 0.4) or (i > 0 and match_elem[1] <= 0.2):
+                elif i == 0 and match_elem[1] < 0.4:
                     tool_name = match_elem[0].page_content.split(' ')[0]
                     file_name = match_elem[0].page_content.split(' ')[1]
                     api_info = self.extract_input_output(tool_name, file_name)
                     list_match.append(api_info)
-                    print(f"name: {match_elem} score: {match_elem[1]}")
+                    print(f"\tname: {match_elem} score: {match_elem[1]}")
+                elif i > 0 and match_elem[1] <= 0.2:
+                    tool_name = match_elem[0].page_content.split(' ')[0]
+                    file_name = match_elem[0].page_content.split(' ')[1]
+                    api_info = self.extract_input_output(tool_name, file_name)
+                    list_match.append(api_info)
+                    print(f"\tname: {match_elem} score: {match_elem[1]}")
         except Exception as e:
             exception = str(e)
             return {'api_name': self.__class__.__name__, 'input': input_parameters, 'output': None, 'exception': exception}

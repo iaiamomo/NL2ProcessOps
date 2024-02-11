@@ -1,7 +1,7 @@
 
 class ReceiveOrder:
     description = {
-        "description": "Sales department receives a new order.",
+        "description": "Sales department receives a new order",
         "more details": "It takes no input. It returns the part list and the product id.",
         "input_parameters": [],
         "output_parameters": ["list_of_parts:list", "product_id:int"],

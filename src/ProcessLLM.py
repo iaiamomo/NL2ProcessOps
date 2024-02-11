@@ -3,12 +3,13 @@ from ModelTasksLLM import MermaidLLM
 from TaskRetrieverLLM import TaskRetrieverLLM
 from CodeLLM import CodeLLM
 from DataLLM import DataLLM
-from ToolsManagerDB import ToolsManagerDB
+from ToolsManagerDB import ToolStore
 import ast
 import json
 import os
 import dotenv
 from termcolor import colored
+from langchain_openai import OpenAIEmbeddings
 
 class ProcessLLM:
 
@@ -17,7 +18,10 @@ class ProcessLLM:
         self.task_llm = TaskRetrieverLLM(model, openai_key, temperature=temperature)
         self.code_llm = CodeLLM(model, openai_key, temperature=temperature)
         self.data_llm = DataLLM(model, openai_key, temperature=temperature)
-        self.tools_manager = ToolsManagerDB(openai_key)
+
+        embedding_function = OpenAIEmbeddings(model="text-embedding-ada-002", api_key=openai_key)
+        self.tools_store = ToolStore(openai_key)
+        self.tools_store.embed_tools(embedding_function)
 
 
     def tools_prompt_parser(self, task_llm_output: dict) -> str:
@@ -26,7 +30,7 @@ class ProcessLLM:
         task_list = ast.literal_eval(task_llm_output)
         for task in task_list:
             # retrieve the tool
-            res = self.tools_manager.tool_store.search(task)['output']
+            res = self.tools_store.search(task)['output']
             if res == []:
                 continue
             else:
@@ -158,7 +162,7 @@ class ProcessLLM:
         )
 
         return code_llm_chain_output
-    
+
 
     def task_llm_parser(self) -> Runnable:
         task_llm_chain = self.task_llm.get_chain()
@@ -295,7 +299,7 @@ The calibration process of a cardboard production consists of continuously captu
 ['capture photo of cardboard', 'analyze photo', 'set speed of die cutting machine to 10000 RPM']
 ['continuously capturing a photo of the cardboard being produced', 'analyzing each photo to check if all the markers identified are ok', 'setting the speed of the die cutting machine to 10000 RPM']
 
-The manufacturing process of spindles in HSD company is fully automated. When a new order for a spindle arrives at the sales department, a new process instance is initiated. The warehouse system retrive the necessary raw materials, and in parallel the L12 line is set up for the assembly of the ordered spindle. Once the warehouse successfully retrieves the raw materials and the L12 lines is set up, the spindle is assembled over the L12 lines. Subsequently, the spindle undergoes testing and running-in in the smart tester. If the outcome of the test is negative, the spindle is sent to maintenance. Then, the the process ends.
+The manufacturing process of spindles in HSD company is fully automated. When a new order for a spindle arrives at the sales department, a new process instance is initiated. The warehouse system retrive the necessary raw materials, and in parallel the L12 line is set up for the assembly of the ordered spindle. Once the warehouse successfully retrieves the raw materials and the L12 lines is set up, the spindle is assembled over the L12 lines. Subsequently, the spindle undergoes testing and running-in in the smart tester. If the outcome of the test is negative, the spindle is sent to maintenance. Then, the process ends.
 
 ['new order for a spindle arrives', 'retrieval of raw materials', 'set up of L12 line', 'assembly of the spindle', 'testing and running-in of the spindle', 'maintenance of the spindle']
 ['a new order for a spindle arrives at the sales department', 'the warehouse system retrieves the necessary raw materials', 'the L12 line is set up for the assembly of the ordered spindle', 'the spindle is assembled over the L12 line', 'the spindle undergoes testing and running-in in the smart tester', 'if the outcome of the test is negative, the spindle is sent to maintenance', 'the process ends']

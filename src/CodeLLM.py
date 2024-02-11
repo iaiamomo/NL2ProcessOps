@@ -64,35 +64,84 @@ Generate the python code in the 'def process():' function and add the invocation
 The python code should use the tools to execute the process tasks whenever possible. To use the tools you need to use the .call() static method with the proper input (e.g., the tool with name BookAppointment which does not take inputs should be called with BookAppointment.call()).
 You can assume that the classes implementing the tools are already already imported. You don't need to implement the classes of the tools. You only need to use them.
 At the end of the Python code add the invocation of the function that implements the process. The invocation should be within the 'if __name__ == "__main__":' block.
-Generate the python code within the ```python and ``` markdown delimiters after the "Answer:" line.
+Generate the python code within the ```python and ``` markdown delimiters after the "Answer:" line. Do not add any other information after the ```python and ``` markdown delimiters.
 
 Process description: {input}
 Process model: {model}
 Answer:
 """
 
+TEMPLATE = """\
+You are given a process description and the process model depicting the control flow.
+
+problem description:
+=============
+{input}
+=============
+
+process model:
+======
+{model}
+======
+
+Your goal is to generate a valid Python code that correctly implements the process description, using the following tools:
+=============
+{tools}
+=============
+Each tool is represented by a JSON string having the following structure:
+{{
+    "name": <class_name>,
+    "description": <description>,
+    "input_parameters": <input_parameters>,
+    "output_values": <output_values>,
+    "actor": <actor_name>
+}}
+where:
+    - <class_name> is the class implementing the tool.
+    - <description> is a string describing what the tool is able to do.
+    - <input_parameters> is the list of input parameters of the tool, separated by a comma. Each input parameter has the following structure <name>:<type> where <name> is the name of the input parameter and <type> is the type of the input parameter.
+    - <output_values> is the list of output values of the tool, separated by a comma. Each output value has the following structure <name>:<type> where <name> is the name of the output value and <type> is the type of the output value.
+    - <actor_name> is the actor that can perform the task executed by the tool.
+
+
+Guidelines:
+- Use the tools to execute the process tasks whenever possible. To use the tools you need to use the .call() static method with the proper input (e.g., the tool with name BookAppointment which does not take inputs should be called with BookAppointment.call()).
+- Consider the tools already imported. You don't need to implement the classes of the tools. You only need to use them with the .call() method.
+- Variables names you use should be meaningful.
+- Double-check the generated code. It should generalize to any valid input, and not just the provided examples.
+- Make sure to address the control flow provided by the process model. Use conditional statements (if-else) for exclusive gateways and parallel execution (threads) for parallel gateways.
+- The code needs to be self-contained, and executable as-is.
+- Do not add any other information after the ``` markdown end delimiters.
+
+The generated code must follow this structure:
+```python
+def process(...):
+    ...
+    return ...
+
+if __name__ == "__main__":
+    ...
+```
+
+Answer:
+```python
+"""
+
 
 class CustomOutputParser(BaseOutputParser):
     """The output parser for the LLM."""
     def parse(self, text: str) -> str:
-        # remove any newline character at the beginning and at the end of the string
         text = text.strip("\n")
-        # remove any whitespace at the beginning and at the end of the string
         text = text.strip()
-        # parse the output of the LLM
-        """Parse the output of an LLM call."""
-        # check that the string starts with a triple backtick followed by "py"
-        # and ends with a triple backtick
-        if not text.startswith("```python"):
+        # count how many ``` are in the text
+        back_count = text.count("```")
+        if back_count != 2:
             print(text)
-            raise ValueError("The string should start with a triple backtick followed by python")
-        if not text.endswith("```"):
-            print(text)
-            raise ValueError("The string should end with a triple backtick")
-        # remove the triple backticks at the beginning and at the end and return the string
-        # use the strip method to remove the triple backticks
-        print(text)
-        return text.strip("```python").strip().strip("```").strip()
+            raise ValueError("The string should contain exactly two triple backticks")
+        code = text.split("```")[1]
+        code = code.strip().strip("python").strip()
+        print(code)
+        return code
 
 
 class CodeLLM():
