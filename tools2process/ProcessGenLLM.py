@@ -6,15 +6,27 @@ import os
 import dotenv
 import random
 
+
 TEMPLATE = """Provide me a process description in the industrial manufacturing domain.
 
-The actors involved in the process must be:
-{actors}
+Examples of manufacturing process descriptions:
+- Plastic injection molding is a manufacturing process for producing a variety of parts by injecting molten plastic material into a mold, and letting it cool and solidify into the desired end product. Our interest is in the quality assurance process which involves real-time monitoring of injection molding parameters. As each batch of molten plastic enters the mold, sensors capture data on temperature, pressure, and fill rates. The system analyzes this data to ensure that the molding parameters align with the specified standards. If any deviations are detected, the system triggers adjustments to the injection molding machine settings, allowing for immediate correction. Once the parameters are within the acceptable range, the system authorizes the production run to continue. This dynamic monitoring process guarantees the consistency and quality of the plastic molded components, minimizing the risk of defects and ensuring adherence to precise manufacturing specifications.
+- The production of custom metal brackets begins with order processing. The warehouse department evaluates the parts lists and in parallel the production planning department configures the robotic assembly line accordingly. The automated precision machine cuts the metal and the welding machine assembles the parts into brackets. A computer vision inspection system then checks for quality assurance. If defective brakets are detected, the process ends. After inspection, a coating system enhances durability. Finally, the process is complete.
 
-The tasks that must be performed are:
-{tasks}
+You need to provide a manufacturing process description that involves the following actors and tasks:
+{actors_tasks}
 
-The process description needs to be a single paragraph and must be discorsive and coherent with the actors and tasks provided. Do not provide the list of tasks and actors, but a discorsive and coherent paragraph.
+Guidelines:
+- Each actor is responsible to perform the relative task
+- The process description must contain the tasks and actors provided following a coherent control flow (e.g., if the actor A performs the task 1, then the actor B performs the task 2, etc.)
+- Include in the control flow exclusive or parallel tasks (e.g., if the actor A performs the task 1, then the actor B performs the task 2, or the actor C performs the task 3)
+- The task must be performed with proper input value. Do not describe what the task does, and do not provide the type of the input (e.g., np.matrix, int, bool, etc.). Just report the tasks that must be performed with the proper input value (e.g., 100, image, true (ok), etc.)
+- If the process includes products or materials, include the type of product or material
+- The manufacturing process must be coherent with the actors and tasks provided
+- Do not provide the list of tasks and actors, but a discorsive and coherent paragraph
+- The lenght of the process description must be less than 200 words
+
+The manufacturing process description is
 """
 
 
@@ -23,7 +35,7 @@ class ToolDict:
     @staticmethod
     def summary(cls):
         return {cls.__name__: {
-            'description': f"{cls.description['description']}",
+            'description': f"{cls.description['description']} {cls.description['more details']}",
             'actor': cls.description['actor']
         }}
 
@@ -44,7 +56,6 @@ class ToolDict:
 class GeneratorLLM:
 
     def __init__(self, model="gpt-3.5-turbo", openai_key=None, temperature=0.0):
-        #model = "gpt-4"
         self.model = ChatOpenAI(model=model, openai_api_key=openai_key, temperature=temperature)
         self.prompt = PromptTemplate.from_template(TEMPLATE)
         self.output_parser = StrOutputParser()
@@ -54,28 +65,25 @@ class GeneratorLLM:
 
 
 def generate_process_description():
-    dotenv.load_dotenv()
     generator = GeneratorLLM(openai_key=os.getenv('OPENAI_API_KEY'))
     tools_manager = ToolDict()
 
     tools = tools_manager.tools
     random.shuffle(tools)
 
-    tools_to_include = tools[:6]
-    print(tools_to_include)
+    n_random_tools = random.randint(5, 13)
+    tools_to_include = tools[:n_random_tools]
 
-    actors = ""
-    tasks = ""
+    actors_tasks = ""
     for tool in tools_to_include:
         tool_key = list(tool.keys())[0]
-        actors += f"{tool[tool_key]['actor']}, "
-        tasks += f"{tool[tool_key]['description']}, "
-    actors = actors[:-2]
-    tasks = tasks[:-2]
+        actors_tasks += f"{tool[tool_key]['actor']}: {tool[tool_key]['description']}.\n"
+    actors_tasks = actors_tasks[:-1]
 
-    res = generator.get_chain().invoke({"actors": actors, "tasks": tasks})
-    print(res)
+    res = generator.get_chain().invoke({"actors_tasks": actors_tasks})
 
 
 if __name__ == '__main__':
-    generate_process_description()
+    dotenv.load_dotenv("gen.env")
+    for i in range(30):
+        generate_process_description()
