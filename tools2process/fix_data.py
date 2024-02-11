@@ -2,16 +2,12 @@ import pandas as pd
 from ProcessGenLLM import ToolDict
 
 def get_tools(all_tools, tools):
-    res_tools = {}
+    res_tools = []
     for tool in tools:
         for tool_elem in all_tools:
             tool_key = list(tool_elem.keys())[0]
             if tool_elem[tool_key]["description"] in tool:
-                if res_tools == {}:
-                    res_tools = tool_elem
-                else:
-                    res_tools.update(tool_elem)
-    print(res_tools)
+                res_tools.append(tool_key)
     return res_tools
 
 
