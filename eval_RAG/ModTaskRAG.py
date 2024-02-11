@@ -148,8 +148,6 @@ class MermaidLLM:
             'tasks': tasks_list
         }
 
-        print(result)
-
         return result
 
     def get_chain(self) -> str:
@@ -201,8 +199,6 @@ class ProcessLLM:
             result_list = []
         if len(result_list) == 0:
             return False
-        
-        print(f"Tasks: {result_list}")
         
         return True
 

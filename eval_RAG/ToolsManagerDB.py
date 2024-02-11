@@ -55,7 +55,6 @@ class ToolStore():
             # cosine distance is used to find the closest vector
             # best_match contains the list of the closest vectors (the first element is the closest one)
             best_match = self.db.similarity_search_with_score(keywords)
-            print(f"best_match: {best_match}")
             for i in range(len(best_match)):
                 match_elem = best_match[i]
                 # if the first element is already above 0.4, we don't need to check the rest
@@ -68,13 +67,11 @@ class ToolStore():
                     file_name = match_elem[0].page_content.split(' ')[1]
                     api_info = self.extract_input_output(tool_name, file_name, match_elem[1])
                     list_match.append(api_info)
-                    print(f"\tname: {match_elem} score: {match_elem[1]}")
                 elif i > 0 and match_elem[1] <= 0.2:
                     tool_name = match_elem[0].page_content.split(' ')[0]
                     file_name = match_elem[0].page_content.split(' ')[1]
                     api_info = self.extract_input_output(tool_name, file_name, match_elem[1])
                     list_match.append(api_info)
-                    print(f"\tname: {match_elem} score: {match_elem[1]}")
         except Exception as e:
             exception = str(e)
             return {'api_name': self.__class__.__name__, 'input': input_parameters, 'output': None, 'exception': exception}

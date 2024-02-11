@@ -95,7 +95,6 @@ class ProcessLLM:
         if len(result_list) == 0:
             return False
 
-        print(f"Tasks: {result_list}")
         return True
 
     def tasks_llm_parser(self) -> Runnable:
