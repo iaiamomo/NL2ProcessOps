@@ -1,0 +1,3 @@
+- [TaskRAG.py](TaskRAG.py): extract task from process description
+- [ModTaskRAG.py](ModTaskRAG.py): extract model and relative tasks from process description
+- [ModTaskPreRAG.py](ModTaskPreRAG.py): extract model and relative tasks and preprocessing of tasks from process description
