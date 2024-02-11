@@ -4,9 +4,9 @@
 - [ModTaskPreRAG.py](ModTaskPreRAG.py): extract model and relative tasks and preprocessing of tasks from process description
 
 #### Results:
-$precision=\frac{tool\_correct\_ext}{tool\_correct\_ext+no\_correct\_ext}$
+$precision=t_{p}/(t_{p}+f_{p})$
 
-$recall=\frac{tool\_correct\_ext}{tool\_correct\_ext+correct\_not\_ext}$
+$recall=t_{p}/(t_{p}+f{n})$
 
 ```
             case few_shot  model    recall  precision
