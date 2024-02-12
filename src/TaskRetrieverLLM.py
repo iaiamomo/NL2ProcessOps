@@ -4,8 +4,6 @@ from langchain_core.output_parsers import StrOutputParser
 import dotenv
 import os
 
-# few-shot
-
 TEMPLATE = """You are a very proficient assistant expert in Business Process Management.
 
 You are able to better describe the list of tasks-activities from a process description. 

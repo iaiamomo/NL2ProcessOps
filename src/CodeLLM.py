@@ -1,12 +1,7 @@
-from langchain.schema.runnable import Runnable
-from langchain.schema.runnable import RunnableLambda, RunnablePassthrough
 from langchain.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import BaseOutputParser
 from langchain_openai import ChatOpenAI
-import json
-import dotenv
-import os
-import ast
+
 
 TEMPLATE = """You are a helpful code assistant that generates a Python code that implements a business process. The description of the business process is provided in the "Process description:" line.
 

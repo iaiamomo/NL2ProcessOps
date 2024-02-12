@@ -1,4 +1,4 @@
-from langchain.schema.runnable import Runnable, RunnableLambda, RunnablePassthrough, RunnableParallel, RunnableBranch
+from langchain.schema.runnable import Runnable, RunnableLambda, RunnablePassthrough, RunnableBranch
 from ModelTasksLLM import MermaidLLM
 from TaskRetrieverLLM import TaskRetrieverLLM
 from CodeLLM import CodeLLM
