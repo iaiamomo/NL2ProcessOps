@@ -2,6 +2,7 @@ llm_process_code*.py
 build
 tree-sitter-python
 history
+doc4tools
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
