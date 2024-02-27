@@ -1,0 +1,14 @@
+graph LR
+1:startevent:((startevent)) --> 2:task:(New order arrives)
+2:task: --> 3:parallelgateway:{AND}
+3:parallelgateway: --> 4:task:(Retrieve raw materials)
+3:parallelgateway: --> 5:task:(Set up L12 line)
+4:task: --> 6:parallelgateway:{AND}
+5:task: --> 6:parallelgateway:{AND}
+6:parallelgateway: --> 7:task:(Assemble spindle)
+7:task: --> 8:task:(Test spindle)
+8:task: --> 9:exclusivegateway:{x}
+9:exclusivegateway: --> |negative test outcome| 10:task:(Send to maintenance)
+9:exclusivegateway: --> |positive test outcome| 11:exclusivegateway:{x}   
+10:task: --> 11:exclusivegateway:
+11:exclusivegateway: --> 12:endevent:((endevent))

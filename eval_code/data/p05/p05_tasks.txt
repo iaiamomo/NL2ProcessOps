@@ -1,0 +1,1 @@
+["capture data on temperature, pressure, and fill rates", "analyze the molding parameters", "adjust the injection molding machine settings", "authorize the production run to continue"]

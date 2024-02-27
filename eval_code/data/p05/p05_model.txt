@@ -1,0 +1,8 @@
+graph LR
+1:startevent:((startevent)) --> 2:task:(Capture Data on Temperature, Pressure, and Fill Rates)
+2:task: --> 3:task:(Analyze Molding Parameters)
+3:task: --> 4:exclusivegateway:{x}
+4:exclusivegateway:{x} --> |Deviations Detected| 5:task:(Adjust Machine Settings)
+5:task: --> 3:task:
+4:exclusivegateway:{x} --> |Parameters Acceptable| 6:task:(Authorize Production)
+6:task: --> 7:endevent:((endevent))

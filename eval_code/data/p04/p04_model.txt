@@ -1,0 +1,17 @@
+graph LR
+1:startevent:((startevent)) --> 2:task:(Instruct Artist)
+2:task: --> 3:task:(Send Sketches)
+3:task: --> 4:task:(Revise Model)
+4:task: --> 5:task:(Choose Plastic Color)
+5:task: --> 6:exclusivegateway:{x}
+6:exclusivegateway:{x} --> |Have color at home| 7:task:(Check Color Quantity)
+6:exclusivegateway:{x} --> |Don't have color at home| 8:task:(Order Color)
+7:task: --> 9:exclusivegateway:{x}
+9:exclusivegateway:{x} --> |Under 100 grams| 10:task:(Add to Shopping List)
+9:exclusivegateway:{x} --> |Over 100 grams| 11:task:(Turn on Printer)
+8:task: --> 11:task:
+10:task: --> 11:task:
+11:task: --> 12:task:(Heat up Bed and Extruder)
+12:task: --> 13:task:(Generate Gcode File)
+13:task: --> 14:task:(Print Model)
+14:task: --> 15:endevent:((endevent))

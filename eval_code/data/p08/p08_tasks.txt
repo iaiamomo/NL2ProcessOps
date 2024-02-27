@@ -1,0 +1,1 @@
+["check the type of the new cardboard roll", "enter the cardboard type information into the WMS system", "capture an image of the current warehouse status", "identify the storage location for the new cardboard roll", "store the cardboard roll in the identified location", "update the stock of cardboard rolls in the warehouse"]

@@ -1,0 +1,304 @@
+input,output
+"manufacturer: Check the quantity of the color. It takes the color as input. It returns the quantity of the color in grams..
+manufacturer: Send a message to people. It takes the message. It does not return anything..
+manufacturer: Buy snacks for the party. It takes the list of people. It does not return anything..
+precision_machine: The precision machine cut the metal. This tool takes no input and does not return anything..
+manufacturer: Update the shopping list. It takes the color type as input. It does not return anything..
+worker: Worker assembles parts. It takes no input. It returns no output..
+manufacturer: Check the availability of the color. It takes the color as input. It returns the availability of the color..
+mold_is: Adjust the settings the mold. It takes no input and returns no output..
+manufacturer: Generate the requirement for the tree house. It takes no input. It returns the part list..","The manufacturer checks the availability of the color and updates the shopping list accordingly. If the color is available, the precision machine cuts the metal based on the part list generated for the tree house. The worker then assembles the metal parts to create the components needed for the tree house. Once the parts are assembled, the manufacturer checks the quantity of the color required for painting the components. If the color quantity is sufficient, the mold is adjusted to ensure proper shaping of the components. Finally, the manufacturer sends a message to the team to inform them that the components are ready for assembly. Additionally, the manufacturer buys snacks for the party to celebrate the successful completion of the manufacturing process."
+"assembly_line: Configure the assembly line. This tool takes no input and does not return anything..
+worker: Worker assembles parts. It takes no input. It returns no output..
+l12: Set up the L12 line for spindle assembly. This tool takes no input and returns a boolean indicating if the line has been set up..
+wms_is: Warehouse department updates the stock of a product. It takes as input the product type. It does not return anything..
+precision_machine: The precision machine cut the metal. This tool takes no input and does not return anything..
+wms_is: Warehouse deparment orders the raw material. It takes the part as input. It does not return anything..
+die_machine: set the speed of the die cutting machine. It takes as input the speed. It returns a boolean value, True if the speed has been set, False otherwise..
+vision_is: Identify where to store a new cardboard roll. It takes as input an image of the warehouse and the type of cardboard roll. It returns the location where to store the new product..
+crm_is: Sales department accepts the order. It takes the product id as input. It returns a boolean indicating if the order is accepted..
+smart_tester: Test and run-in of the spindle. It takes as input the identificator of the product to be tested. It returns a boolean value, True if the spindle passed the test, False otherwise..
+manufacturer: Create the list of people to invite. It takes no input. It returns the list of people..
+printer_3d: Turn on the 3D printer. It takes no input. It does not return anything..
+worker: Worker inserts the type of cardboard in the system. It takes the type of cardboard as input. It returns no output..
+mold_is: Authorize the production of the mold. It takes no input and returns no output..
+welding_machine: The welding machine assemble the parts into brackets. This tool takes no input and does not return anything..","The manufacturing process begins with the warehouse department updating the stock of metal brackets. The precision machine then cuts the metal according to the configured assembly line for spindle assembly. The welding machine assembles the parts into brackets, while the die cutting machine sets the speed for the cutting process. Once the brackets are assembled, the smart tester conducts tests to ensure quality. The vision system identifies the location to store the finished brackets. The process ends with the authorization of the production of the mold for the brackets. Throughout the process, workers insert the type of cardboard and order raw materials as needed. The sales department accepts the order for the brackets, ensuring a smooth production flow."
+"manufacturer: Manufacturer orders the parts online. It takes the part list. It does not return anything..
+manufacturer: Generate the requirement for the tree house. It takes no input. It returns the part list..
+robot: Move the robot. It takes as input the coordinates of the destination. It return a boolean value, True if the robot has reached the destination, False otherwise..
+wms_is: Warehouse department updates the stock of a product. It takes as input the product type. It does not return anything..
+manufacturer: Receive the individual parts from the teams. It takes no input. It does not return anything..
+manufacturer: Create the list of people to invite. It takes no input. It returns the list of people..
+mold_is: Adjust the settings the mold. It takes no input and returns no output..
+manufacturer: Send the invitations to the people. It takes the list of people. It does not return anything..
+crm_is: Sales department accepts the order. It takes the product id as input. It returns a boolean indicating if the order is accepted..
+die_machine: set the speed of the die cutting machine. It takes as input the speed. It returns a boolean value, True if the speed has been set, False otherwise..
+manufacturer: Check the availability of the color. It takes the color as input. It returns the availability of the color..
+manufacturer: Order the color. It takes the color as input. It does not return anything..","The manufacturer generates the requirement for the tree house, which results in the creation of a part list. The warehouse department updates the stock of the required parts. The manufacturer orders the color needed for the project after checking its availability. The manufacturer then orders the parts online and receives them from the teams. The die cutting machine's speed is set accordingly. The mold settings are adjusted as needed. The robot is directed to move to the designated location. The sales department accepts the order based on the product ID. The manufacturer creates a list of people to invite and sends out the invitations. The process ensures that all necessary components are in place for the successful production of the custom tree house."
+"smart_tester: Test and run-in of the spindle. It takes as input the identificator of the product to be tested. It returns a boolean value, True if the spindle passed the test, False otherwise..
+worker: Worker assembles parts. It takes no input. It returns no output..
+manufacturer: Assemble the bicycle. It takes the part list. It does not return anything..
+crm_is: Sales department accepts the order. It takes the product id as input. It returns a boolean indicating if the order is accepted..
+robot: Move the robot. It takes as input the coordinates of the destination. It return a boolean value, True if the robot has reached the destination, False otherwise..
+working_station_is: The working station system displays the scanning UI. It takes no input. It returns no output..","The manufacturing process begins with the sales department accepting the order for a bicycle, using the product id as input. If the order is accepted, the smart_tester tests and runs-in the spindle to ensure its functionality. Once the spindle passes the test, the worker assembles the parts, and the manufacturer assembles the bicycle using the part list. The robot then moves to the designated coordinates to transport the assembled bicycle. Meanwhile, the working station system displays the scanning UI for quality control purposes. If all tasks are completed successfully, the bicycle is ready for shipment."
+"precision_machine: The precision machine cut the metal. This tool takes no input and does not return anything..
+printer_3d: Heat up the bed and the extruder. It takes no input. It does not return anything..
+crm_is: Sales department accepts the order. It takes the product id as input. It returns a boolean indicating if the order is accepted..
+crm_is: Deliver the product to the customer. It takes the product id as input. It does not return anything..
+vision_is: Analysis of the markers on a cardboard image. This tool takes as input an image depicting a cardboard. It returns a boolean indicating if markers are present on the cardboard..
+vision_is: Check the quality of the brackets. It takes no input. It returns a boolean indicating if the brackets are of good quality..
+vision_is: Count the number of trees in an image It takes as input an image as a numpy matrix. It returns the number of trees in the image..","The production of custom metal brackets begins with the sales department accepting the order by providing the product id. Once the order is accepted, the precision machine cuts the metal to create the brackets. The brackets are then inspected for quality by the vision inspection system. If the brackets pass the quality check, they are delivered to the customer by the sales department using the product id. The entire process ensures that the brackets are manufactured accurately and meet the required quality standards before being sent to the customer."
+"welding_machine: The welding machine assemble the parts into brackets. This tool takes no input and does not return anything..
+mold_is: Authorize the production of the mold. It takes no input and returns no output..
+manufacturer: Update the shopping list. It takes the color type as input. It does not return anything..
+pallet: Pallet arrives at the working station. It takes no input. It returns no output..
+working_station_is: Worker scans the order. It takes no input. It returns the order id scanned..
+precision_machine: The precision machine cut the metal. This tool takes no input and does not return anything..
+manufacturer: Receive the individual parts from the teams. It takes no input. It does not return anything..
+printer_3d: Print the object. It takes the object as input. It does not return anything..","The manufacturing process begins with the manufacturer updating the shopping list with the color type. Once the pallet arrives at the working station, the worker scans the order to retrieve the order id. The precision machine then cuts the metal to create the individual parts, which are received by the manufacturer. The welding machine assembles the parts into brackets, and the mold authorizes the production of the mold. Finally, the 3D printer prints the final object, completing the manufacturing process. Each actor plays a crucial role in ensuring the efficient and accurate production of custom metal brackets."
+"working_station_is: The working station system empty the scan result. It takes no input. It returns no output..
+precision_machine: The precision machine cut the metal. This tool takes no input and does not return anything..
+smart_tester: Test and run-in of the spindle. It takes as input the identificator of the product to be tested. It returns a boolean value, True if the spindle passed the test, False otherwise..
+l12: Assembly of a spindle over the L12 line. This tool takes as input the part list of a spindle. It returns a boolean indicating if the spindle has been assembled..
+crm_is: Sales department accepts the order. It takes the product id as input. It returns a boolean indicating if the order is accepted..
+manufacturer: Assemble the tree house. It takes the part list. It does not return anything..
+l12: Set up the L12 line for spindle assembly. This tool takes no input and returns a boolean indicating if the line has been set up..
+vision_is: Identify where to store a new cardboard roll. It takes as input an image of the warehouse and the type of cardboard roll. It returns the location where to store the new product..
+manufacturer: Assemble the interior of the plane. It takes the part list and the plane id. It does not return anything..
+manufacturer: Inform the storehouse and the engineering departments. It takes the part list and the product id. It does not return anything..","The manufacturing process begins with the sales department accepting the order for a custom plane. The manufacturer then assembles the interior of the plane and informs the storehouse and engineering departments. The precision machine cuts the metal for the plane parts, while the L12 line is set up for spindle assembly. The smart tester conducts a test and run-in of the spindle, ensuring its quality. Once the spindle passes the test, it is assembled over the L12 line. The working station system empties the scan result, and the vision system identifies where to store a new cardboard roll in the warehouse. This comprehensive process ensures the efficient and accurate production of the custom plane."
+"mold_is: Authorize the production of the mold. It takes no input and returns no output..
+machine: Cook a product in the oven. It takes as input the id of the product to be cooked. It returns a boolean value, True if the product has been cooked, False otherwise..
+precision_machine: The precision machine cut the metal. This tool takes no input and does not return anything..
+manufacturer: Create the test protocol for the product. It takes the part list and the product id. It returns the test protocol..
+manufacturer: Buy snacks for the party. It takes the list of people. It does not return anything..
+manufacturer: Send the invitations to the people. It takes the list of people. It does not return anything..
+crm_is: Sales department accepts the order. It takes the product id as input. It returns a boolean indicating if the order is accepted..
+manufacturer: Choose the color of the plastic. It takes no input. It returns the color of the plastic..
+manufacturer: Order the color. It takes the color as input. It does not return anything..
+manufacturer: Assemble the bicycle. It takes the part list. It does not return anything..","The manufacturing process begins with the manufacturer choosing the color of the plastic for the bicycle. Once the color is selected, the manufacturer orders the specific color needed. The precision machine then cuts the metal parts according to the part list provided. The manufacturer assembles the bicycle using the cut metal parts. The manufacturer creates a test protocol for the assembled bicycle, using the product id and part list. The CRM system checks if the sales department accepts the order based on the product id. If the order is accepted, the mold is authorized for production. The machine then cooks the assembled bicycle in the oven. If the product is successfully cooked, the process is complete."
+"cad_cam_is: Retrieve the recipe for testing. It takes as input the identificator of the product to be tested. It returns the recipe..
+mold_is: Analyze the temperature, pressure and fill rates of the mold to check deviations. It takes the temperature, pressure and fill rate as input and returns a boolean indicating if the mold is ok..
+manufacturer: Send the invitations to the people. It takes the list of people. It does not return anything..
+worker: Worker assembles parts. It takes no input. It returns no output..
+manufacturer: Check the quantity of the color. It takes the color as input. It returns the quantity of the color in grams..","The manufacturing process for producing custom metal brackets begins with the CAD/CAM system retrieving the recipe for testing based on the product identifier. The mold inspection system then analyzes the temperature, pressure, and fill rates to check for deviations. If the mold is okay, the manufacturer sends invitations to the workers to assemble the parts. The workers then assemble the metal parts into brackets. Meanwhile, the manufacturer checks the quantity of the color needed for coating, ensuring the correct amount in grams is available. This process ensures the efficient and accurate production of high-quality metal brackets."
+"working_station_is: The working station system displays the scanning UI. It takes no input. It returns no output..
+vision_is: Analysis of the markers on a cardboard image. This tool takes as input an image depicting a cardboard. It returns a boolean indicating if markers are present on the cardboard..
+welding_machine: The welding machine assemble the parts into brackets. This tool takes no input and does not return anything..
+camera: Capture of a photo from the camera. This tool takes no input and returns an image captured from the the camera. The image is returned as a numpy matrix..
+manufacturer: Generate the requirement for the tree house. It takes no input. It returns the part list..
+vision_is: Identify where to store a new cardboard roll. It takes as input an image of the warehouse and the type of cardboard roll. It returns the location where to store the new product..
+vision_is: Count the number of trees in an image It takes as input an image as a numpy matrix. It returns the number of trees in the image..
+mold_is: Authorize the production of the mold. It takes no input and returns no output..
+manufacturer: Assemble the bicycle. It takes the part list. It does not return anything..
+manufacturer: Buy snacks for the party. It takes the list of people. It does not return anything..
+crm_is: Sales department receives a new order specification from customer. It takes no input. It returns the part list and the product id..
+worker: Worker assembles parts. It takes no input. It returns no output..
+worker: Worker stores the cardboard roll in the warehouse. It takes as input the location. It returns no output..
+mold_is: Adjust the settings the mold. It takes no input and returns no output..
+worker: Worker checks the type of cardboard. It takes no input. It returns no output..","The manufacturing process for producing custom cardboard packaging begins with the manufacturer generating the requirement for the cardboard rolls. The vision system then identifies where to store the new cardboard roll in the warehouse. Once the location is determined, the worker stores the cardboard roll in the designated area. The camera captures an image of the cardboard for analysis by the vision system to check for markers. If markers are present, the cardboard is sent to the working station for further processing. The worker checks the type of cardboard before the welding machine assembles the parts into the final packaging product. The quality of the finished product is ensured through the vision system's inspection of the markers on the cardboard image. If the product passes inspection, it is authorized for production by the mold system."
+"cad_cam_is: Retrieve the recipe for testing. It takes as input the identificator of the product to be tested. It returns the recipe..
+manufacturer: Choose the color of the plastic. It takes no input. It returns the color of the plastic..
+manufacturer: Send the requirements (part list) to the proper teams. It takes the list of requirements. It does not return anything..
+manufacturer: Inform the storehouse and the engineering departments. It takes the part list and the product id. It does not return anything..
+precision_machine: The precision machine cut the metal. This tool takes no input and does not return anything..
+l12: Assembly of a spindle over the L12 line. This tool takes as input the part list of a spindle. It returns a boolean indicating if the spindle has been assembled..
+crm_is: Deliver the product to the customer. It takes the product id as input. It does not return anything..
+manufacturer: Generate the GCode file for the printer. It takes the object as input. It returns the GCode file..
+cmms_is: Fix (maintenance of) a product. It takes no input and does not return anything..
+manufacturer: Refine the requirements for the tree house. It takes the part list. It returns the refined part list..
+manufacturer: Buy snacks for the party. It takes the list of people. It does not return anything..
+manufacturer: Send the sketches of the project to the artist. It takes no input. It returns the description of the project..
+vision_is: Identify where to store a new cardboard roll. It takes as input an image of the warehouse and the type of cardboard roll. It returns the location where to store the new product..","The manufacturing process for producing custom tree houses begins with the manufacturer refining the requirements for the project based on the initial part list. Once the refined part list is generated, the manufacturer informs the storehouse and engineering departments to prepare for production. The CAD/CAM system retrieves the recipe for testing the tree house design, while the manufacturer generates the GCode file for the printer to begin production. The precision machine cuts the metal components, and the L12 line assembles the spindle. Once the spindle is assembled, the CRM system delivers the finished tree house to the customer. In parallel, the manufacturer sends the sketches of the project to the artist for any additional design elements. Throughout the process, the vision system identifies where to store new materials in the warehouse to ensure efficient production flow."
+"pallet: Pallet arrives at the working station. It takes no input. It returns no output..
+manufacturer: Assemble the bicycle. It takes the part list. It does not return anything..
+wms_is: Warehouse deparment orders the raw material. It takes the part as input. It does not return anything..
+manufacturer: Create the test protocol for the product. It takes the part list and the product id. It returns the test protocol..
+manufacturer: Receive the individual parts from the teams. It takes no input. It does not return anything..
+die_machine: set the speed of the die cutting machine. It takes as input the speed. It returns a boolean value, True if the speed has been set, False otherwise..
+wms_is: Warehouse department updates the stock of a product. It takes as input the product type. It does not return anything..","The manufacturing process begins with the warehouse department ordering the raw materials needed for assembling the bicycle. Once the pallet arrives at the working station, the manufacturer assembles the bicycle using the parts list provided. The manufacturer then creates a test protocol for the product, based on the part list and product id. The individual parts are received from the teams, and the die machine sets the speed of the die cutting machine. The warehouse department updates the stock of the bicycle product type. This process ensures that the bicycle is assembled correctly and tested according to the specified protocol before being stocked for distribution."
+"vision_is: Identify where to store a new cardboard roll. It takes as input an image of the warehouse and the type of cardboard roll. It returns the location where to store the new product..
+die_machine: set the speed of the die cutting machine. It takes as input the speed. It returns a boolean value, True if the speed has been set, False otherwise..
+manufacturer: Send the requirements to the architect. It takes the part list. It does not return anything..
+vision_is: Check the quality of the brackets. It takes no input. It returns a boolean indicating if the brackets are of good quality..
+manufacturer: Generate the requirement for the tree house. It takes no input. It returns the part list..","The manufacturing process for producing custom cardboard rolls begins with the manufacturer sending the part list requirements to the architect for the tree house. Once the part list is generated, the vision_is system identifies the location to store a new cardboard roll in the warehouse. The die_machine then sets the speed of the die cutting machine to cut the cardboard rolls. After the rolls are cut, the vision_is system checks the quality of the brackets to ensure they meet the standards. If the brackets pass the quality check, they are ready for further processing or shipment. This process ensures efficient production and quality control of the cardboard rolls and brackets."
+"robot: Move the robot. It takes as input the coordinates of the destination. It return a boolean value, True if the robot has reached the destination, False otherwise..
+crm_is: Deliver the product to the customer. It takes the product id as input. It does not return anything..
+crm_is: Sales department receives a new order specification from customer. It takes no input. It returns the part list and the product id..
+working_station_is: Worker scans the order. It takes no input. It returns the order id scanned..
+printer_3d: Print the object. It takes the object as input. It does not return anything..
+mold_is: Authorize the production of the mold. It takes no input and returns no output..
+crm_is: Deliver the test protocol to the customer. It takes the protocol and the product id as input. It does not return anything..
+cad_cam_is: Retrieve the recipe for testing. It takes as input the identificator of the product to be tested. It returns the recipe..
+manufacturer: Update the shopping list. It takes the color type as input. It does not return anything..
+manufacturer: Receive the individual parts from the teams. It takes no input. It does not return anything..
+wms_is: Warehouse deparment evaluates part list and retrieve raw materials. This tool takes as input the part list of a product. It returns a boolean indicating if all the parts are retrieved..
+vision_is: Analysis of the markers on a cardboard image. This tool takes as input an image depicting a cardboard. It returns a boolean indicating if markers are present on the cardboard..
+working_station_is: The working station system displays the scanning UI. It takes no input. It returns no output..","The sales department receives a new order specification from the customer, providing the part list and product id. The working station system displays the scanning UI for the worker to scan the order, returning the order id scanned. The warehouse department evaluates the part list and retrieves the raw materials, ensuring all parts are retrieved. The manufacturer updates the shopping list with the color type. The individual parts are received from the teams and the robot moves to the destination coordinates. The 3D printer prints the object, and the mold authorizes the production of the mold. The vision analysis system checks for markers on a cardboard image. The CAD/CAM system retrieves the recipe for testing, and once the product is ready, the test protocol is delivered to the customer. Finally, the CRM system delivers the product to the customer."
+"wms_is: Warehouse department updates the stock of a product. It takes as input the product type. It does not return anything..
+assembly_line: Configure the assembly line. This tool takes no input and does not return anything..
+manufacturer: Generate the requirement for the tree house. It takes no input. It returns the part list..
+welding_machine: The welding machine assemble the parts into brackets. This tool takes no input and does not return anything..
+coating_machine: The coating machine enhances the product. This tool takes no input and does not return anything..
+vision_is: Analysis of the markers on a cardboard image. This tool takes as input an image depicting a cardboard. It returns a boolean indicating if markers are present on the cardboard..
+manufacturer: Choose the color of the plastic. It takes no input. It returns the color of the plastic..
+manufacturer: Check the quantity of the color. It takes the color as input. It returns the quantity of the color in grams..
+manufacturer: Send the sketches of the project to the artist. It takes no input. It returns the description of the project..
+mold_is: Authorize the production of the mold. It takes no input and returns no output..
+machine: Cook a product in the oven. It takes as input the id of the product to be cooked. It returns a boolean value, True if the product has been cooked, False otherwise..
+manufacturer: Send the invitations to the people. It takes the list of people. It does not return anything..","The manufacturing process for custom tree houses begins with the manufacturer generating the part list based on the project sketches. The warehouse department then updates the stock of the required materials. The manufacturer chooses the color of the plastic and checks the quantity available. The assembly line is configured accordingly, and the welding machine assembles the parts into brackets. The coating machine enhances the brackets for durability. The vision system analyzes markers on a cardboard image to ensure quality. Once all components are ready, the mold is authorized for production. Finally, the tree house parts are cooked in the oven, and invitations are sent to the people involved in the project."
+"wms_is: Warehouse department retrieves a raw material. It takes the part as input. It returns a boolean indicating if the part is retrieved..
+mold_is: Analyze the temperature, pressure and fill rates of the mold to check deviations. It takes the temperature, pressure and fill rate as input and returns a boolean indicating if the mold is ok..
+working_station_is: The working station system displays the scanning UI. It takes no input. It returns no output..
+mold_is: Adjust the settings the mold. It takes no input and returns no output..
+wms_is: Warehouse deparment orders the raw material. It takes the part as input. It does not return anything..
+manufacturer: Refine the requirements for the tree house. It takes the part list. It returns the refined part list..
+cmms_is: Fix (maintenance of) a product. It takes no input and does not return anything..
+pallet: Pallet arrives at the working station. It takes no input. It returns no output..
+vision_is: Analysis of the markers on a cardboard image. This tool takes as input an image depicting a cardboard. It returns a boolean indicating if markers are present on the cardboard..
+manufacturer: Generate the requirement for the tree house. It takes no input. It returns the part list..
+manufacturer: Send the invitations to the people. It takes the list of people. It does not return anything..
+precision_machine: The precision machine cut the metal. This tool takes no input and does not return anything..","The manufacturing process begins with the warehouse department retrieving the raw material, which is a metal part, for the production of custom metal brackets. The manufacturer then refines the requirements for the brackets based on the part list. The precision machine cuts the metal to shape the brackets, while the welding machine assembles the parts. The working station system displays the scanning UI for quality assurance, where the computer vision inspection system analyzes markers on a cardboard image to ensure accuracy. If any defects are detected, the CMMS system is responsible for fixing the product. Once the brackets pass inspection, a coating system is used to enhance durability. Finally, the pallet arrives at the working station for packaging and shipment."
+"working_station_is: The working station system displays the scanning UI. It takes no input. It returns no output..
+manufacturer: Check the quantity of the color. It takes the color as input. It returns the quantity of the color in grams..
+vision_is: Analysis of the markers on a cardboard image. This tool takes as input an image depicting a cardboard. It returns a boolean indicating if markers are present on the cardboard..
+manufacturer: Choose the color of the plastic. It takes no input. It returns the color of the plastic..
+cmms_is: Fix (maintenance of) a product. It takes no input and does not return anything..","The manufacturing process begins with the working station system displaying the scanning UI. The manufacturer then checks the quantity of the color in grams. If markers are present on the cardboard image, the vision system analyzes them. The manufacturer chooses the color of the plastic, and the process continues with the production of plastic components. If any products require maintenance, the CMMS system is responsible for fixing them. This process ensures that the plastic components are produced with the correct color and quality, and any maintenance issues are promptly addressed to maintain production efficiency."
+"mold_is: Measure the temperature, pressure and fill rates of the mold. It takes no input and returns the temperature of the oven..
+manufacturer: Check the quantity of the color. It takes the color as input. It returns the quantity of the color in grams..
+crm_is: Deliver the product to the customer. It takes the product id as input. It does not return anything..
+mold_is: Analyze the temperature, pressure and fill rates of the mold to check deviations. It takes the temperature, pressure and fill rate as input and returns a boolean indicating if the mold is ok..
+printer_3d: Turn on the 3D printer. It takes no input. It does not return anything..
+welding_machine: The welding machine assemble the parts into brackets. This tool takes no input and does not return anything..
+l12: Set up the L12 line for spindle assembly. This tool takes no input and returns a boolean indicating if the line has been set up..
+manufacturer: Create the list of people to invite. It takes no input. It returns the list of people..
+manufacturer: Send a message to people. It takes the message. It does not return anything..
+manufacturer: Buy snacks for the party. It takes the list of people. It does not return anything..
+smart_tester: Test and run-in of the spindle. It takes as input the identificator of the product to be tested. It returns a boolean value, True if the spindle passed the test, False otherwise..
+precision_machine: The precision machine cut the metal. This tool takes no input and does not return anything..","The manufacturing process begins with the mold_is actor measuring the temperature, pressure, and fill rates of the mold. The manufacturer then checks the quantity of the color in grams. If the mold_is actor analyzes the parameters and detects any deviations, adjustments are made to ensure the mold is ok. The precision_machine cuts the metal, and the welding_machine assembles the parts into brackets. The smart_tester tests and runs-in the spindle, determining if it passes the test. Once the brackets are assembled, the crm_is actor delivers the product to the customer. Finally, the manufacturer creates a list of people to invite, sends a message to them, and buys snacks for the party."
+"mold_is: Authorize the production of the mold. It takes no input and returns no output..
+worker: Worker assembles parts. It takes no input. It returns no output..
+printer_3d: Heat up the bed and the extruder. It takes no input. It does not return anything..
+manufacturer: Order the color. It takes the color as input. It does not return anything..
+worker: Worker stores the cardboard roll in the warehouse. It takes as input the location. It returns no output..
+wms_is: Warehouse department retrieves a raw material. It takes the part as input. It returns a boolean indicating if the part is retrieved..
+manufacturer: Update the shopping list. It takes the color type as input. It does not return anything..
+mold_is: Measure the temperature, pressure and fill rates of the mold. It takes no input and returns the temperature of the oven..
+worker: Worker inserts the type of cardboard in the system. It takes the type of cardboard as input. It returns no output..
+manufacturer: Assemble the tree house. It takes the part list. It does not return anything..","The manufacturer orders the color for the custom cardboard tree house. The warehouse department retrieves the raw cardboard material and stores it in the warehouse. The worker then inserts the specific type of cardboard into the system. The 3D printer heats up the bed and extruder to begin the printing process. Once the cardboard is ready, the worker assembles the parts to create the tree house. The mold is then authorized for production, and the temperature, pressure, and fill rates are measured to ensure proper molding. Finally, the manufacturer updates the shopping list and assembles the completed tree house according to the part list."
+"cad_cam_is: Retrieve the recipe for testing. It takes as input the identificator of the product to be tested. It returns the recipe..
+printer_3d: Heat up the bed and the extruder. It takes no input. It does not return anything..
+wms_is: Warehouse deparment orders the raw material. It takes the part as input. It does not return anything..
+machine: Cook a product in the oven. It takes as input the id of the product to be cooked. It returns a boolean value, True if the product has been cooked, False otherwise..
+mold_is: Measure the temperature, pressure and fill rates of the mold. It takes no input and returns the temperature of the oven..
+pallet: Pallet arrives at the working station. It takes no input. It returns no output..","The 3D printing process begins with the CAD/CAM system retrieving the recipe for testing based on the product identifier. The 3D printer then heats up the bed and extruder to prepare for printing. Meanwhile, the warehouse department orders the raw material needed for the printing process. Once the material is ready, the pallet arrives at the working station for production. The 3D printer starts printing the product layer by layer according to the recipe retrieved earlier. After printing is complete, the product is sent to the oven for cooking. The mold measures the temperature, pressure, and fill rates to ensure the product is cooked properly. If the product passes the cooking process, the machine returns a boolean value of True, indicating successful cooking. This comprehensive process ensures the efficient and accurate production of 3D printed products."
+"manufacturer: Buy snacks for the party. It takes the list of people. It does not return anything..
+wms_is: Warehouse department retrieves a raw material. It takes the part as input. It returns a boolean indicating if the part is retrieved..
+cmms_is: Fix (maintenance of) a product. It takes no input and does not return anything..
+mold_is: Analyze the temperature, pressure and fill rates of the mold to check deviations. It takes the temperature, pressure and fill rate as input and returns a boolean indicating if the mold is ok..
+crm_is: Sales department receives a new order specification from customer. It takes no input. It returns the part list and the product id..
+assembly_line: Configure the assembly line. This tool takes no input and does not return anything..
+manufacturer: Assemble the interior of the plane. It takes the part list and the plane id. It does not return anything..
+manufacturer: Send the requirements (part list) to the proper teams. It takes the list of requirements. It does not return anything..
+vision_is: Analysis of the markers on a cardboard image. This tool takes as input an image depicting a cardboard. It returns a boolean indicating if markers are present on the cardboard..
+working_station_is: Worker scans the order. It takes no input. It returns the order id scanned..
+die_machine: set the speed of the die cutting machine. It takes as input the speed. It returns a boolean value, True if the speed has been set, False otherwise..
+manufacturer: Create the list of people to invite. It takes no input. It returns the list of people..
+manufacturer: Check the availability of the color. It takes the color as input. It returns the availability of the color..
+vision_is: Identify where to store a new cardboard roll. It takes as input an image of the warehouse and the type of cardboard roll. It returns the location where to store the new product..
+robot: Move the robot. It takes as input the coordinates of the destination. It return a boolean value, True if the robot has reached the destination, False otherwise..","The manufacturer receives a new order specification from the customer and sends the part list and product id to the proper teams. The warehouse department retrieves the raw material and the working station scans the order id. The manufacturer then assembles the interior of the plane using the part list and plane id. The vision system analyzes the markers on a cardboard image to ensure quality. If markers are present, the die cutting machine sets the speed accordingly. The robot moves to the destination coordinates to assist in the assembly process. Finally, the manufacturer creates the list of people to invite to the party and buys snacks for the event."
+"mold_is: Adjust the settings the mold. It takes no input and returns no output..
+mold_is: Measure the temperature, pressure and fill rates of the mold. It takes no input and returns the temperature of the oven..
+manufacturer: Assemble the bicycle. It takes the part list. It does not return anything..
+pallet: Pallet arrives at the working station. It takes no input. It returns no output..
+working_station_is: Worker scans the order. It takes no input. It returns the order id scanned..
+mold_is: Authorize the production of the mold. It takes no input and returns no output..","The manufacturing process of assembling bicycles begins with the arrival of a pallet at the working station. The worker scans the order to retrieve the order ID. The manufacturer then assembles the bicycle using the part list provided. Once the assembly is complete, the mold is adjusted to the specific settings required for the production run. The mold is then authorized for production, and the temperature, pressure, and fill rates are measured to ensure optimal conditions for molding. This process ensures that each bicycle is assembled correctly and meets the quality standards before being shipped out to customers."
+"working_station_is: The working station system empty the scan result. It takes no input. It returns no output..
+manufacturer: Create the list of people to invite. It takes no input. It returns the list of people..
+worker: Worker assembles parts. It takes no input. It returns no output..
+manufacturer: Inform the storehouse and the engineering departments. It takes the part list and the product id. It does not return anything..
+manufacturer: Manufacturer orders the parts online. It takes the part list. It does not return anything..
+mold_is: Measure the temperature, pressure and fill rates of the mold. It takes no input and returns the temperature of the oven..
+wms_is: Warehouse department updates the stock of a product. It takes as input the product type. It does not return anything..
+camera: Capture of a photo from the camera. This tool takes no input and returns an image captured from the the camera. The image is returned as a numpy matrix..
+crm_is: Sales department receives a new order specification from customer. It takes no input. It returns the part list and the product id..","The manufacturing process begins with the CRM system receiving a new order specification from the customer, providing the part list and product ID. The manufacturer then orders the required parts online based on the part list. The working station system empties the scan result, while the warehouse department updates the stock of the product in the WMS system. The manufacturer creates a list of people to invite for the assembly process. The mold system measures the temperature, pressure, and fill rates of the mold, returning the temperature of the oven. The worker assembles the parts, and the manufacturer informs the storehouse and engineering departments of the progress. The camera captures a photo of the assembled product for quality control. This process ensures efficient production and quality assurance throughout the manufacturing process."
+"vision_is: Count the number of trees in an image It takes as input an image as a numpy matrix. It returns the number of trees in the image..
+manufacturer: Generate the requirement for the tree house. It takes no input. It returns the part list..
+cad_cam_is: Retrieve the recipe for testing. It takes as input the identificator of the product to be tested. It returns the recipe..
+manufacturer: Send the sketches of the project to the artist. It takes no input. It returns the description of the project..
+mold_is: Analyze the temperature, pressure and fill rates of the mold to check deviations. It takes the temperature, pressure and fill rate as input and returns a boolean indicating if the mold is ok..
+manufacturer: Update the shopping list. It takes the color type as input. It does not return anything..
+working_station_is: Worker scans the order. It takes no input. It returns the order id scanned..
+manufacturer: Send a message to people. It takes the message. It does not return anything..","The manufacturing process for building a tree house begins with the vision_is actor counting the number of trees in the designated area. The manufacturer then generates the requirement for the tree house, creating a part list. The CAD_CAM_IS retrieves the recipe for testing the structure. The manufacturer sends the sketches of the project to the artist for further detailing. The mold_is analyzes the temperature, pressure, and fill rates of the mold to ensure it is in optimal condition. The manufacturer updates the shopping list based on the color type required. At the working_station_is, the worker scans the order ID. Finally, the manufacturer sends a message to the team regarding the progress of the project. This process ensures a systematic and efficient production of the tree house."
+"printer_3d: Print the object. It takes the object as input. It does not return anything..
+wms_is: Warehouse department retrieves a raw material. It takes the part as input. It returns a boolean indicating if the part is retrieved..
+manufacturer: Send the requirements (part list) to the proper teams. It takes the list of requirements. It does not return anything..
+working_station_is: The working station system displays the scanning UI. It takes no input. It returns no output..
+vision_is: Identify where to store a new cardboard roll. It takes as input an image of the warehouse and the type of cardboard roll. It returns the location where to store the new product..
+welding_machine: The welding machine assemble the parts into brackets. This tool takes no input and does not return anything..
+robot: Move the robot. It takes as input the coordinates of the destination. It return a boolean value, True if the robot has reached the destination, False otherwise..
+wms_is: Warehouse deparment evaluates part list and retrieve raw materials. This tool takes as input the part list of a product. It returns a boolean indicating if all the parts are retrieved..
+smart_tester: Test and run-in of the spindle. It takes as input the identificator of the product to be tested. It returns a boolean value, True if the spindle passed the test, False otherwise..
+l12: Set up the L12 line for spindle assembly. This tool takes no input and returns a boolean indicating if the line has been set up..
+cmms_is: Fix (maintenance of) a product. It takes no input and does not return anything..
+manufacturer: Create the list of people to invite. It takes no input. It returns the list of people..
+manufacturer: Update the shopping list. It takes the color type as input. It does not return anything..
+manufacturer: Generate the GCode file for the printer. It takes the object as input. It returns the GCode file..
+mold_is: Authorize the production of the mold. It takes no input and returns no output..","The manufacturing process begins with the manufacturer sending the requirements (part list) to the proper teams. The warehouse department evaluates the part list and retrieves the raw materials. Once all the parts are retrieved, the working station system displays the scanning UI. The robot moves to the designated coordinates for assembly, and the welding machine assembles the parts into brackets. The smart tester then conducts a test and run-in of the spindle to ensure quality. If the spindle passes the test, the L12 line is set up for spindle assembly. Finally, the manufacturer generates the GCode file for the printer to print the object, and the mold authorizes the production of the mold."
+"mold_is: Measure the temperature, pressure and fill rates of the mold. It takes no input and returns the temperature of the oven..
+manufacturer: Receive the individual parts from the teams. It takes no input. It does not return anything..
+manufacturer: Send a message to people. It takes the message. It does not return anything..
+manufacturer: Create the test protocol for the product. It takes the part list and the product id. It returns the test protocol..
+worker: Worker inserts the type of cardboard in the system. It takes the type of cardboard as input. It returns no output..
+manufacturer: Send the sketches of the project to the artist. It takes no input. It returns the description of the project..
+l12: Set up the L12 line for spindle assembly. This tool takes no input and returns a boolean indicating if the line has been set up..
+assembly_line: Configure the assembly line. This tool takes no input and does not return anything..
+manufacturer: Update the shopping list. It takes the color type as input. It does not return anything..
+vision_is: Analysis of the markers on a cardboard image. This tool takes as input an image depicting a cardboard. It returns a boolean indicating if markers are present on the cardboard..
+die_machine: set the speed of the die cutting machine. It takes as input the speed. It returns a boolean value, True if the speed has been set, False otherwise..
+precision_machine: The precision machine cut the metal. This tool takes no input and does not return anything..
+cmms_is: Fix (maintenance of) a product. It takes no input and does not return anything..
+wms_is: Warehouse department retrieves a raw material. It takes the part as input. It returns a boolean indicating if the part is retrieved..","The manufacturing process begins with the warehouse department retrieving the raw material from the warehouse based on the part list. The manufacturer then receives the individual parts and sends them to the assembly line for configuration. The precision machine cuts the metal parts, and the welding machine assembles them into the final product. The die machine sets the speed for the die cutting process. Once the product is assembled, the manufacturer creates a test protocol for quality assurance. The vision system analyzes the markers on the cardboard image to ensure accuracy. If any defects are detected, the CMMS team is responsible for fixing them. Finally, the manufacturer updates the shopping list with the color type for the next production run."
+"machine: Cook a product in the oven. It takes as input the id of the product to be cooked. It returns a boolean value, True if the product has been cooked, False otherwise..
+l12: Set up the L12 line for spindle assembly. This tool takes no input and returns a boolean indicating if the line has been set up..
+manufacturer: Send the requirements (part list) to the proper teams. It takes the list of requirements. It does not return anything..
+crm_is: Deliver the product to the customer. It takes the product id as input. It does not return anything..
+manufacturer: Assemble the interior of the plane. It takes the part list and the plane id. It does not return anything..
+manufacturer: Send the requirements to the architect. It takes the part list. It does not return anything..
+worker: Worker assembles parts. It takes no input. It returns no output..
+mold_is: Measure the temperature, pressure and fill rates of the mold. It takes no input and returns the temperature of the oven..
+printer_3d: Heat up the bed and the extruder. It takes no input. It does not return anything..
+manufacturer: Create the test protocol for the product. It takes the part list and the product id. It returns the test protocol..","The manufacturer sends the requirements (part list) to the proper teams, including the architect for design specifications. Once the part list is received, the manufacturer sets up the L12 line for spindle assembly. The worker then assembles the parts for the interior of the plane, following the set-up instructions. Meanwhile, the 3D printer heats up the bed and extruder to prepare for printing components. The manufacturer creates the test protocol for the product, incorporating the part list and product ID. Once the interior assembly is complete, the product is cooked in the oven by the machine. The mold inspection system measures the temperature, pressure, and fill rates of the mold during the cooking process. Finally, the CRM department delivers the finished product to the customer."
+"wms_is: Warehouse deparment orders the raw material. It takes the part as input. It does not return anything..
+precision_machine: The precision machine cut the metal. This tool takes no input and does not return anything..
+vision_is: Check the quality of the brackets. It takes no input. It returns a boolean indicating if the brackets are of good quality..
+worker: Worker inserts the type of cardboard in the system. It takes the type of cardboard as input. It returns no output..
+l12: Set up the L12 line for spindle assembly. This tool takes no input and returns a boolean indicating if the line has been set up..
+mold_is: Adjust the settings the mold. It takes no input and returns no output..
+welding_machine: The welding machine assemble the parts into brackets. This tool takes no input and does not return anything..","The manufacturing process begins with the warehouse department ordering the raw material, which is a type of cardboard specified by the worker. The precision machine then cuts the cardboard into the required shapes for the brackets. Once the cardboard pieces are ready, the worker inserts them into the system. The L12 line is set up for spindle assembly by the L12 tool. The welding machine assembles the cardboard pieces into brackets. The mold settings are adjusted by the mold tool to ensure proper shaping. The vision system checks the quality of the brackets, returning a boolean indicating if they meet the quality standards. If the brackets pass the quality check, the process is complete."
+"wms_is: Warehouse deparment evaluates part list and retrieve raw materials. This tool takes as input the part list of a product. It returns a boolean indicating if all the parts are retrieved..
+manufacturer: Send a message to people. It takes the message. It does not return anything..
+camera: Capture of a photo from the camera. This tool takes no input and returns an image captured from the the camera. The image is returned as a numpy matrix..
+manufacturer: Check the quantity of the color. It takes the color as input. It returns the quantity of the color in grams..
+crm_is: Deliver the test protocol to the customer. It takes the protocol and the product id as input. It does not return anything..
+wms_is: Warehouse deparment orders the raw material. It takes the part as input. It does not return anything..
+manufacturer: Send the sketches of the project to the artist. It takes no input. It returns the description of the project..
+manufacturer: Send the invitations to the people. It takes the list of people. It does not return anything..
+manufacturer: Generate the GCode file for the printer. It takes the object as input. It returns the GCode file..
+manufacturer: Inform the storehouse and the engineering departments. It takes the part list and the product id. It does not return anything..
+worker: Worker checks the type of cardboard. It takes no input. It returns no output..
+die_machine: set the speed of the die cutting machine. It takes as input the speed. It returns a boolean value, True if the speed has been set, False otherwise..
+vision_is: Analysis of the markers on a cardboard image. This tool takes as input an image depicting a cardboard. It returns a boolean indicating if markers are present on the cardboard..","The manufacturing process begins with the warehouse department evaluating the part list and ordering the raw materials needed for the production of cardboard boxes. Once the materials are retrieved, the die cutting machine's speed is set accordingly. The worker then checks the type of cardboard being used. Simultaneously, the camera captures an image of the cardboard for analysis by the vision system to detect markers. The manufacturer generates the GCode file for the printer based on the cardboard specifications. The manufacturer informs the storehouse and engineering departments of the production progress. Finally, the CRM system delivers the test protocol to the customer for approval. Throughout the process, the manufacturer communicates with the artist for project sketches and sends invitations to relevant parties."
+"mold_is: Analyze the temperature, pressure and fill rates of the mold to check deviations. It takes the temperature, pressure and fill rate as input and returns a boolean indicating if the mold is ok..
+welding_machine: The welding machine assemble the parts into brackets. This tool takes no input and does not return anything..
+coating_machine: The coating machine enhances the product. This tool takes no input and does not return anything..
+crm_is: Sales department receives a new order specification from customer. It takes no input. It returns the part list and the product id..
+manufacturer: Send the sketches of the project to the artist. It takes no input. It returns the description of the project..
+manufacturer: Send the requirements (part list) to the proper teams. It takes the list of requirements. It does not return anything..
+manufacturer: Assemble the tree house. It takes the part list. It does not return anything..
+die_machine: set the speed of the die cutting machine. It takes as input the speed. It returns a boolean value, True if the speed has been set, False otherwise..
+printer_3d: Turn on the 3D printer. It takes no input. It does not return anything..
+mold_is: Authorize the production of the mold. It takes no input and returns no output..
+manufacturer: Generate the GCode file for the printer. It takes the object as input. It returns the GCode file..
+worker: Worker inserts the type of cardboard in the system. It takes the type of cardboard as input. It returns no output..
+cmms_is: Fix (maintenance of) a product. It takes no input and does not return anything..
+worker: Worker stores the cardboard roll in the warehouse. It takes as input the location. It returns no output..","The manufacturing process of producing custom cardboard tree houses begins with the CRM system receiving a new order specification from the customer, providing the part list and product ID. The manufacturer then sends the sketches of the project to the artist and the requirements to the proper teams. Once the part list is received, the manufacturer assembles the tree house, with the worker inserting the type of cardboard and storing the cardboard roll in the warehouse. The die cutting machine sets the speed, the 3D printer is turned on to generate the GCode file, and the mold is authorized for production. The welding machine assembles the parts into brackets, which are then enhanced by the coating machine. If maintenance is required, the CMMS system fixes the product. The process ensures the efficient and accurate production of high-quality cardboard tree houses."

@@ -1,0 +1,1 @@
+["receive a new order for a spindle", "retrieve the necessary raw materials from the warehouse", "set up the L12 line for spindle assembly", "assemble the spindle over the L12 line", "test and run-in the spindle in the smart tester", "send the spindle to maintenance"]

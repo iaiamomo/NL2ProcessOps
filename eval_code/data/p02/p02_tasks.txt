@@ -1,0 +1,1 @@
+["capture a photo of the cardboard being produced", "analyze the photo", "set the speed of the die cutting machine"]

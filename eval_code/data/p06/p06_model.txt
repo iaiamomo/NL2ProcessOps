@@ -1,0 +1,14 @@
+graph LR
+1:startevent:((startevent)) --> 2:task:(Process Order)
+2:task: --> 3:parallelgateway:{AND}
+3:parallelgateway:{AND} --> 4:task:(Evaluate Parts List)
+3:parallelgateway:{AND} --> 5:task:(Configure Robotic Assembly Line)
+4:task: --> 6:parallelgateway:{AND}
+5:task: --> 6:parallelgateway:{AND}
+6:parallelgateway:{AND} --> 7:task:(Cut Metal)
+7:task: --> 8:task:(Assemble Brackets)
+8:task: --> 9:task:(Inspect Brackets)
+9:task: --> 10:exclusivegateway:{x}
+10:exclusivegateway:{x} --> |Defective| 11:endevent:((endevent))
+10:exclusivegateway:{x} --> |Not Defective| 12:task:(Apply Coating)
+12:task: --> 13:endevent:((endevent))

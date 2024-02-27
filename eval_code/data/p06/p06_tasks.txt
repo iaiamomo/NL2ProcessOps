@@ -1,0 +1,1 @@
+["process the order", "evaluate the parts list", "configure the robotic assembly line", "cut the metal with precision machinery", "assemble the cut metal into brackets", "inspect the brackets with a computer vision system", "apply a coating to enhance durability"]

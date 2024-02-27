@@ -1,0 +1,10 @@
+graph LR
+1:startevent:((startevent)) --> 2:task:(Pallet arrives at the working station)
+2:task: --> 3:task:(System empties the scan results)
+3:task: --> 4:task:(Worker scans the order)
+4:task: --> 5:parallelgateway:{AND}
+5:parallelgateway: --> 6:task:(System displays the scanning UI)
+5:parallelgateway: --> 7:task:(Worker assembles the part)
+6:task: --> 8:parallelgateway:{AND}
+7:task: --> 8:parallelgateway:{AND}
+8:parallelgateway: --> 9:endevent:((endevent))

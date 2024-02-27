@@ -1,0 +1,10 @@
+graph LR
+1:startevent:((startevent)) --> 2:task:(Receive customer specifications)
+2:task: --> 3:task:(Sent requirements)
+3:task: --> 4:task:(Receive parts)
+4:task: --> 5:task:(Assemble interior)
+5:task: --> 6:task:(Test flight)
+6:task: --> 7:task:(Create test protocol)
+7:task: --> 8:task:(Deliver plane to customer)
+8:task: --> 9:task:(Customer confirmation)
+9:task: --> 10:endevent:((endevent))

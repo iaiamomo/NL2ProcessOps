@@ -1,0 +1,1 @@
+["receive the specifications from the customer for the airplane interior", "send requirements to the teams", "receive the parts, "assemble the interior of the plane", "conduct a test flight", "create a test protocol during the flight", "deliver the plane to the customer", "obtain confirmation from the customer"]

@@ -1,0 +1,1 @@
+["pallet arrives at the working station", "system empties the scan results", "worker scans the order", "system displays the scanning UI to the worker", "worker assembles the part"]

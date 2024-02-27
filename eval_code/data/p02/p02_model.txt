@@ -1,0 +1,7 @@
+graph LR
+1:startevent:((startevent)) --> 2:task:(Capture photo of cardboard)       
+2:task: --> 3:task:(Analyze photo)
+3:task: --> 4:exclusivegateway:{x}
+4:exclusivegateway: --> |markers not ok| 2:task:
+4:exclusivegateway: --> |markers ok| 5:task:(Set die cutting machine speed)
+5:task: --> 6:endevent:((endevent))

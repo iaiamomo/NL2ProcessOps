@@ -1,0 +1,1 @@
+["Instruct an artist to create a project", "Send sketches to the artist", "Approve the project", "Choose a plastic color", "Check the quantity of the color", "Order the color", "Add the color to the shopping list", "Turn on the 3D printer", "Heat up the bed and the extruder of the printer", "Generate the gcode file for the printer", "Print the 3D model"]

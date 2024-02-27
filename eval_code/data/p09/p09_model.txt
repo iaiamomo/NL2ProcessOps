@@ -1,0 +1,19 @@
+graph LR
+1:startevent:((startevent)) --> 2:task:(Collect Requirements)
+2:task: --> 3:task:(Send Requirements to Architect)
+3:task: --> 4:task:(Receive Draft from Architect)
+4:task: --> 5:task:(Refine Draft)
+5:task: --> 6:exclusivegateway:{x}
+6:exclusivegateway: --> |Additional Requirements| 5:task: 
+6:exclusivegateway: --> 7:task:(Create Materials List)
+7:task: --> 8:task:(Categorize Materials)
+8:task: --> 9:task:(Order Materials Online)
+9:task: --> 10:parallelgateway:{AND}
+10:parallelgateway: --> 11:task:(Send Messages to Friends for Building)
+10:parallelgateway: --> 12:task:(Wait for Order Processing)
+11:task: --> 13:task:(Build Tree House)
+12:task: --> 13:task:
+13:task: --> 14:task:(Send Invitations for Tree House Party)
+14:task: --> 15:task:(Create Attendee List)
+15:task: --> 16:task:(Buy Snacks for Party)
+16:task: --> 17:endevent:((endevent))

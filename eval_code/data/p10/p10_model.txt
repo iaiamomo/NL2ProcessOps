@@ -1,0 +1,19 @@
+graph LR
+1:startevent:((startevent)) --> 2:task:(Receive Order)        
+2:task: --> 3:exclusivegateway:{x}
+3:exclusivegateway:{x} --> |Order Rejected| 4:endevent:((endevent))
+3:exclusivegateway:{x} --> |Order Accepted| 5:task:(Inform Storehouse and Engineering)
+5:task: --> 6:parallelgateway:{AND}
+6:parallelgateway:{AND} --> 7:task:(Process Part)        
+7:task: --> 8:exclusivegateway:{x}
+8:exclusivegateway:{x} --> |Part Available| 9:task:(Reserve Part)
+8:exclusivegateway:{x} --> |Part Not Available| 10:task:(Back-Order Part)
+9:task: --> 11:exclusivegateway:{OR}
+10:task: --> 11:exclusivegateway:{OR}
+11:exclusivegateway: --> |More items| 7:task:
+11:exclusivegateway: --> |No more items| 13:parallelgateway:{AND}
+6:parallelgateway:{AND} --> 12:task:(Prepare for Assembling)  
+12:task: --> 13:parallelgateway:{AND}
+13:parallelgateway:{AND} --> 14:task:(Assemble Bicycle)       
+14:task: --> 15:task:(Ship Bicycle to Customer)
+15:task: --> 16:endevent:((endevent))

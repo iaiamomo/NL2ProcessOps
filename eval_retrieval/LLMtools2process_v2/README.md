@@ -1,0 +1,3 @@
+## Processes dataset generation
+
+`ProcessGenLLM` is an LLM that generates textual process decriptions from a set of [tools](tools). Each tool is described as `<actor>: <task>`, where `actor` identify the actor performing the task (e.g., machine, information systems, operator) and `task` represent the description of the task the actor is able to perform. [process_tools.csv](processes_tools.csv) contains the list of tools from which the textual process description is generated.

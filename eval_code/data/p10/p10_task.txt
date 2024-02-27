@@ -1,0 +1,1 @@
+["receive an order", "reject or accept the order", "inform the storehouse and engineering department upon order acceptance", "process the part list for required quantities", "reserve the part if available", "back-order the part if not available", "prepare for the assembling of the bicycle", "assemble the bicycle", "ship the bicycle to the customer"]
