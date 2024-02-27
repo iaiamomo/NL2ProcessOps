@@ -1,8 +1,10 @@
 from langchain_community.vectorstores.chroma import Chroma
+from langchain_openai import OpenAIEmbeddings
 import importlib.util
 import os
 import dotenv
 import json
+
 
 class ToolStore():
 
@@ -69,15 +71,16 @@ class ToolStore():
                     file_name = match_elem[0].page_content.split(' ')[1]
                     api_info = self.extract_input_output(tool_name, file_name)
                     list_match.append(api_info)
-                    print(f"\tname: {match_elem} score: {match_elem[1]}")
+                    #print(f"\tname: {match_elem} score: {match_elem[1]}")
                 elif i > 0 and match_elem[1] <= 0.2:
                     tool_name = match_elem[0].page_content.split(' ')[0]
                     file_name = match_elem[0].page_content.split(' ')[1]
                     api_info = self.extract_input_output(tool_name, file_name)
                     list_match.append(api_info)
-                    print(f"\tname: {match_elem} score: {match_elem[1]}")
+                    #print(f"\tname: {match_elem} score: {match_elem[1]}")
         except Exception as e:
             exception = str(e)
+            print(f"Exception: {exception}")
             return {'api_name': self.__class__.__name__, 'input': input_parameters, 'output': None, 'exception': exception}
         else:
             return {'api_name': self.__class__.__name__, 'input': input_parameters, 'output': list_match, 'exception': None}
@@ -87,6 +90,8 @@ class ToolsManagerDB:
 
     def __init__(self, openai_key):
         self.tool_store = ToolStore(openai_key)
+        embedding_function = OpenAIEmbeddings(model="text-embedding-ada-002", api_key=openai_key)
+        self.tool_store.embed_tools(embedding_function)
 
     def command_line(self):
         while True:
@@ -111,16 +116,3 @@ if __name__ == '__main__':
     openai_key = os.getenv('OPENAI_API_KEY')
     tools_manager = ToolsManagerDB(openai_key=openai_key)
     tools_manager.command_line()
-
-
-"""
-The calibration process of a cardboard production consists of continuously capturing a photo of the cardboard being produced. Each photo is analyzed to check if all the markers identified are ok. If markers are not ok, the calibration process continues. If the markers are ok, the speed of the die cutting machine is set to 10000 RPM and the process ends.
-
-['capture photo of cardboard', 'analyze photo', 'set speed of die cutting machine to 10000 RPM']
-['continuously capturing a photo of the cardboard being produced', 'analyzing each photo to check if all the markers identified are ok', 'setting the speed of the die cutting machine to 10000 RPM']
-
-The manufacturing process of spindles in HSD company is fully automated. When a new order for a spindle arrives at the sales department, a new process instance is initiated. The warehouse system retrive the necessary raw materials, and in parallel the L12 line is set up for the assembly of the ordered spindle. Once the warehouse successfully retrieves the raw materials and the L12 lines is set up, the spindle is assembled over the L12 lines. Subsequently, the spindle undergoes testing and running-in in the smart tester. If the outcome of the test is negative, the spindle is sent to maintenance. Then, the the process ends.
-
-['new order for a spindle arrives', 'retrieval of raw materials', 'set up of L12 line', 'assembly of the spindle', 'testing and running-in of the spindle', 'maintenance of the spindle']
-['a new order for a spindle arrives at the sales department', 'the warehouse system retrieves the necessary raw materials', 'the L12 line is set up for the assembly of the ordered spindle', 'the spindle is assembled over the L12 line', 'the spindle undergoes testing and running-in in the smart tester', 'if the outcome of the test is negative, the spindle is sent to maintenance', 'the process ends']
-"""

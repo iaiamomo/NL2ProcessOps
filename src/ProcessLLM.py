@@ -1,8 +1,7 @@
 from langchain.schema.runnable import Runnable, RunnableLambda, RunnablePassthrough, RunnableBranch
-from ModelTasksLLM import MermaidLLM
-from TaskRetrieverLLM import TaskRetrieverLLM
+from TasksModelLLM import MermaidLLM
+from TasksPreProcessingLLM import TaskRetrieverLLM
 from CodeLLM import CodeLLM
-from DataLLM import DataLLM
 from ToolsManagerDB import ToolStore
 import ast
 import json
@@ -11,13 +10,13 @@ import dotenv
 from termcolor import colored
 from langchain_openai import OpenAIEmbeddings
 
+
 class ProcessLLM:
 
     def __init__(self, model="gpt-3.5-turbo", openai_key=None, temperature=0.0):
         self.model_tasks_llm = MermaidLLM(model, openai_key, temperature=temperature)
         self.task_llm = TaskRetrieverLLM(model, openai_key, temperature=temperature)
         self.code_llm = CodeLLM(model, openai_key, temperature=temperature)
-        self.data_llm = DataLLM(model, openai_key, temperature=temperature)
 
         embedding_function = OpenAIEmbeddings(model="text-embedding-ada-002", api_key=openai_key)
         self.tools_store = ToolStore(openai_key)
@@ -109,7 +108,7 @@ class ProcessLLM:
         except Exception as e:
             print(e)
             error_python = True
-            
+
         json_output = {
             "tools": output_chain["tools"],
             "code": output_chain["code"],
@@ -119,27 +118,6 @@ class ProcessLLM:
         }
         
         return json_output
-
-
-    def data_llm_parser(self) -> Runnable:
-        data_llm_chain = self.data_llm.get_chain()
-
-        data_llm_chain_output = {
-            "dataFlow": data_llm_chain,
-            "inputs": RunnablePassthrough()
-        }
-
-        data_llm_chain_output = (
-            data_llm_chain_output 
-            | RunnableLambda(lambda x: {
-                "dataFlow": x["dataFlow"],
-                "code": x["inputs"]["code"],
-                "input": x["inputs"]["input"],
-                "model": x["inputs"]["model"]
-                })
-        )
-
-        return data_llm_chain_output
 
 
     def code_llm_parser(self) -> Runnable:
@@ -205,19 +183,13 @@ class ProcessLLM:
 
 
     def parse_output(self, output_chain: dict) -> str:
-        out_txt = f"Data Flow:\n{output_chain['dataFlow']}\nPython code:\n{output_chain['code']}"
+        out_txt = f"Python code:\n{output_chain['code']}"
         return out_txt
 
     def get_chain(self):
         model_tasks_llm_chain_output = self.model_tasks_llm_parser()
         task_llm_chain_output = self.task_llm_parser()
         code_llm_chain_output = self.code_llm_parser()
-        data_llm_chain_output = self.data_llm_parser()
-
-        data_output_chain = (
-            data_llm_chain_output
-            | RunnableLambda(lambda x: self.parse_output(x))
-        )
 
         # general chain that takes as input the process description, the model and the tools
         # it executes only if there are tasks in the process description
@@ -229,7 +201,7 @@ class ProcessLLM:
                 })
             | code_llm_chain_output
             | RunnableBranch(
-                (lambda x: not x["error_python"], data_output_chain),
+                (lambda x: not x["error_python"], RunnableLambda(lambda x: self.parse_output(x))),
                 (lambda x: "There are some errors in the python code.")
             )
         )
@@ -291,16 +263,3 @@ if __name__ == "__main__":
         else:
             print(colored("Quitting...", "green"))
             break
-
-
-"""
-The calibration process of a cardboard production consists of continuously capturing a photo of the cardboard being produced. Each photo is analyzed to check if all the markers identified are ok. If markers are not ok, the calibration process continues. If the markers are ok, the speed of the die cutting machine is set to 10000 RPM and the process ends.
-
-['capture photo of cardboard', 'analyze photo', 'set speed of die cutting machine to 10000 RPM']
-['continuously capturing a photo of the cardboard being produced', 'analyzing each photo to check if all the markers identified are ok', 'setting the speed of the die cutting machine to 10000 RPM']
-
-The manufacturing process of spindles in HSD company is fully automated. When a new order for a spindle arrives at the sales department, a new process instance is initiated. The warehouse system retrive the necessary raw materials, and in parallel the L12 line is set up for the assembly of the ordered spindle. Once the warehouse successfully retrieves the raw materials and the L12 lines is set up, the spindle is assembled over the L12 lines. Subsequently, the spindle undergoes testing and running-in in the smart tester. If the outcome of the test is negative, the spindle is sent to maintenance. Then, the process ends.
-
-['new order for a spindle arrives', 'retrieval of raw materials', 'set up of L12 line', 'assembly of the spindle', 'testing and running-in of the spindle', 'maintenance of the spindle']
-['a new order for a spindle arrives at the sales department', 'the warehouse system retrieves the necessary raw materials', 'the L12 line is set up for the assembly of the ordered spindle', 'the spindle is assembled over the L12 line', 'the spindle undergoes testing and running-in in the smart tester', 'if the outcome of the test is negative, the spindle is sent to maintenance', 'the process ends']
-"""
