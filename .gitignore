@@ -3,6 +3,7 @@ build
 tree-sitter-python
 history
 doc4tools
+copilot_*.txt
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
