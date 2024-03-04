@@ -1,73 +1,60 @@
 from tools.manufacturer import RefineRequirementsTreeHouse
+from tools.manufacturer import GenerateRequirementTreeHouse
+from tools.manufacturer import AssembleTreeHouse
 from tools.manufacturer import SendRequirementsArchitect
 from tools.manufacturer import SendRequirements
 from tools.manufacturer import OrderParts
-from tools.manufacturer import SendMessage
-from tools.manufacturer import AssembleTreeHouse
 from tools.manufacturer import SendInvitations
 from tools.manufacturer import BuySnacks
-from threading import Thread
+import threading
 
-# Assuming the tools are already imported as per the guidelines
-
-def collect_requirements():
-    # This function simulates collecting requirements from the user
-    # In a real scenario, this could involve user input or reading from a file
-    return ["basic tree house"]
-
-def refine_draft(part_list):
-    refined_part_list = RefineRequirementsTreeHouse.call(part_list=part_list)
-    return refined_part_list
-
-def create_materials_list(draft):
-    # This function simulates creating a materials list from the draft
-    # The actual implementation would depend on the draft details
-    return ["wood", "nails", "hammer"]
-
-def order_materials(materials_list):
-    OrderParts.call(part_list=materials_list)
-
-def message_friends_for_help():
-    SendMessage.call(message="Please help me build a tree house this weekend!")
-
-def build_tree_house(materials_list):
-    AssembleTreeHouse.call(part_list=materials_list)
-
-def send_party_invitations():
-    # Simulating a list of friends
-    friends = ["Alice", "Bob", "Charlie"]
-    SendInvitations.call(people=friends)
-    return friends
-
-def create_snack_list(attendees):
-    BuySnacks.call(people=attendees)
+# Assuming the tools are already imported and available for use
 
 def process():
-    requirements = collect_requirements()
-    SendRequirementsArchitect.call(part_list=requirements)
-    draft = ["draft plan"]  # Simulating receiving a draft plan
-    additional_requirements = True
-    while additional_requirements:
-        refined_draft = refine_draft(draft)
-        # Simulate decision-making process for additional requirements
-        if refined_draft == draft:
-            additional_requirements = False
-        draft = refined_draft
-    
-    materials_list = create_materials_list(draft)
-    
-    # Parallel execution for ordering materials and messaging friends
-    order_thread = Thread(target=order_materials, args=(materials_list,))
-    message_thread = Thread(target=message_friends_for_help)
+    # Collect requirements
+    part_list = GenerateRequirementTreeHouse.call()
+
+    # Send requirements to architect and receive draft
+    SendRequirementsArchitect.call(part_list=part_list)
+
+    # Refine draft with additional requirements if needed
+    while True:
+        refined_part_list = RefineRequirementsTreeHouse.call(part_list=part_list)
+        if refined_part_list == part_list:
+            break
+        else:
+            part_list = refined_part_list
+
+    # Create list of materials from the plan
+    # Assuming this step is included in the refinement or another process not explicitly defined here
+
+    # Order materials online and message friends for help in parallel
+    def order_materials():
+        OrderParts.call(part_list=part_list)
+
+    def message_friends():
+        SendRequirements.call(part_list=part_list)
+
+    order_thread = threading.Thread(target=order_materials)
+    message_thread = threading.Thread(target=message_friends)
+
     order_thread.start()
     message_thread.start()
+
     order_thread.join()
     message_thread.join()
-    
-    build_tree_house(materials_list)
-    
-    attendees = send_party_invitations()
-    create_snack_list(attendees)
+
+    # Build tree house
+    AssembleTreeHouse.call(part_list=part_list)
+
+    # Send party invitations
+    # Assuming we have a predefined list of friends as 'friends_list'
+    friends_list = ["Alice", "Bob", "Charlie"]
+    SendInvitations.call(people=friends_list)
+
+    # Create snack list based on the attendees
+    # Assuming the BuySnacks tool is used here to represent creating a snack list
+    BuySnacks.call(people=friends_list)
 
 if __name__ == "__main__":
     process()

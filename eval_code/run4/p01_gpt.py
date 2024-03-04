@@ -2,41 +2,41 @@ from tools.working_station_is import EmptyScan
 from tools.working_station_is import ScanOrder
 from tools.working_station_is import DisplaysScanningUI
 from tools.worker import AssembleParts
+from tools.welding_machine import AssembleParts
+from tools.manufacturer import AssembleBicycle
+from tools.robot import MoveRobot
 import threading
 
-# Assuming the tools are already imported and available for use as described
-def process_pallet_arrival():
-    # Empty the scan results
+# Assuming the tools are already imported and available for use
+
+def empty_scan_results():
     EmptyScan.call()
+
+def scan_order():
+    return ScanOrder.call()
+
+def display_scanning_ui(order_id):
+    DisplaysScanningUI.call(order_id=order_id)
+
+def worker_assembles_part():
+    AssembleParts.call()
+
+def process():
+    # Empty the scan results
+    empty_scan_results()
     
     # Scan the order and get the order_id
-    order_id = ScanOrder.call()
+    order_id = scan_order()
     
-    # Display the scanning UI
-    DisplaysScanningUI.call(order_id=order_id)
+    # Display the scanning UI in parallel with worker assembling the part
+    display_ui_thread = threading.Thread(target=display_scanning_ui, args=(order_id,))
+    assemble_part_thread = threading.Thread(target=worker_assembles_part)
     
-    # Assemble parts in parallel with another task (not specified)
-    def assemble_parts():
-        AssembleParts.call()
+    display_ui_thread.start()
+    assemble_part_thread.start()
     
-    def another_task():
-        # Placeholder for another task that runs in parallel
-        pass
-    
-    # Create threads for parallel execution
-    thread_assemble_parts = threading.Thread(target=assemble_parts)
-    thread_another_task = threading.Thread(target=another_task)
-    
-    # Start threads
-    thread_assemble_parts.start()
-    thread_another_task.start()
-    
-    # Wait for both threads to complete
-    thread_assemble_parts.join()
-    thread_another_task.join()
-    
-    return "Process completed."
+    display_ui_thread.join()
+    assemble_part_thread.join()
 
 if __name__ == "__main__":
-    result = process_pallet_arrival()
-    print(result)
+    process()

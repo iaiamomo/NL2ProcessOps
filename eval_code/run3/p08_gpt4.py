@@ -1,44 +1,38 @@
 from tools.worker import CheckTypeCardboard
 from tools.vision_is import AnalyzeWarehouse
 from tools.worker import StoreCardboardRoll
+from tools.worker import InsertCardboardTypeInfo
+from tools.wms_is import UpdateStock
 import numpy as np
 
-# Assuming the necessary tool classes are imported as per the guidelines
-# CheckTypeCardboard, AnalyzeWarehouse, StoreCardboardRoll
+# Assuming the necessary tool classes are already imported as per the guidelines
 
 def capture_image_of_warehouse():
     # This function simulates capturing an image of the warehouse
-    # For simplicity, we return a dummy np.matrix as the image
-    return np.matrix([[0]])
-
-def enter_information_in_WMS(type_cardboard):
-    # This function simulates entering information into the WMS system
-    # In a real scenario, this would involve database operations
-    print(f"Information about the {type_cardboard} cardboard roll entered into the WMS system.")
-
-def update_stock_in_system(location):
-    # This function simulates updating the stock in the system
-    # In a real scenario, this would involve database operations
-    print(f"Stock updated in the system for the location: {location}")
+    # For simplicity, we return a dummy np.matrix as there's no actual image capturing
+    return np.matrix('1; 2; 3')  # Dummy image representation
 
 def process_new_cardboard_roll():
     # Check the type of cardboard
     type_cardboard = CheckTypeCardboard.call()
     
-    # Enter information in WMS
-    enter_information_in_WMS(type_cardboard)
+    # Enter the type of cardboard information in the WMS system
+    InsertCardboardTypeInfo.call(type_cardboard=type_cardboard)
     
-    # Capture image of the warehouse
-    image = capture_image_of_warehouse()
+    # Capture an image of the current status of the warehouse
+    image_of_warehouse = capture_image_of_warehouse()
     
-    # Identify storage location
-    location = AnalyzeWarehouse.call(image=image, type_cardboard=type_cardboard)
+    # Identify the storage location by analyzing the image and type of cardboard
+    location = AnalyzeWarehouse.call(image=image_of_warehouse, type_cardboard=type_cardboard)
     
-    # Store the cardboard roll
+    # Store the cardboard roll in the identified location
     StoreCardboardRoll.call(location=location)
     
-    # Update stock in the system
-    update_stock_in_system(location)
+    # Update the stock of that cardboard rolls in the warehouse
+    UpdateStock.call(product_type=type_cardboard)
+    
+    return "Process completed successfully."
 
 if __name__ == "__main__":
-    process_new_cardboard_roll()
+    result = process_new_cardboard_roll()
+    print(result)

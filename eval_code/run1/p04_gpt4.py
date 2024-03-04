@@ -1,54 +1,54 @@
 from tools.manufacturer import SendSketches
 from tools.manufacturer import ChoosePlasticColor
+from tools.manufacturer import CheckColorAvailability
 from tools.manufacturer import CheckColorQuantity
-from tools.printer_3d import TurnOn
+from tools.manufacturer import OrderColor
 from tools.printer_3d import HeatUpBedExtruder
+from tools.printer_3d import TurnOn
 from tools.manufacturer import GenerateGCode
 from tools.printer_3d import Print
-import threading
-
-# Assuming the tools are already imported and available for use as described in the problem description.
-
-def instruct_artist_and_get_project():
+def instruct_artist_and_print_model():
+    # Instruct the artist by sending sketches and revising until satisfied
     project_description = SendSketches.call()
     satisfied = False
     while not satisfied:
-        # Assuming there's a function to review the project and decide if satisfied or not.
-        # This could be a user input or an automated check.
-        satisfied = input("Are you satisfied with the project? (yes/no): ").lower() == "yes"
-        if not satisfied:
-            # Assuming a function to send revisions to the artist.
-            # This could be a user input or an automated process.
-            print("Sending revisions to the artist...")
-            project_description = SendSketches.call()  # Simulating the revision process
-    return project_description
-
-def check_and_prepare_color():
+        # Assume a function revise_sketches() exists that returns True if satisfied, False otherwise
+        satisfied = revise_sketches(project_description)
+    
+    # Choose plastic color
     color = ChoosePlasticColor.call()
-    quantity = CheckColorQuantity.call(color=color)
-    if quantity < 100:
-        print("Adding color to shopping list...")
-        # Assuming a function to add items to a shopping list.
-        # This could be a user input or an automated process.
+    
+    # Check color availability and quantity
+    color_availability = CheckColorAvailability.call(color=color)
+    if color_availability:
+        color_quantity = CheckColorQuantity.call(color=color)
+        if color_quantity < 100:
+            add_to_shopping_list(color)
     else:
-        print("Color quantity is sufficient.")
-    return color
-
-def prepare_printer(project_description):
-    TurnOn.call()
-    HeatUpBedExtruder.call()
+        OrderColor.call(color=color)
+    
+    # Prepare the printer
+    prepare_printer()
+    
+    # Generate GCode
     gcode = GenerateGCode.call(project=project_description)
-    return gcode
-
-def print_model(gcode):
+    
+    # Print the model
     Print.call(GCodeFile=gcode)
 
-def process():
-    project_description = instruct_artist_and_get_project()
-    check_and_prepare_color()
-    gcode = prepare_printer(project_description)
-    print_model(gcode)
-    print("Model printing process completed.")
+def revise_sketches(project_description):
+    # This is a placeholder for the logic to decide if the sketches need more revisions
+    # For the purpose of this example, let's assume we're always satisfied after the first revision
+    return True
+
+def add_to_shopping_list(color):
+    # Placeholder for adding the color to a shopping list
+    print(f"Added color {color} to the shopping list.")
+
+def prepare_printer():
+    # Turn on the printer and heat up the bed and the extruder
+    TurnOn.call()
+    HeatUpBedExtruder.call()
 
 if __name__ == "__main__":
-    process()
+    instruct_artist_and_print_model()

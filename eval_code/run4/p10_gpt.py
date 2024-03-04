@@ -5,19 +5,17 @@ from tools.manufacturer import OrderParts
 from tools.worker import AssembleParts
 from threading import Thread
 
-# Assuming the tools are already imported as per the guidelines
-# from tools import AcceptOrder, InformStorehouseEngineering, OrderParts, AssembleBicycle
+# Assuming the necessary tools are imported as per the provided JSON descriptions
+# AcceptOrder, InformStorehouseEngineering, OrderParts, AssembleBicycle
 
 def check_and_order_parts(part_list):
-    for part in part_list:
-        # Simulating the check for part availability and ordering if not available
-        # This is a simplification, in a real scenario, this would involve inventory management
-        # For the sake of this exercise, we assume all parts need to be ordered
-        OrderParts.call(part_list=[part])
+    # This function simulates checking each part's availability and ordering if not available
+    # For simplicity, we assume all parts need to be back-ordered
+    OrderParts.call(part_list=part_list)
 
 def prepare_and_assemble_bicycle(part_list):
-    # Simulating the preparation for assembly, which in a real scenario would involve various tasks
-    # For this exercise, we directly call the assembly function after preparation is assumed to be done
+    # This function simulates the preparation for assembly and the assembly itself
+    # Since there's no specific tool for preparation, we directly call the assembly tool
     AssembleBicycle.call(part_list=part_list)
 
 def process_order(product_id, part_list):
@@ -25,7 +23,7 @@ def process_order(product_id, part_list):
     if order_accepted:
         InformStorehouseEngineering.call(part_list=part_list, product_id=product_id)
         
-        # Processing parts and preparing for assembly in parallel
+        # Simulate parallel execution of checking/ordering parts and preparing for assembly
         parts_thread = Thread(target=check_and_order_parts, args=(part_list,))
         assembly_thread = Thread(target=prepare_and_assemble_bicycle, args=(part_list,))
         
@@ -40,6 +38,8 @@ def process_order(product_id, part_list):
         print("Order rejected.")
 
 if __name__ == "__main__":
-    product_id = 123  # Example product ID
-    part_list = ['wheel', 'frame', 'pedal']  # Example part list
+    # Example inputs
+    product_id = 123
+    part_list = ['wheel', 'frame', 'pedal']
+    
     process_order(product_id, part_list)

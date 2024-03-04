@@ -4,10 +4,9 @@ from tools.die_machine import SetSpeedDieMachine
 import numpy as np
 
 def capture_photo():
-    # Simulate capturing a photo of the cardboard
-    # This is a placeholder for the actual photo capturing logic
-    # For simplicity, we return a numpy matrix representing the photo
-    return np.random.rand(10, 10)  # Random photo for demonstration
+    # Simulate capturing a photo. In a real scenario, this would interface with a camera.
+    # Here, we just return a placeholder numpy matrix representing an image.
+    return np.random.rand(10, 10)
 
 def calibration_process():
     while True:
@@ -19,7 +18,7 @@ def calibration_process():
                 print("Calibration process completed successfully.")
                 break
             else:
-                print("Failed to set the speed of the die cutting machine.")
+                print("Failed to set speed. Trying again.")
         else:
             print("Markers not OK. Repeating the calibration process.")
 

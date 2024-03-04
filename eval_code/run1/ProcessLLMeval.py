@@ -238,7 +238,7 @@ class ProcessLLM:
 if __name__ == "__main__":
     dotenv.load_dotenv("exe.env")
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-    models = ["gpt-3.5-turbo-16k", "gpt-4-0125-preview"]
+    models = ["gpt-4-0125-preview"]
     
     processes = glob.glob("../eval_code/data/*")
     processes = [os.path.basename(process) for process in processes]
@@ -269,7 +269,4 @@ if __name__ == "__main__":
         
         res_df = pd.DataFrame(res_eval, columns=["process", "input", "model", "tasks", "tasks_original", "tools", "code"])
 
-        if model == "gpt-3.5-turbo-16k":
-            res_df.to_csv('eval_code_gpt35.csv', sep=',', index=False)
-        else:
-            res_df.to_csv('eval_code_gpt4.csv', sep=',', index=False)
+        res_df.to_csv('eval_code_gpt4.csv', sep=',', index=False)

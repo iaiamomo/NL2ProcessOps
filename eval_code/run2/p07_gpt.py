@@ -1,53 +1,81 @@
 from tools.crm_is import ReceiveOrder
+from tools.manufacturer import BuySnacks
+from tools.working_station_is import ScanOrder
 from tools.manufacturer import OrderColor
+from tools.manufacturer import CheckColorQuantity
+from tools.manufacturer import AssembleTreeHouse
 from tools.manufacturer import AssembleInterior
-from tools.manufacturer import ReceiveParts
 from tools.manufacturer import CreateTestProtocol
 from tools.crm_is import DeliverTestProtocol
+from tools.smart_tester import TestSpindle
 from tools.pallet import PalletArrives
 import threading
 
-# Assuming the tools are already imported and available for use
-
-def receive_order():
+def receive_order_and_dispatch():
     part_list, product_id = ReceiveOrder.call()
-    return part_list, product_id
-
-def order_parts(part_list):
-    # Example of ordering parts based on the part_list
-    # This is a simplified version and does not cover all the logic
+    # Assuming the part_list contains the specifications for bars, seats, color, and water amount
+    # Dispatch manufacturing tasks based on the specifications
+    threads = []
     for part in part_list:
         if part == "vodka bar":
-            # Order vodka bar (assuming a method exists for this)
-            pass
+            thread = threading.Thread(target=order_and_manufacture_vodka_bar)
+            threads.append(thread)
         elif part == "whiskey bar":
-            # Order whiskey bar
-            pass
-        # Add more conditions for other parts like seats, toilet water amount, etc.
+            thread = threading.Thread(target=order_and_manufacture_whiskey_bar)
+            threads.append(thread)
+        elif part == "seats":
+            thread = threading.Thread(target=order_and_manufacture_seats)
+            threads.append(thread)
+        elif part == "toilet water amount":
+            thread = threading.Thread(target=order_and_manufacture_toilet_water)
+            threads.append(thread)
     
-    # Assuming a method to wait for all parts to be manufactured and received
-    ReceiveParts.call()
+    for thread in threads:
+        thread.start()
+    
+    for thread in threads:
+        thread.join()
+    
+    return part_list, product_id
 
-def assemble_interior(part_list, product_id):
+def order_and_manufacture_vodka_bar():
+    # Placeholder function for ordering and manufacturing vodka bar
+    pass
+
+def order_and_manufacture_whiskey_bar():
+    # Placeholder function for ordering and manufacturing whiskey bar
+    pass
+
+def order_and_manufacture_seats():
+    # Placeholder function for ordering and manufacturing seats
+    pass
+
+def order_and_manufacture_toilet_water():
+    # Placeholder function for ordering and manufacturing toilet water amount
+    pass
+
+def assemble_interior_and_test_flight(part_list, product_id):
     AssembleInterior.call(part_list=part_list, product_id=product_id)
+    test_flight_passed = TestSpindle.call(product_id=product_id)
+    if test_flight_passed:
+        test_protocol = CreateTestProtocol.call(part_list=part_list, product_id=product_id)
+        return test_protocol
+    else:
+        return "Test flight failed"
 
-def test_flight_and_delivery(part_list, product_id):
-    test_protocol = CreateTestProtocol.call(part_list=part_list, product_id=product_id)
+def deliver_and_confirm(product_id, test_protocol):
     DeliverTestProtocol.call(product_id=product_id, protocol=test_protocol)
-    # Assuming a method exists for delivering the airplane to the customer and receiving confirmation
-    # DeliverAirplane.call(product_id=product_id)
-    # ReceiveConfirmation.call(product_id=product_id)
+    # Assuming a placeholder function for delivery and customer confirmation
+    # In real scenario, this would involve logistics and customer interaction
+    print(f"Airplane with ID {product_id} delivered and awaiting customer confirmation.")
 
 def process():
-    part_list, product_id = receive_order()
-    order_parts_thread = threading.Thread(target=order_parts, args=(part_list,))
-    order_parts_thread.start()
-    order_parts_thread.join()  # Wait for parts ordering and manufacturing to complete
-    
-    assemble_interior(part_list, product_id)
-    test_flight_and_delivery(part_list, product_id)
-    return "Process completed successfully."
+    part_list, product_id = receive_order_and_dispatch()
+    test_protocol = assemble_interior_and_test_flight(part_list, product_id)
+    if test_protocol != "Test flight failed":
+        deliver_and_confirm(product_id, test_protocol)
+    else:
+        print("Process aborted due to test flight failure.")
 
 if __name__ == "__main__":
-    result = process()
-    print(result)
+    process()

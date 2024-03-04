@@ -3,31 +3,24 @@ from tools.vision_is import CheckMarkers
 from tools.die_machine import SetSpeedDieMachine
 import numpy as np
 
-def capture_photo_of_cardboard():
-    # This function simulates capturing a photo of the cardboard.
-    # In a real scenario, this would interface with a camera system.
-    # Here, we return a simulated image as a numpy matrix.
-    return np.random.rand(10, 10)  # Simulated image
+def capture_photo():
+    # Simulate capturing a photo. In a real scenario, this would interface with a camera.
+    # Here, we just return a placeholder numpy matrix representing an image.
+    return np.random.rand(10, 10)  # Placeholder for an image of the cardboard
 
 def calibration_process():
     while True:
-        # Capture photo of cardboard
-        cardboard_image = capture_photo_of_cardboard()
-        
-        # Analyze photo
-        markers_ok = CheckMarkers.call(image=cardboard_image)
-        
-        # Check if markers are ok
+        photo = capture_photo()
+        markers_ok = CheckMarkers.call(image=photo)
         if markers_ok:
-            # Set machine speed to 10000 RPM
             speed_set = SetSpeedDieMachine.call(speed=10000)
             if speed_set:
-                print("Machine speed set to 10000 RPM successfully.")
+                print("Speed set to 10000 RPM. Calibration process completed.")
             else:
-                print("Failed to set machine speed.")
-            break  # End the process
+                print("Failed to set speed. Please check the die cutting machine.")
+            break
         else:
-            print("Markers not ok, capturing another photo.")
+            print("Markers not ok. Repeating the calibration process.")
 
 if __name__ == "__main__":
     calibration_process()

@@ -1,48 +1,30 @@
 from tools.mold_is import AuthorizeProduction
 from tools.mold_is import SensorMeasure
-class AuthorizeProduction:
-    @staticmethod
-    def call():
-        # This method simulates authorizing the production run
-        print("Production authorized.")
-
-class SensorMeasure:
-    @staticmethod
-    def call():
-        # This method simulates measuring the temperature, pressure, and fill rates
-        # For the sake of example, let's return some dummy values
-        return 100, 200, 300  # temperature, pressure, fill_rate
-
-def analyze_data(temperature, pressure, fill_rate):
-    # This function simulates analyzing the captured data
-    # Let's assume the specified standards are:
-    # Temperature: 100 +/- 10, Pressure: 200 +/- 20, Fill Rate: 300 +/- 30
-    if (90 <= temperature <= 110) and (180 <= pressure <= 220) and (270 <= fill_rate <= 330):
-        return True  # No deviations detected
-    else:
-        return False  # Deviations detected
-
-def trigger_adjustments():
-    # This function simulates triggering adjustments to the machine settings
-    print("Adjustments to machine settings have been triggered.")
-
+from tools.mold_is import AnalyzeMold
 def inject_molten_plastic_into_mold():
-    # This function simulates the injection of molten plastic into the mold
-    print("Molten plastic injected into mold.")
+    """
+    Simulates the injection of molten plastic into the mold.
+    This function is a placeholder for the actual injection process.
+    """
+    pass  # This would be replaced with actual injection logic
 
-def continue_production_run():
-    # This function simulates continuing the production run
-    AuthorizeProduction.call()
+def trigger_adjustments_to_machine_settings():
+    """
+    Simulates triggering adjustments to the machine settings based on deviations detected.
+    This function is a placeholder for the actual adjustment process.
+    """
+    pass  # This would be replaced with actual adjustment logic
 
-def quality_assurance_process():
+def process():
     inject_molten_plastic_into_mold()
     while True:
         temperature, pressure, fill_rate = SensorMeasure.call()
-        if analyze_data(temperature, pressure, fill_rate):
-            continue_production_run()
-            break
+        deviation = AnalyzeMold.call(temperature=temperature, pressure=pressure, fill_rate=fill_rate)
+        if deviation:
+            trigger_adjustments_to_machine_settings()
         else:
-            trigger_adjustments()
+            AuthorizeProduction.call()
+            break
 
 if __name__ == "__main__":
-    quality_assurance_process()
+    process()

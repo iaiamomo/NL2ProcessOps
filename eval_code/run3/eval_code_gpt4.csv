@@ -12,297 +12,248 @@ p01,"When a pallet arrives at the working station, the system empties the scan r
 {""name"": ""DisplaysScanningUI"", ""description"": ""The working station system displays the scanning UI.It takes no input. It returns no output."", ""input_parameters"": [""order_id:int""], ""output_parameters"": [], ""actor"": ""working_station_is""}
 ","import threading
 
-# Assuming the tools are already imported and available for use as described
-# EmptyScan, ScanOrder, DisplaysScanningUI
+# Assuming the tools are already imported as per the guidelines
+# from tools import EmptyScan, ScanOrder, DisplaysScanningUI
 
 def display_scanning_ui_and_assemble_part(order_id):
-    # Display the scanning UI
     DisplaysScanningUI.call(order_id=order_id)
-    # Simulate assembling part in parallel (not explicitly defined, so no actual function call here)
-    # In a real scenario, this could involve calling another tool or performing some operations
+    # Assuming there's a placeholder function for assembling the part since it's not provided as a tool
+    assemble_part()
 
-def process():
+def assemble_part():
+    # Placeholder function to represent the assembly part task
+    # In a real scenario, this would involve specific actions to assemble the part
+    print(""Assembling the part..."")
+
+def process_pallet():
     # Empty the scan results
     EmptyScan.call()
     
-    # Scan the order and get the order ID
+    # Scan the order and get the order_id
     order_id = ScanOrder.call()
     
-    # Create threads for parallel execution of displaying scanning UI and assembling part
-    thread_ui = threading.Thread(target=display_scanning_ui_and_assemble_part, args=(order_id,))
-    thread_assemble = threading.Thread(target=lambda: None)  # Placeholder for assembling part, assuming no specific function call is needed
-    
-    # Start threads
-    thread_ui.start()
-    thread_assemble.start()
-    
-    # Wait for both threads to complete
-    thread_ui.join()
-    thread_assemble.join()
-    
-    return ""Process completed.""
+    # Display scanning UI and assemble part in parallel
+    threading.Thread(target=display_scanning_ui_and_assemble_part, args=(order_id,)).start()
+    threading.Thread(target=assemble_part).start()
 
 if __name__ == ""__main__"":
-    result = process()
-    print(result)"
+    process_pallet()"
 p02,"The calibration process of a cardboard production consists of continuously capturing a photo of the cardboard being produced. Each photo is analyzed to check if all the markers identified are ok. If markers are not ok, the calibration process continues. If the markers are ok, the speed of the die cutting machine is set to 10000 RPM and the process ends.","graph LR
-1:startevent:((startevent)) --> 2:task:(Capture photo of cardboard)
-2:task: --> 3:task:(Analyze photo)
+1:startevent:((startevent)) --> 2:task:(Capture Photo)
+2:task: --> 3:task:(Analyze Photo)
 3:task: --> 4:exclusivegateway:{x}
 4:exclusivegateway:{x} --> |Markers not ok| 2:task:
-4:exclusivegateway:{x} --> |Markers ok| 5:task:(Set machine speed to 10000 RPM)
-5:task: --> 6:endevent:((endevent))","[""continuously capture a photo of the cardboard being produced"", ""analyze each photo to check if all markers identified are ok"", ""if markers are not ok, continue the calibration process"", ""if markers are ok, set the speed of the die cutting machine to 10000 RPM""]","{""name"": ""StoreCardboardRoll"", ""description"": ""Worker stores the cardboard roll in the warehouse.It takes as input the location. It returns no output."", ""input_parameters"": [""location:str""], ""output_parameters"": [], ""actor"": ""worker""}
+4:exclusivegateway:{x} --> |Markers ok| 5:task:(Set Speed to 10000 RPM)
+5:task: --> 6:endevent:((endevent))","[""continuously capture a photo of the cardboard being produced"", ""analyze each photo to check if all markers are ok"", ""if markers are not ok, continue the calibration process"", ""if markers are ok, set the speed of the die cutting machine to 10000 RPM""]","{""name"": ""StoreCardboardRoll"", ""description"": ""Worker stores the cardboard roll in the warehouse.It takes as input the location. It returns no output."", ""input_parameters"": [""location:str""], ""output_parameters"": [], ""actor"": ""worker""}
 {""name"": ""CheckMarkers"", ""description"": ""Analysis of the markers on a cardboard image.This tool takes as input an image depicting a cardboard. It returns a boolean indicating if markers are present on the cardboard."", ""input_parameters"": [""image:np.matrix""], ""output_parameters"": [""markers_ok:bool""], ""actor"": ""vision_is""}
 {""name"": ""SetSpeedDieMachine"", ""description"": ""set the speed of the die cutting machine.It takes as input the speed. It returns a boolean value, True if the speed has been set, False otherwise."", ""input_parameters"": [""speed:int""], ""output_parameters"": [""speed_set:bool""], ""actor"": ""die_machine""}
 ","import numpy as np
 
-def capture_photo_of_cardboard():
-    # This function simulates capturing a photo of the cardboard.
-    # In a real scenario, this would interface with a camera system.
-    # Here, we return a simulated image as a numpy matrix.
-    return np.random.rand(10, 10)  # Simulated image
+def capture_photo():
+    # Simulate capturing a photo. In a real scenario, this would interface with a camera.
+    # Here, we just return a placeholder numpy matrix representing an image.
+    return np.random.rand(10, 10)  # Placeholder for an image of the cardboard
 
 def calibration_process():
     while True:
-        # Capture photo of cardboard
-        cardboard_image = capture_photo_of_cardboard()
-        
-        # Analyze photo
-        markers_ok = CheckMarkers.call(image=cardboard_image)
-        
-        # Check if markers are ok
+        photo = capture_photo()
+        markers_ok = CheckMarkers.call(image=photo)
         if markers_ok:
-            # Set machine speed to 10000 RPM
             speed_set = SetSpeedDieMachine.call(speed=10000)
             if speed_set:
-                print(""Machine speed set to 10000 RPM successfully."")
+                print(""Speed set to 10000 RPM. Calibration process completed."")
             else:
-                print(""Failed to set machine speed."")
-            break  # End the process
+                print(""Failed to set speed. Please check the die cutting machine."")
+            break
         else:
-            print(""Markers not ok, capturing another photo."")
+            print(""Markers not ok. Repeating the calibration process."")
 
 if __name__ == ""__main__"":
     calibration_process()"
 p03,"The manufacturing process of spindles in HSD company is fully automated. When a new order for a spindle arrives at the sales department, a new process instance is initiated. The warehouse system retrive the necessary raw materials, and in parallel the L12 line is set up for the assembly of the ordered spindle. Once the warehouse successfully retrieves the raw materials and the L12 line is set up, the spindle is assembled over the L12 line. Subsequently, the spindle undergoes testing and running-in in the smart tester. If the outcome of the test is negative, the spindle is sent to maintenance. Then, the the process ends.","graph LR
-1:startevent:((startevent)) --> 2:task:(New order arrives)
+1:startevent:((startevent)) --> 2:task:(Initiate new spindle order process)
 2:task: --> 3:parallelgateway:{AND}
 3:parallelgateway:{AND} --> 4:task:(Retrieve raw materials)
 3:parallelgateway:{AND} --> 5:task:(Set up L12 line)
 4:task: --> 6:parallelgateway:{AND}
 5:task: --> 6:parallelgateway:{AND}
-6:parallelgateway:{AND} --> 7:task:(Assemble spindle)
+6:parallelgateway:{AND} --> 7:task:(Assemble spindle over L12 line)
 7:task: --> 8:task:(Test and run-in spindle)
 8:task: --> 9:exclusivegateway:{x}
 9:exclusivegateway:{x} --> |Test Negative| 10:task:(Send to maintenance)
 9:exclusivegateway:{x} --> |Test Positive| 11:endevent:((endevent))
-10:task: --> 11:endevent:((endevent))","[""receive a new order for a spindle"", ""retrieve the necessary raw materials from the warehouse"", ""set up the L12 line for spindle assembly"", ""assemble the spindle over the L12 line"", ""test and run-in the spindle in the smart tester"", ""if the test outcome is negative, send the spindle to maintenance""]","{""name"": ""L12AssembleSpindle"", ""description"": ""Assembly of a spindle over the L12 line.This tool takes as input the part list of a spindle. It returns a boolean indicating if the spindle has been assembled."", ""input_parameters"": {""part_list"": {""type"": ""list"", ""description"": ""list of parts of a spindle""}}, ""output_parameters"": {""assembled"": {""type"": ""bool"", ""description"": ""True if the spindle has been assembled, False otherwise""}}, ""actor"": ""l12""}
+10:task: --> 11:endevent:((endevent))","[""initiate a new order process for a spindle"", ""retrieve the necessary raw materials from the warehouse"", ""set up the L12 line for spindle assembly"", ""assemble the spindle over the L12 line"", ""test and run-in the spindle in the smart tester"", ""if the test outcome is negative, send the spindle to maintenance""]","{""name"": ""TestSpindle"", ""description"": ""Test and run-in of the spindle.It takes as input the identificator of the product to be tested. It returns a boolean value, True if the spindle passed the test, False otherwise."", ""input_parameters"": [""product_id:int""], ""output_parameters"": [""passed:bool""], ""actor"": ""smart_tester""}
 {""name"": ""RetrieveRawMaterials"", ""description"": ""Warehouse deparment evaluates part list and retrieve raw materials.This tool takes as input the part list of a product. It returns a boolean indicating if all the parts are retrieved."", ""input_parameters"": [""part_list:list""], ""output_parameters"": [""retrieved:bool""], ""actor"": ""wms_is""}
+{""name"": ""OrderRawMaterial"", ""description"": ""Warehouse deparment orders the raw material.It takes the part as input. It does not return anything."", ""input_parameters"": [""part:str""], ""output_parameters"": [], ""actor"": ""wms_is""}
+{""name"": ""RetrieveRawMaterial"", ""description"": ""Warehouse department retrieves a raw material.It takes the part as input. It returns a boolean indicating if the part is retrieved."", ""input_parameters"": [""part:str""], ""output_parameters"": [""retrieved:bool""], ""actor"": ""wms_is""}
 {""name"": ""L12SetUp"", ""description"": ""Set up the L12 line for spindle assembly.This tool takes no input and returns a boolean indicating if the line has been set up."", ""input_parameters"": [], ""output_parameters"": [""set_up:bool""], ""actor"": ""l12""}
-{""name"": ""TestSpindle"", ""description"": ""Test and run-in of the spindle.It takes as input the identificator of the product to be tested. It returns a boolean value, True if the spindle passed the test, False otherwise."", ""input_parameters"": [""product_id:int""], ""output_parameters"": [""passed:bool""], ""actor"": ""smart_tester""}
-","from threading import Thread
-from queue import Queue
+{""name"": ""L12AssembleSpindle"", ""description"": ""Assembly of a spindle over the L12 line.This tool takes as input the part list of a spindle. It returns a boolean indicating if the spindle has been assembled."", ""input_parameters"": {""part_list"": {""type"": ""list"", ""description"": ""list of parts of a spindle""}}, ""output_parameters"": {""assembled"": {""type"": ""bool"", ""description"": ""True if the spindle has been assembled, False otherwise""}}, ""actor"": ""l12""}
+","import threading
 
-# Assuming the tools are already imported and available for use
-# from tools import L12AssembleSpindle, RetrieveRawMaterials, L12SetUp, TestSpindle
+# Assuming the tools are already imported as per the guidelines
+# from tools import TestSpindle, RetrieveRawMaterials, OrderRawMaterial, RetrieveRawMaterial, L12SetUp, L12AssembleSpindle
 
-def retrieve_and_setup(part_list, setup_queue, retrieve_queue):
-    # Set up L12 line
-    setup_result = L12SetUp.call()
-    setup_queue.put(setup_result)
-    
-    # Retrieve raw materials
-    retrieve_result = RetrieveRawMaterials.call(part_list=part_list)
-    retrieve_queue.put(retrieve_result)
+def initiate_spindle_order_process(part_list):
+    # Parallel tasks for retrieving raw materials and setting up L12 line
+    def retrieve_raw_materials():
+        return RetrieveRawMaterials.call(part_list=part_list)
 
-def process(part_list, product_id):
-    setup_queue = Queue()
-    retrieve_queue = Queue()
-    
-    # Start parallel tasks for retrieving raw materials and setting up L12 line
-    thread = Thread(target=retrieve_and_setup, args=(part_list, setup_queue, retrieve_queue))
-    thread.start()
-    thread.join()
-    
-    # Check if both tasks were successful
-    setup_result = setup_queue.get()
-    retrieve_result = retrieve_queue.get()
-    
-    if setup_result and retrieve_result:
-        # Assemble spindle
-        assembly_result = L12AssembleSpindle.call(part_list=part_list)
-        if assembly_result['assembled']:
+    def setup_l12_line():
+        return L12SetUp.call()
+
+    thread_retrieve = threading.Thread(target=retrieve_raw_materials)
+    thread_setup = threading.Thread(target=setup_l12_line)
+
+    thread_retrieve.start()
+    thread_setup.start()
+
+    thread_retrieve.join()
+    raw_materials_retrieved = thread_retrieve._target()
+    thread_setup.join()
+    l12_line_set_up = thread_setup._target()
+
+    # Proceed only if both tasks are completed successfully
+    if raw_materials_retrieved and l12_line_set_up:
+        # Assemble spindle over L12 line
+        spindle_assembled = L12AssembleSpindle.call(part_list=part_list)
+        if spindle_assembled:
             # Test and run-in spindle
-            test_result = TestSpindle.call(product_id=product_id)
-            if test_result['passed']:
-                return ""Process completed successfully.""
+            test_result = TestSpindle.call(product_id=1)  # Assuming a product ID for demonstration
+            if test_result:
+                print(""Spindle assembly and testing completed successfully."")
             else:
-                # Send to maintenance
-                return ""Spindle failed the test and was sent to maintenance.""
+                # Send to maintenance if test fails
+                print(""Spindle failed the test and is sent to maintenance."")
         else:
-            return ""Assembly of spindle failed.""
+            print(""Failed to assemble spindle."")
     else:
-        return ""Failed to set up L12 line or retrieve raw materials.""
+        print(""Failed to retrieve raw materials or set up L12 line."")
 
 if __name__ == ""__main__"":
-    part_list = [""part1"", ""part2"", ""part3""]
-    product_id = 123
-    result = process(part_list, product_id)
-    print(result)"
+    part_list = [""part1"", ""part2"", ""part3""]  # Example part list
+    initiate_spindle_order_process(part_list)"
 p04,"When craving a custom 3D model, as a first step you have to instruct an artist to create a project for you. First you have to send him several sketches, and then tell him what to change until you are satisfied with the result. After that, you choose a plastic color you want to use for 3D printing. If you have the color at home (in stock), you check how much color you have left. If it's under 100 grams, you put it on your shopping list. If you do not have the color at home, you order it. When you have the plastic, you can turn the printer on and heat up the bed and the extruder (it continuously sends you back its status). While doing that, you can generate the gcode file for your printer out of the STL sent to you by the artist. After that you print the model.","graph LR
-1:startevent:((startevent)) --> 2:task:(Instruct Artist)
-2:task: --> 3:task:(Send Sketches)
-3:task: --> 4:task:(Revise Project)
+1:startevent:((startevent)) --> 2:task:(Send sketches to artist)
+2:task: --> 3:task:(Revise project with artist)
+3:task: --> 4:task:(Choose plastic color)
 4:task: --> 5:exclusivegateway:{x}
-5:exclusivegateway:{x} --> |Satisfied| 6:task:(Choose Plastic Color)
-5:exclusivegateway:{x} --> |Not Satisfied| 3:task:
-6:task: --> 7:exclusivegateway:{x}
-7:exclusivegateway:{x} --> |Color In Stock| 8:task:(Check Color Quantity)
-7:exclusivegateway:{x} --> |Color Not In Stock| 9:task:(Order Color)
-8:task: --> 10:exclusivegateway:{x}
-10:exclusivegateway:{x} --> |Under 100g| 11:task:(Add to Shopping List)
-10:exclusivegateway:{x} --> |Over 100g| 12:task:(Prepare Printer)
-9:task: --> 12:task:
-12:task: --> 13:task:(Heat Up Printer)
-13:task: --> 14:task:(Generate Gcode)
-14:task: --> 15:task:(Print Model)
-15:task: --> 16:endevent:((endevent))","[""instruct an artist to create a 3D model project"", ""send initial sketches to the artist"", ""revise the project until satisfied"", ""choose the plastic color for 3D printing"", ""check the quantity of the chosen color if in stock"", ""if the color is under 100 grams, add it to the shopping list"", ""order the color if not in stock"", ""prepare the 3D printer"", ""heat up the printer's bed and extruder"", ""generate the Gcode file from the STL file"", ""print the 3D model""]","{""name"": ""SendSketches"", ""description"": ""Send the sketches of the project to the artist.It takes no input. It returns the description of the project."", ""input_parameters"": [], ""output_parameters"": [""project:str""], ""actor"": ""manufacturer""}
-{""name"": ""RefineRequirementsTreeHouse"", ""description"": ""Refine the requirements for the tree house.It takes the part list. It returns the refined part list."", ""input_parameters"": [""part_list:list""], ""output_parameters"": [""refined_part_list:list""], ""actor"": ""manufacturer""}
+5:exclusivegateway:{x} --> |Color in stock| 6:task:(Check color quantity)
+5:exclusivegateway:{x} --> |Color not in stock| 7:task:(Order color)
+6:task: --> 8:exclusivegateway:{x}
+8:exclusivegateway:{x} --> |Under 100g| 9:task:(Add to shopping list)
+8:exclusivegateway:{x} --> |100g or more| 10:task:(Prepare printer)
+7:task: --> 10:task:
+10:task: --> 11:task:(Generate gcode file)
+11:task: --> 12:task:(Heat up printer)
+12:task: --> 13:task:(Print model)
+13:task: --> 14:endevent:((endevent))","[""send initial sketches to the artist"", ""revise the project with the artist until satisfied"", ""choose the plastic color for 3D printing"", ""check the quantity of the chosen color if in stock"", ""add the color to the shopping list if under 100 grams"", ""order the color if not in stock"", ""prepare the 3D printer"", ""generate the gcode file from the STL file"", ""heat up the printer's bed and extruder"", ""print the 3D model""]","{""name"": ""SendSketches"", ""description"": ""Send the sketches of the project to the artist.It takes no input. It returns the description of the project."", ""input_parameters"": [], ""output_parameters"": [""project:str""], ""actor"": ""manufacturer""}
 {""name"": ""ChoosePlasticColor"", ""description"": ""Choose the color of the plastic.It takes no input. It returns the color of the plastic."", ""input_parameters"": [], ""output_parameters"": [""color:int""], ""actor"": ""manufacturer""}
 {""name"": ""CheckColorQuantity"", ""description"": ""Check the quantity of the color.It takes the color as input. It returns the quantity of the color in grams."", ""input_parameters"": [""color:int""], ""output_parameters"": [""quantity:int""], ""actor"": ""manufacturer""}
+{""name"": ""CheckColorAvailability"", ""description"": ""Check the availability of the color.It takes the color as input. It returns the availability of the color."", ""input_parameters"": [""color:int""], ""output_parameters"": [""availability:bool""], ""actor"": ""manufacturer""}
 {""name"": ""OrderColor"", ""description"": ""Order the color.It takes the color as input. It does not return anything."", ""input_parameters"": [""color:int""], ""output_parameters"": [], ""actor"": ""manufacturer""}
 {""name"": ""TurnOn"", ""description"": ""Turn on the 3D printer.It takes no input. It does not return anything."", ""input_parameters"": [], ""output_parameters"": [], ""actor"": ""printer_3d""}
+{""name"": ""Print"", ""description"": ""Print the object.It takes the object as input. It does not return anything."", ""input_parameters"": [""GCodeFile:str""], ""output_parameters"": [], ""actor"": ""printer_3d""}
 {""name"": ""HeatUpBedExtruder"", ""description"": ""Heat up the bed and the extruder.It takes no input. It does not return anything."", ""input_parameters"": [], ""output_parameters"": [], ""actor"": ""printer_3d""}
 {""name"": ""GenerateGCode"", ""description"": ""Generate the GCode file for the printer.It takes the object as input. It returns the GCode file."", ""input_parameters"": [""project:str""], ""output_parameters"": [""gcode:str""], ""actor"": ""manufacturer""}
-{""name"": ""Print"", ""description"": ""Print the object.It takes the object as input. It does not return anything."", ""input_parameters"": [""GCodeFile:str""], ""output_parameters"": [], ""actor"": ""printer_3d""}
-","def instruct_artist_and_print_model():
-    # Instruct Artist and Send Sketches
-    project_description = SendSketches.call()
-
-    # Revise Project until satisfied
-    satisfied = False
-    while not satisfied:
-        # Assuming a function to check if the manufacturer is satisfied
-        # This could be replaced with actual logic to determine satisfaction
-        satisfied = input(""Are you satisfied with the project? (yes/no): "").lower() == ""yes""
-        if not satisfied:
-            project_description = RefineRequirementsTreeHouse.call(part_list=[project_description])
-
-    # Choose Plastic Color
-    color = ChoosePlasticColor.call()
-
-    # Check if Color is in Stock and its Quantity
-    quantity = CheckColorQuantity.call(color=color)
-    if quantity < 100:
-        print(""Adding color to shopping list as quantity is under 100g."")
-        # Add to Shopping List (Assuming a function to add items to a shopping list)
-        # This could be replaced with actual logic to add to a shopping list
+","def check_and_order_color(color):
+    availability = CheckColorAvailability.call(color=color)
+    if availability:
+        quantity = CheckColorQuantity.call(color=color)
+        if quantity < 100:
+            print(f""Color {color} is under 100g, adding to shopping list."")
+            # Add to shopping list (Assuming a function or a process for this exists)
+        else:
+            print(f""Color {color} is sufficient for printing."")
     else:
-        # Prepare Printer
-        print(""Preparing printer..."")
-
-    # Order Color if not in stock
-    if quantity == 0:
+        print(f""Color {color} not in stock, ordering."")
         OrderColor.call(color=color)
 
-    # Turn on the printer and heat up
+def prepare_and_print(project):
+    gcode = GenerateGCode.call(project=project)
     TurnOn.call()
     HeatUpBedExtruder.call()
-
-    # Generate GCode
-    gcode = GenerateGCode.call(project=project_description)
-
-    # Print Model
     Print.call(GCodeFile=gcode)
 
+def process():
+    project_description = SendSketches.call()
+    color = ChoosePlasticColor.call()
+    check_and_order_color(color)
+    prepare_and_print(project_description)
     print(""Model printing process completed."")
 
 if __name__ == ""__main__"":
-    instruct_artist_and_print_model()"
+    process()"
 p05,"Plastic injection molding is a manufacturing process for producing a variety of parts by injecting molten plastic material into a mold, and letting it cool and solidify into the desired end product. Our interest is in the quality assurance process which involves real-time monitoring of injection molding parameters. As each batch of molten plastic enters the mold, sensors capture data on temperature, pressure, and fill rates. The system analyzes this data to ensure that the molding parameters align with the specified standards. If any deviations are detected, the system triggers adjustments to the injection molding machine settings, allowing for immediate correction. Once the parameters are within the acceptable range, the system authorizes the production run to continue. This dynamic monitoring process guarantees the consistency and quality of the plastic molded components, minimizing the risk of defects and ensuring adherence to precise manufacturing specifications.","graph LR
 1:startevent:((startevent)) --> 2:task:(Capture Data)
 2:task: --> 3:task:(Analyze Data)
 3:task: --> 4:exclusivegateway:{x}
 4:exclusivegateway:{x} --> |Deviations Detected| 5:task:(Adjust Machine Settings)
-5:task: --> 3:task:
+5:task: --> 2:task:
 4:exclusivegateway:{x} --> |Parameters Acceptable| 6:task:(Authorize Production)
-6:task: --> 7:endevent:((endevent))","[""capture data on temperature, pressure, and fill rates"", ""analyze the captured data to ensure alignment with standards"", ""adjust the injection molding machine settings if deviations are detected"", ""authorize the production run to continue once parameters are within the acceptable range""]","{""name"": ""SensorMeasure"", ""description"": ""Measure the temperature, pressure and fill rates of the mold.It takes no input and returns the temperature of the oven."", ""input_parameters"": [], ""output_parameters"": [""temperature:int"", ""pressure:int"", ""fill_rate:int""], ""actor"": ""mold_is""}
+6:task: --> 7:endevent:((endevent))","[""capture data on temperature, pressure, and fill rates"", ""analyze the captured data to ensure alignment with specified standards"", ""adjust the injection molding machine settings if deviations are detected"", ""authorize the production run to continue once parameters are within the acceptable range""]","{""name"": ""SensorMeasure"", ""description"": ""Measure the temperature, pressure and fill rates of the mold.It takes no input and returns the temperature of the oven."", ""input_parameters"": [], ""output_parameters"": [""temperature:int"", ""pressure:int"", ""fill_rate:int""], ""actor"": ""mold_is""}
+{""name"": ""AnalyzeMold"", ""description"": ""Analyze the temperature, pressure and fill rates of the mold to check deviations.It takes the temperature, pressure and fill rate as input and returns a boolean indicating if the mold is ok."", ""input_parameters"": [""temperature:int"", ""pressure:int"", ""fill_rate:int""], ""output_parameters"": [""deviation:bool""], ""actor"": ""mold_is""}
 {""name"": ""AdjustMold"", ""description"": ""Adjust the settings the mold.It takes no input and returns no output."", ""input_parameters"": [], ""output_parameters"": [], ""actor"": ""mold_is""}
 {""name"": ""AuthorizeProduction"", ""description"": ""Authorize the production of the mold.It takes no input and returns no output."", ""input_parameters"": [], ""output_parameters"": [], ""actor"": ""mold_is""}
-","def check_parameters(temperature, pressure, fill_rate):
-    # Assuming there are predefined standards for temperature, pressure, and fill rate
-    # These standards could be defined as global constants or retrieved from a database
-    # For simplicity, we will define them as constants here
-    STANDARD_TEMPERATURE = 200  # Example standard value
-    STANDARD_PRESSURE = 1500  # Example standard value
-    STANDARD_FILL_RATE = 300  # Example standard value
-
-    # Check if the parameters are within acceptable ranges
-    if (temperature == STANDARD_TEMPERATURE and
-            pressure == STANDARD_PRESSURE and
-            fill_rate == STANDARD_FILL_RATE):
-        return True
-    else:
-        return False
-
-def process():
+","def quality_assurance_process():
     while True:
         # Capture data from sensors
         temperature, pressure, fill_rate = SensorMeasure.call()
-
-        # Analyze data
-        parameters_ok = check_parameters(temperature, pressure, fill_rate)
-
-        if not parameters_ok:
-            # Adjust machine settings if parameters are not acceptable
+        
+        # Analyze captured data for deviations
+        deviation = AnalyzeMold.call(temperature=temperature, pressure=pressure, fill_rate=fill_rate)
+        
+        if deviation:
+            # Adjust machine settings if deviations are detected
             AdjustMold.call()
         else:
             # Authorize production if parameters are acceptable
             AuthorizeProduction.call()
-            break  # Exit the loop and end the process after authorizing production
+            break  # Exit the loop once production is authorized
 
 if __name__ == ""__main__"":
-    process()"
+    quality_assurance_process()"
 p06,"The production of custom metal brackets begins with order processing. The warehouse department evaluates the parts lists and in parallel the production planning department configures the robotic assembly line accordingly. The automated precision machine cuts the metal and the welding machine assembles the parts into brackets. A computer vision inspection system then checks for quality assurance. If defective brakets are detected, the process ends. After inspection, a coating system enhances durability. Finally, the process is complete.","graph LR
-1:startevent:((startevent)) --> 2:task:(Process Order)
+1:startevent:((startevent)) --> 2:task:(Order Processing)
 2:task: --> 3:parallelgateway:{AND}
-3:parallelgateway:{AND} --> 4:task:(Evaluate Parts List)
+3:parallelgateway:{AND} --> 4:task:(Evaluate Parts Lists)
 3:parallelgateway:{AND} --> 5:task:(Configure Robotic Assembly Line)
 4:task: --> 6:parallelgateway:{AND}
 5:task: --> 6:parallelgateway:{AND}
 6:parallelgateway:{AND} --> 7:task:(Cut Metal)
-7:task: --> 8:task:(Assemble Brackets)
+7:task: --> 8:task:(Assemble Parts into Brackets)
 8:task: --> 9:task:(Inspect Brackets)
 9:task: --> 10:exclusivegateway:{x}
 10:exclusivegateway:{x} --> |Defective| 11:endevent:((endevent))
-10:exclusivegateway:{x} --> |Not Defective| 12:task:(Apply Coating)
-12:task: --> 13:endevent:((endevent))","[""process the order"", ""evaluate the parts list"", ""configure the robotic assembly line"", ""cut the metal with precision machinery"", ""assemble the metal parts into brackets"", ""inspect the brackets for quality assurance"", ""apply a coating to enhance durability""]","{""name"": ""AcceptOrder"", ""description"": ""Sales department accepts the order.It takes the product id as input. It returns a boolean indicating if the order is accepted."", ""input_parameters"": [""product_id:int""], ""output_parameters"": [""order_accepted:bool""], ""actor"": ""crm_is""}
-{""name"": ""OrderParts"", ""description"": ""Manufacturer orders the parts online.It takes the part list. It does not return anything."", ""input_parameters"": [""part_list:list""], ""output_parameters"": [], ""actor"": ""manufacturer""}
+10:exclusivegateway:{x} --> |No Defects| 12:task:(Apply Coating)
+12:task: --> 13:endevent:((endevent))","[""process the order"", ""evaluate the parts lists"", ""configure the robotic assembly line"", ""cut the metal with precision machinery"", ""assemble the parts into brackets"", ""inspect the brackets for quality assurance"", ""apply a coating to enhance durability""]","{""name"": ""AcceptOrder"", ""description"": ""Sales department accepts the order.It takes the product id as input. It returns a boolean indicating if the order is accepted."", ""input_parameters"": [""product_id:int""], ""output_parameters"": [""order_accepted:bool""], ""actor"": ""crm_is""}
+{""name"": ""SendRequirements"", ""description"": ""Send the requirements (part list) to the proper teams.It takes the list of requirements. It does not return anything."", ""input_parameters"": [""part_list:list""], ""output_parameters"": [], ""actor"": ""manufacturer""}
 {""name"": ""ConfigureAssemblyLine"", ""description"": ""Configure the assembly line.This tool takes no input and does not return anything."", ""input_parameters"": [], ""output_parameters"": [], ""actor"": ""assembly_line""}
 {""name"": ""CutMetal"", ""description"": ""The precision machine cut the metal.This tool takes no input and does not return anything."", ""input_parameters"": [], ""output_parameters"": [], ""actor"": ""precision_machine""}
 {""name"": ""AssembleParts"", ""description"": ""The welding machine assemble the parts into brackets.This tool takes no input and does not return anything."", ""input_parameters"": [], ""output_parameters"": [], ""actor"": ""welding_machine""}
+{""name"": ""AssembleParts"", ""description"": ""Worker assembles parts.It takes no input. It returns no output."", ""input_parameters"": [], ""output_parameters"": [], ""actor"": ""worker""}
+{""name"": ""AssembleBicycle"", ""description"": ""Assemble the bicycle.It takes the part list. It does not return anything."", ""input_parameters"": [""part_list:list""], ""output_parameters"": [], ""actor"": ""manufacturer""}
 {""name"": ""CheckQualityBrackets"", ""description"": ""Check the quality of the brackets.It takes no input. It returns a boolean indicating if the brackets are of good quality."", ""input_parameters"": [], ""output_parameters"": [""quality_ok:bool""], ""actor"": ""vision_is""}
 {""name"": ""EnhanceProduct"", ""description"": ""The coating machine enhances the product.This tool takes no input and does not return anything."", ""input_parameters"": [], ""output_parameters"": [], ""actor"": ""coating_machine""}
 ","import threading
 
 # Assuming the tools are already imported as per the guidelines
-# from tools import AcceptOrder, OrderParts, ConfigureAssemblyLine, CutMetal, AssembleParts, CheckQualityBrackets, EnhanceProduct
+# from tools import AcceptOrder, SendRequirements, ConfigureAssemblyLine, CutMetal, AssembleParts, CheckQualityBrackets, EnhanceProduct
 
 def process_order(product_id, part_list):
     # Accept the order
     order_accepted = AcceptOrder.call(product_id=product_id)
     if not order_accepted:
-        return False
+        return ""Order not accepted.""
 
-    # Parallel execution for evaluating parts list and configuring the robotic assembly line
-    def evaluate_and_order_parts():
-        OrderParts.call(part_list=part_list)
+    # Parallel execution for evaluating parts lists and configuring the robotic assembly line
+    def evaluate_parts_lists():
+        SendRequirements.call(part_list=part_list)
 
-    def configure_assembly_line():
+    def configure_robotic_assembly_line():
         ConfigureAssemblyLine.call()
 
-    thread1 = threading.Thread(target=evaluate_and_order_parts)
-    thread2 = threading.Thread(target=configure_assembly_line)
+    thread1 = threading.Thread(target=evaluate_parts_lists)
+    thread2 = threading.Thread(target=configure_robotic_assembly_line)
 
     thread1.start()
     thread2.start()
@@ -310,145 +261,156 @@ def process_order(product_id, part_list):
     thread1.join()
     thread2.join()
 
-    # Sequential tasks for cutting metal, assembling brackets, and inspecting them
+    # Sequential tasks for cutting metal, assembling parts, and inspecting brackets
     CutMetal.call()
     AssembleParts.call()
+
     quality_ok = CheckQualityBrackets.call()
-
     if not quality_ok:
-        return False
+        return ""Process ended due to defective brackets.""
 
-    # Apply coating if the brackets are of good quality
+    # Apply coating if brackets are not defective
     EnhanceProduct.call()
 
-    return True
+    return ""Process completed successfully.""
 
 if __name__ == ""__main__"":
     product_id = 123  # Example product ID
     part_list = ['part1', 'part2', 'part3']  # Example parts list
-    process_result = process_order(product_id, part_list)
-    if process_result:
-        print(""Process completed successfully."")
-    else:
-        print(""Process ended due to an error or quality check failure."")"
+    result = process_order(product_id, part_list)
+    print(result)"
 p07,"You produce airplanes. While the base model is always the same, your customer likes to pimp their airplane with fancy interior. You let them decide between a number of 5 different bars, the number of seats, their color, and the amount of water in the toilets of their plane (you can come up with additional stuff). After you received the specifications you send the requirements to different teams to manufacture the parts. E.g. manufacturing the vodka bar is done by the Russian team, the whiskey bar is manufactured by an Irish team. After receiving the individual bits and pieces, the interior of the plane is assembled, and the plane is sent on a test flight. During the flight you create a test protocol which is sent to you and the customer. The plane is delivered to the customer, which has to confirm.","graph LR
-1:startevent:((startevent)) --> 2:task:(Receive airplane customization specifications)
+1:startevent:((startevent)) --> 2:task:(Receive customer specifications)
 2:task: --> 3:parallelgateway:{AND}
 3:parallelgateway:{AND} --> 4:task:(Manufacture vodka bar)
 3:parallelgateway:{AND} --> 5:task:(Manufacture whiskey bar)
 3:parallelgateway:{AND} --> 6:task:(Manufacture seats)
-3:parallelgateway:{AND} --> 7:task:(Manufacture additional custom parts)
+3:parallelgateway:{AND} --> 7:task:(Manufacture toilet water system)
 4:task: --> 8:parallelgateway:{AND}
 5:task: --> 8:parallelgateway:{AND}
 6:task: --> 8:parallelgateway:{AND}
 7:task: --> 8:parallelgateway:{AND}
 8:parallelgateway:{AND} --> 9:task:(Assemble interior)
-9:task: --> 10:task:(Test flight and create protocol)
-10:task: --> 11:task:(Deliver plane to customer)
-11:task: --> 12:task:(Customer confirmation)
-12:task: --> 13:endevent:((endevent))","[""receive customization specifications from the customer"", ""manufacture vodka bar by the Russian team"", ""manufacture whiskey bar by the Irish team"", ""manufacture the specified number and color of seats"", ""manufacture additional custom parts as specified by the customer"", ""assemble the interior of the airplane with all manufactured parts"", ""conduct a test flight and create a test protocol"", ""deliver the airplane to the customer"", ""obtain confirmation from the customer""]","{""name"": ""ReceiveOrder"", ""description"": ""Sales department receives a new order specification from customer.It takes no input. It returns the part list and the product id."", ""input_parameters"": [], ""output_parameters"": [""part_list:list"", ""product_id:int""], ""actor"": ""crm_is""}
-{""name"": ""AssembleInterior"", ""description"": ""Assemble the interior of the plane.It takes the part list and the plane id. It does not return anything."", ""input_parameters"": [""part_list:list"", ""product_id:int""], ""output_parameters"": [], ""actor"": ""manufacturer""}
-{""name"": ""OrderParts"", ""description"": ""Manufacturer orders the parts online.It takes the part list. It does not return anything."", ""input_parameters"": [""part_list:list""], ""output_parameters"": [], ""actor"": ""manufacturer""}
+9:task: --> 10:task:(Test flight)
+10:task: --> 11:task:(Create test protocol)
+11:task: --> 12:task:(Deliver plane to customer)
+12:task: --> 13:task:(Customer confirmation)
+13:task: --> 14:endevent:((endevent))","[""receive customer specifications for the airplane interior"", ""manufacture vodka bar by the Russian team"", ""manufacture whiskey bar by the Irish team"", ""manufacture the specified number and color of seats"", ""manufacture the water system for the toilets"", ""assemble the interior of the plane"", ""conduct a test flight"", ""create a test protocol during the flight"", ""deliver the plane to the customer"", ""obtain customer confirmation after delivery""]","{""name"": ""AssembleInterior"", ""description"": ""Assemble the interior of the plane.It takes the part list and the plane id. It does not return anything."", ""input_parameters"": [""part_list:list"", ""product_id:int""], ""output_parameters"": [], ""actor"": ""manufacturer""}
+{""name"": ""BuySnacks"", ""description"": ""Buy snacks for the party.It takes the list of people. It does not return anything."", ""input_parameters"": [""people:list""], ""output_parameters"": [], ""actor"": ""manufacturer""}
+{""name"": ""InformStorehouseEngineering"", ""description"": ""Inform the storehouse and the engineering departments.It takes the part list and the product id. It does not return anything."", ""input_parameters"": [""part_list:list"", ""product_id:int""], ""output_parameters"": [], ""actor"": ""manufacturer""}
 {""name"": ""CreateTestProtocol"", ""description"": ""Create the test protocol for the product.It takes the part list and the product id. It returns the test protocol."", ""input_parameters"": [""part_list:list"", ""product_id:int""], ""output_parameters"": [""test_protocol:str""], ""actor"": ""manufacturer""}
+{""name"": ""DeliverProduct"", ""description"": ""Deliver the product to the customer.It takes the product id as input. It does not return anything."", ""input_parameters"": [""product_id:int""], ""output_parameters"": [], ""actor"": ""crm_is""}
 {""name"": ""AcceptOrder"", ""description"": ""Sales department accepts the order.It takes the product id as input. It returns a boolean indicating if the order is accepted."", ""input_parameters"": [""product_id:int""], ""output_parameters"": [""order_accepted:bool""], ""actor"": ""crm_is""}
 ","import threading
+from queue import Queue
 
-# Assuming the tools are already imported and available for use as described.
-def manufacture_parts(part_list):
-    # This function simulates the manufacturing of parts in parallel.
-    # Each part could potentially be manufactured by a different team.
+# Assuming the tools are already imported as per the guidelines
+# from tools import AssembleInterior, CreateTestProtocol, DeliverProduct, AcceptOrder
+
+def manufacture_parts(part_list, product_id):
+    # This function simulates the manufacturing of parts in parallel
+    def manufacture_part(part):
+        print(f""Manufacturing {part} for product {product_id}"")
+        # Simulate time taken to manufacture part
+        # In real scenario, this could be a call to a specific manufacturing function
+
     threads = []
     for part in part_list:
-        # For simplicity, we're not differentiating between different parts and teams.
-        # In a real scenario, you would dispatch to different teams based on the part.
-        thread = threading.Thread(target=OrderParts.call, args=([part],))
+        thread = threading.Thread(target=manufacture_part, args=(part,))
         threads.append(thread)
         thread.start()
-    
+
     for thread in threads:
         thread.join()
 
-def process_airplane_order():
-    # Receive airplane customization specifications
-    part_list, product_id = ReceiveOrder.call()
-    
+    print(f""All parts manufactured for product {product_id}"")
+
+def process(product_id, part_list):
+    # Receive customer specifications
+    print(""Received customer specifications"")
+
     # Manufacture parts in parallel
-    manufacture_parts(part_list)
-    
-    # Assemble the interior
+    manufacture_parts(part_list, product_id)
+
+    # Assemble interior
     AssembleInterior.call(part_list=part_list, product_id=product_id)
-    
-    # Test flight and create protocol
+    print(""Interior assembled"")
+
+    # Test flight and create test protocol
     test_protocol = CreateTestProtocol.call(part_list=part_list, product_id=product_id)
-    
-    # Deliver plane to customer and wait for confirmation
+    print(f""Test protocol created: {test_protocol}"")
+
+    # Deliver plane to customer
+    DeliverProduct.call(product_id=product_id)
+    print(""Plane delivered to customer"")
+
+    # Customer confirmation
     order_accepted = AcceptOrder.call(product_id=product_id)
     if order_accepted:
-        print(f""Plane with product ID {product_id} successfully delivered and accepted by the customer."")
+        print(""Customer confirmed order"")
     else:
-        print(f""Plane with product ID {product_id} delivery or acceptance failed."")
+        print(""Customer did not confirm order"")
+
+    return order_accepted
 
 if __name__ == ""__main__"":
-    process_airplane_order()"
+    product_id = 123
+    part_list = [""vodka bar"", ""whiskey bar"", ""seats"", ""toilet water system""]
+    process_result = process(product_id, part_list)
+    print(f""Process completed with result: {process_result}"")"
 p08,"The warehouse of Grimaldi is a warehouse that stores cardboard rolls. A cardboard roll is used to produce cardboards. There exists two types of cardboard: the white cardboard and the brown cardboard. The warehouse stores the cardboard rolls depending on the type of cardboard. When a new cardboard roll arrives at the warehouse, the worker checks the type of cardboard and enter this information inside the WMS system. The system automatically capture an image of the current status of the warehouse. By analyzing the image, the system identifies the location where the cardboard roll should be stored. Then the worker stores the cardboard rool in the identified location in the warehouse and the system updates the stock of that cardboard rolls in the warehouse.","graph LR
-1:startevent:((startevent)) --> 2:task:(Check Type of Cardboard)
+1:startevent:((startevent)) --> 2:task:(Check Cardboard Type)
 2:task: --> 3:task:(Enter Information in WMS)
 3:task: --> 4:task:(Capture Image of Warehouse)
 4:task: --> 5:task:(Identify Storage Location)
 5:task: --> 6:task:(Store Cardboard Roll)
 6:task: --> 7:task:(Update Stock in System)
-7:task: --> 8:endevent:((endevent))","[""check the type of the new cardboard roll"", ""enter the cardboard roll's type into the WMS system"", ""capture an image of the current warehouse status"", ""identify the storage location for the new cardboard roll"", ""store the cardboard roll in the identified location"", ""update the stock of cardboard rolls in the warehouse""]","{""name"": ""CheckTypeCardboard"", ""description"": ""Worker checks the type of cardboard.It takes no input. It returns no output."", ""input_parameters"": [], ""output_parameters"": [""type_cardboard:str""], ""actor"": ""worker""}
+7:task: --> 8:endevent:((endevent))","[""check the type of the new cardboard roll"", ""enter the cardboard type information into the WMS system"", ""capture an image of the current status of the warehouse"", ""identify the location where the cardboard roll should be stored"", ""store the cardboard roll in the identified location"", ""update the stock of cardboard rolls in the warehouse""]","{""name"": ""CheckTypeCardboard"", ""description"": ""Worker checks the type of cardboard.It takes no input. It returns no output."", ""input_parameters"": [], ""output_parameters"": [""type_cardboard:str""], ""actor"": ""worker""}
 {""name"": ""AnalyzeWarehouse"", ""description"": ""Identify where to store a new cardboard roll.It takes as input an image of the warehouse and the type of cardboard roll. It returns the location where to store the new product."", ""input_parameters"": [""image:np.matrix"", ""type_cardboard:str""], ""output_parameters"": [""location:str""], ""actor"": ""vision_is""}
 {""name"": ""StoreCardboardRoll"", ""description"": ""Worker stores the cardboard roll in the warehouse.It takes as input the location. It returns no output."", ""input_parameters"": [""location:str""], ""output_parameters"": [], ""actor"": ""worker""}
+{""name"": ""InsertCardboardTypeInfo"", ""description"": ""Worker inserts the type of cardboard in the system.It takes the type of cardboard as input. It returns no output."", ""input_parameters"": [""type_cardboard:str""], ""output_parameters"": [], ""actor"": ""worker""}
+{""name"": ""UpdateStock"", ""description"": ""Warehouse department updates the stock of a product.It takes as input the product type. It does not return anything."", ""input_parameters"": [""product_type:str""], ""output_parameters"": [], ""actor"": ""wms_is""}
 ","import numpy as np
 
-# Assuming the necessary tool classes are imported as per the guidelines
-# CheckTypeCardboard, AnalyzeWarehouse, StoreCardboardRoll
+# Assuming the necessary tool classes are already imported as per the guidelines
 
 def capture_image_of_warehouse():
     # This function simulates capturing an image of the warehouse
-    # For simplicity, we return a dummy np.matrix as the image
-    return np.matrix([[0]])
-
-def enter_information_in_WMS(type_cardboard):
-    # This function simulates entering information into the WMS system
-    # In a real scenario, this would involve database operations
-    print(f""Information about the {type_cardboard} cardboard roll entered into the WMS system."")
-
-def update_stock_in_system(location):
-    # This function simulates updating the stock in the system
-    # In a real scenario, this would involve database operations
-    print(f""Stock updated in the system for the location: {location}"")
+    # For simplicity, we return a dummy np.matrix as there's no actual image capturing
+    return np.matrix('1; 2; 3')  # Dummy image representation
 
 def process_new_cardboard_roll():
     # Check the type of cardboard
     type_cardboard = CheckTypeCardboard.call()
     
-    # Enter information in WMS
-    enter_information_in_WMS(type_cardboard)
+    # Enter the type of cardboard information in the WMS system
+    InsertCardboardTypeInfo.call(type_cardboard=type_cardboard)
     
-    # Capture image of the warehouse
-    image = capture_image_of_warehouse()
+    # Capture an image of the current status of the warehouse
+    image_of_warehouse = capture_image_of_warehouse()
     
-    # Identify storage location
-    location = AnalyzeWarehouse.call(image=image, type_cardboard=type_cardboard)
+    # Identify the storage location by analyzing the image and type of cardboard
+    location = AnalyzeWarehouse.call(image=image_of_warehouse, type_cardboard=type_cardboard)
     
-    # Store the cardboard roll
+    # Store the cardboard roll in the identified location
     StoreCardboardRoll.call(location=location)
     
-    # Update stock in the system
-    update_stock_in_system(location)
+    # Update the stock of that cardboard rolls in the warehouse
+    UpdateStock.call(product_type=type_cardboard)
+    
+    return ""Process completed successfully.""
 
 if __name__ == ""__main__"":
-    process_new_cardboard_roll()"
+    result = process_new_cardboard_roll()
+    print(result)"
 p09,"You want to build a tree house. First you collect your requirements, and send them to a tree house architect. The architect sends you back a draft, which you refine multiple times with additional requirements. You then create the list of needed materials from the plan. These materials fall into several categories, you order them from several online stores. While the order is processed, you send messages to several of your friends to build the house. After the house is built, you send invitations for a tree house party to your friends. In order to buy the snacks for the party, a list of people that attend the party is created.","graph LR
 1:startevent:((startevent)) --> 2:task:(Collect Requirements)
-2:task: --> 3:task:(Send to Architect)
-3:task: --> 4:task:(Receive Draft)
+2:task: --> 3:task:(Send Requirements to Architect)
+3:task: --> 4:task:(Receive Draft from Architect)
 4:task: --> 5:exclusivegateway:{x}
 5:exclusivegateway:{x} --> |Additional Requirements| 6:task:(Refine Draft)
 6:task: --> 4:task:
-5:exclusivegateway:{x} --> |No Additional Requirements| 7:task:(Create Materials List)
+5:exclusivegateway:{x} --> |No Additional Requirements| 7:task:(Create List of Materials)
 7:task: --> 8:parallelgateway:{AND}
 8:parallelgateway:{AND} --> 9:task:(Order Materials Online)
 8:parallelgateway:{AND} --> 10:task:(Message Friends for Help)
@@ -457,76 +419,63 @@ p09,"You want to build a tree house. First you collect your requirements, and se
 11:parallelgateway:{AND} --> 12:task:(Build Tree House)
 12:task: --> 13:task:(Send Party Invitations)
 13:task: --> 14:task:(Create Snack List)
-14:task: --> 15:endevent:((endevent))","[""collect your requirements for the tree house"", ""send requirements to a tree house architect"", ""receive draft plan from the architect"", ""refine the draft plan with additional requirements as needed"", ""create a list of needed materials from the final plan"", ""order materials from several online stores"", ""send messages to friends for building the house"", ""build the tree house"", ""send invitations for a tree house party"", ""create a list of snacks for the party based on the attendees""]","{""name"": ""RefineRequirementsTreeHouse"", ""description"": ""Refine the requirements for the tree house.It takes the part list. It returns the refined part list."", ""input_parameters"": [""part_list:list""], ""output_parameters"": [""refined_part_list:list""], ""actor"": ""manufacturer""}
+14:task: --> 15:endevent:((endevent))","[""collect your requirements for the tree house"", ""send requirements to a tree house architect"", ""receive draft plan from architect"", ""refine the draft plan with additional requirements as needed"", ""create a list of needed materials from the final plan"", ""order materials from several online stores"", ""message friends to help build the tree house"", ""build the tree house"", ""send invitations for a tree house party"", ""create a list of snacks for the party based on the attendees""]","{""name"": ""RefineRequirementsTreeHouse"", ""description"": ""Refine the requirements for the tree house.It takes the part list. It returns the refined part list."", ""input_parameters"": [""part_list:list""], ""output_parameters"": [""refined_part_list:list""], ""actor"": ""manufacturer""}
+{""name"": ""GenerateRequirementTreeHouse"", ""description"": ""Generate the requirement for the tree house.It takes no input. It returns the part list."", ""input_parameters"": [], ""output_parameters"": [""part_list:list""], ""actor"": ""manufacturer""}
+{""name"": ""AssembleTreeHouse"", ""description"": ""Assemble the tree house.It takes the part list. It does not return anything."", ""input_parameters"": [""part_list:list""], ""output_parameters"": [], ""actor"": ""manufacturer""}
 {""name"": ""SendRequirementsArchitect"", ""description"": ""Send the requirements to the architect.It takes the part list. It does not return anything."", ""input_parameters"": [""part_list:list""], ""output_parameters"": [], ""actor"": ""manufacturer""}
 {""name"": ""SendRequirements"", ""description"": ""Send the requirements (part list) to the proper teams.It takes the list of requirements. It does not return anything."", ""input_parameters"": [""part_list:list""], ""output_parameters"": [], ""actor"": ""manufacturer""}
 {""name"": ""OrderParts"", ""description"": ""Manufacturer orders the parts online.It takes the part list. It does not return anything."", ""input_parameters"": [""part_list:list""], ""output_parameters"": [], ""actor"": ""manufacturer""}
-{""name"": ""SendMessage"", ""description"": ""Send a message to people.It takes the message. It does not return anything."", ""input_parameters"": [""message:str""], ""output_parameters"": [], ""actor"": ""manufacturer""}
-{""name"": ""AssembleTreeHouse"", ""description"": ""Assemble the tree house.It takes the part list. It does not return anything."", ""input_parameters"": [""part_list:list""], ""output_parameters"": [], ""actor"": ""manufacturer""}
 {""name"": ""SendInvitations"", ""description"": ""Send the invitations to the people.It takes the list of people. It does not return anything."", ""input_parameters"": [""people:list""], ""output_parameters"": [], ""actor"": ""manufacturer""}
 {""name"": ""BuySnacks"", ""description"": ""Buy snacks for the party.It takes the list of people. It does not return anything."", ""input_parameters"": [""people:list""], ""output_parameters"": [], ""actor"": ""manufacturer""}
-","from threading import Thread
+","import threading
 
-# Assuming the tools are already imported as per the guidelines
-
-def collect_requirements():
-    # This function simulates collecting requirements from the user
-    # In a real scenario, this could involve user input or reading from a file
-    return [""basic tree house""]
-
-def refine_draft(part_list):
-    refined_part_list = RefineRequirementsTreeHouse.call(part_list=part_list)
-    return refined_part_list
-
-def create_materials_list(draft):
-    # This function simulates creating a materials list from the draft
-    # The actual implementation would depend on the draft details
-    return [""wood"", ""nails"", ""hammer""]
-
-def order_materials(materials_list):
-    OrderParts.call(part_list=materials_list)
-
-def message_friends_for_help():
-    SendMessage.call(message=""Please help me build a tree house this weekend!"")
-
-def build_tree_house(materials_list):
-    AssembleTreeHouse.call(part_list=materials_list)
-
-def send_party_invitations():
-    # Simulating a list of friends
-    friends = [""Alice"", ""Bob"", ""Charlie""]
-    SendInvitations.call(people=friends)
-    return friends
-
-def create_snack_list(attendees):
-    BuySnacks.call(people=attendees)
+# Assuming the tools are already imported and available for use
 
 def process():
-    requirements = collect_requirements()
-    SendRequirementsArchitect.call(part_list=requirements)
-    draft = [""draft plan""]  # Simulating receiving a draft plan
-    additional_requirements = True
-    while additional_requirements:
-        refined_draft = refine_draft(draft)
-        # Simulate decision-making process for additional requirements
-        if refined_draft == draft:
-            additional_requirements = False
-        draft = refined_draft
-    
-    materials_list = create_materials_list(draft)
-    
-    # Parallel execution for ordering materials and messaging friends
-    order_thread = Thread(target=order_materials, args=(materials_list,))
-    message_thread = Thread(target=message_friends_for_help)
+    # Collect requirements
+    part_list = GenerateRequirementTreeHouse.call()
+
+    # Send requirements to architect and receive draft
+    SendRequirementsArchitect.call(part_list=part_list)
+
+    # Refine draft with additional requirements if needed
+    while True:
+        refined_part_list = RefineRequirementsTreeHouse.call(part_list=part_list)
+        if refined_part_list == part_list:
+            break
+        else:
+            part_list = refined_part_list
+
+    # Create list of materials from the plan
+    # Assuming this step is included in the refinement or another process not explicitly defined here
+
+    # Order materials online and message friends for help in parallel
+    def order_materials():
+        OrderParts.call(part_list=part_list)
+
+    def message_friends():
+        SendRequirements.call(part_list=part_list)
+
+    order_thread = threading.Thread(target=order_materials)
+    message_thread = threading.Thread(target=message_friends)
+
     order_thread.start()
     message_thread.start()
+
     order_thread.join()
     message_thread.join()
-    
-    build_tree_house(materials_list)
-    
-    attendees = send_party_invitations()
-    create_snack_list(attendees)
+
+    # Build tree house
+    AssembleTreeHouse.call(part_list=part_list)
+
+    # Send party invitations
+    # Assuming we have a predefined list of friends as 'friends_list'
+    friends_list = [""Alice"", ""Bob"", ""Charlie""]
+    SendInvitations.call(people=friends_list)
+
+    # Create snack list based on the attendees
+    # Assuming the BuySnacks tool is used here to represent creating a snack list
+    BuySnacks.call(people=friends_list)
 
 if __name__ == ""__main__"":
     process()"
@@ -540,10 +489,10 @@ p10,"A small company manufactures customized bicycles. Whenever the sales depart
 6:task: --> 8:exclusivegateway:{x}
 8:exclusivegateway:{x} --> |Part Available| 9:task:(Reserve Part)
 8:exclusivegateway:{x} --> |Part Not Available| 10:task:(Back-Order Part)
-9:task: --> 11:exclusivegateway:{x}
-10:task: --> 11:exclusivegateway:{x}
-11:exclusivegateway:{x} --> |More Parts?| 6:task:
-11:exclusivegateway:{x} --> |No More Parts| 12:parallelgateway:{AND}
+9:task: --> 11:task:(Check Next Item)
+10:task: --> 11:task:
+11:task: --> |Items Left| 8:exclusivegateway:{x}
+11:task: --> |No Items Left| 12:parallelgateway:{AND}
 7:task: --> 12:parallelgateway:{AND}
 12:parallelgateway:{AND} --> 13:task:(Assemble Bicycle)
 13:task: --> 14:task:(Ship Bicycle)
@@ -555,45 +504,51 @@ p10,"A small company manufactures customized bicycles. Whenever the sales depart
 {""name"": ""AssembleBicycle"", ""description"": ""Assemble the bicycle.It takes the part list. It does not return anything."", ""input_parameters"": [""part_list:list""], ""output_parameters"": [], ""actor"": ""manufacturer""}
 ","import threading
 
+# Assuming the tools are already imported and available for use as described.
+
 def process_part_list(part_list):
     for part in part_list:
-        # Simulate checking if part is available and either reserving or back-ordering it
-        # This is a placeholder for the actual logic which might involve calling another tool or service
-        print(f""Processing part: {part}"")
-        # Assume part is always successfully processed for simplicity
-    print(""All parts processed."")
+        # Simulate checking if part is available and either reserving or back-ordering it.
+        # This is a simplification, as the actual decision logic and storage updates are not detailed.
+        # In a real scenario, this would involve database operations or API calls.
+        part_available = True  # Placeholder for actual availability check
+        if part_available:
+            # Reserve part
+            pass  # Placeholder for reservation logic
+        else:
+            # Back-order part
+            pass  # Placeholder for back-order logic
 
 def prepare_for_assembling():
-    # Simulate preparing for assembling
-    # This is a placeholder for the actual logic which might involve calling another tool or service
-    print(""Preparation for assembling done."")
+    # Placeholder for the actual preparation logic.
+    # This could involve setting up assembly lines, gathering tools, etc.
+    pass
 
 def process_order():
     part_list, product_id = ReceiveOrder.call()
     order_accepted = AcceptOrder.call(product_id=product_id)
     if not order_accepted:
-        print(""Order rejected."")
-        return
+        return ""Order Rejected""
 
+    # Informing storehouse and engineering department is done in parallel with processing part list and preparing for assembling.
     InformStorehouseEngineering.call(part_list=part_list, product_id=product_id)
 
-    # Parallel execution of processing part list and preparing for assembling
-    threads = []
-    thread_part_list = threading.Thread(target=process_part_list, args=(part_list,))
-    thread_prepare = threading.Thread(target=prepare_for_assembling)
-    threads.append(thread_part_list)
-    threads.append(thread_prepare)
+    # Using threads to simulate parallel tasks.
+    part_list_thread = threading.Thread(target=process_part_list, args=(part_list,))
+    prepare_thread = threading.Thread(target=prepare_for_assembling)
 
-    for thread in threads:
-        thread.start()
-    for thread in threads:
-        thread.join()
+    part_list_thread.start()
+    prepare_thread.start()
 
+    # Wait for both threads to complete.
+    part_list_thread.join()
+    prepare_thread.join()
+
+    # Assuming all parts are either reserved or back-ordered successfully and preparation is done.
     AssembleBicycle.call(part_list=part_list)
-    print(""Bicycle assembled and ready to be shipped."")
-
-    # Simulate shipping bicycle
-    print(""Bicycle shipped to customer."")
+    # Assuming shipping is handled internally after assembly.
+    return ""Order Completed and Shipped""
 
 if __name__ == ""__main__"":
-    process_order()"
+    result = process_order()
+    print(result)"

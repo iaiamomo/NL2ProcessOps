@@ -2,39 +2,38 @@ from tools.manufacturer import SendSketches
 from tools.manufacturer import RefineRequirementsTreeHouse
 from tools.manufacturer import ChoosePlasticColor
 from tools.manufacturer import CheckColorQuantity
+from tools.manufacturer import CheckColorAvailability
 from tools.manufacturer import OrderColor
+from tools.printer_3d import HeatUpBedExtruder
 from tools.printer_3d import TurnOn
 from tools.manufacturer import GenerateGCode
 from tools.printer_3d import Print
-def create_custom_3d_model():
-    # Send sketches to the artist and get the project description
-    project_description = SendSketches.call()
-
-    # Assume there's a process of refining requirements that's iterative but not detailed here
-    # This could involve multiple calls to RefineRequirementsTreeHouse with different part lists
-    # For simplicity, we skip directly to choosing the plastic color
-
-    # Choose the plastic color
-    color = ChoosePlasticColor.call()
-
-    # Check if the color is in stock and its quantity
-    quantity = CheckColorQuantity.call(color=color)
-
-    # If the quantity is under 100 grams or the color is not in stock, order the color
-    if quantity < 100:
+def check_and_order_color(color):
+    availability = CheckColorAvailability.call(color=color)
+    if availability:
+        quantity = CheckColorQuantity.call(color=color)
+        if quantity < 100:
+            print(f"Color {color} is under 100 grams, adding to shopping list.")
+            # Here you would add the color to your shopping list. This is a placeholder.
+            # In a real scenario, you might interact with a database or a shopping list app.
+        else:
+            print(f"Color {color} is sufficient for printing.")
+    else:
+        print(f"Color {color} is not available at home, ordering.")
         OrderColor.call(color=color)
 
-    # Turn on the 3D printer
+def main_process():
+    project_description = SendSketches.call()
+    # Assuming there's a loop or interaction process for refining requirements not detailed here.
+    # This would typically involve back-and-forth communication with the artist.
+    # For simplicity, we're moving directly to choosing the plastic color.
+    color = ChoosePlasticColor.call()
+    check_and_order_color(color)
     TurnOn.call()
-
-    # Generate the GCode file for the printer from the project description
+    HeatUpBedExtruder.call()
     gcode = GenerateGCode.call(project=project_description)
-
-    # Print the model
     Print.call(GCodeFile=gcode)
-
-    return "Model printing initiated."
+    print("Printing process started.")
 
 if __name__ == "__main__":
-    result = create_custom_3d_model()
-    print(result)
+    main_process()

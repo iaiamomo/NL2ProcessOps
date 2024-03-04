@@ -3,39 +3,48 @@ from tools.manufacturer import ChoosePlasticColor
 from tools.manufacturer import CheckColorQuantity
 from tools.manufacturer import OrderColor
 from tools.printer_3d import HeatUpBedExtruder
+from tools.printer_3d import TurnOn
 from tools.manufacturer import GenerateGCode
 from tools.printer_3d import Print
 def instruct_artist_and_create_project():
-    satisfied_with_result = False
-    while not satisfied_with_result:
-        # Assuming there's a tool or method to instruct the artist and provide feedback
-        # which is not explicitly mentioned in the tools provided.
-        # This placeholder represents the interaction with the artist.
+    satisfied = False
+    while not satisfied:
         project_description = SendSketches.call()
-        # Placeholder for providing feedback and checking satisfaction
-        # This could involve more complex logic or user input in a real scenario
-        satisfied_with_result = True  # Assuming satisfaction for simplicity
+        feedback = input("Provide feedback to the artist (type 'satisfied' to proceed): ")
+        if feedback.lower() == 'satisfied':
+            satisfied = True
     return project_description
 
-def manage_plastic_color():
+def choose_and_prepare_color():
     color = ChoosePlasticColor.call()
     quantity = CheckColorQuantity.call(color=color)
     if quantity < 100:
-        # Assuming there's a method to add the color to the shopping list
-        # This is a placeholder for that action
-        print("Added color to shopping list")
+        print("Putting color on shopping list as quantity is under 100 grams.")
     else:
-        OrderColor.call(color=color)
+        print("Color is in stock and sufficient.")
+    return color
 
-def prepare_printer_and_print(project_description):
+def order_color_if_needed(color):
+    if quantity < 100:
+        OrderColor.call(color=color)
+        print("Ordered more of the color as it was under 100 grams.")
+
+def heat_up_printer_and_generate_gcode(project_description):
     HeatUpBedExtruder.call()
     gcode = GenerateGCode.call(project=project_description)
+    return gcode
+
+def print_model(gcode):
+    TurnOn.call()
     Print.call(GCodeFile=gcode)
 
-def process():
+def main_process():
     project_description = instruct_artist_and_create_project()
-    manage_plastic_color()
-    prepare_printer_and_print(project_description)
+    color = choose_and_prepare_color()
+    order_color_if_needed(color)
+    gcode = heat_up_printer_and_generate_gcode(project_description)
+    print_model(gcode)
+    print("Model printing process completed.")
 
 if __name__ == "__main__":
-    process()
+    main_process()

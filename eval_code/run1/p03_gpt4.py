@@ -1,55 +1,63 @@
-from tools.crm_is import ReceiveOrder
-from tools.wms_is import OrderRawMaterial
 from tools.l12 import L12AssembleSpindle
+from tools.wms_is import RetrieveRawMaterials
+from tools.wms_is import OrderRawMaterial
 from tools.l12 import L12SetUp
 from tools.smart_tester import TestSpindle
 import threading
 
-# Assuming the tools are already imported as per the guidelines
-# from tools import ReceiveOrder, OrderRawMaterial, L12AssembleSpindle, L12SetUp, TestSpindle
+# Assuming the tools are already imported and available for use as described
+# in the problem description.
 
-def retrieve_raw_materials(part_list):
-    for part in part_list:
-        OrderRawMaterial.call(part=part)
+def retrieve_materials_and_setup_line(part_list):
+    # Retrieve raw materials
+    materials_retrieved = RetrieveRawMaterials.call(part_list=part_list)
+    
+    # Set up L12 line
+    line_set_up = L12SetUp.call()
+    
+    return materials_retrieved, line_set_up
 
-def set_up_L12_line():
-    return L12SetUp.call()
-
-def assemble_spindle(part_list):
-    return L12AssembleSpindle.call(part_list=part_list)
-
-def test_spindle(product_id):
-    return TestSpindle.call(product_id=product_id)
-
-def process():
-    # Receive order
-    part_list, product_id = ReceiveOrder.call()
-
-    # Parallel execution for retrieving raw materials and setting up L12 line
-    threads = []
-    t1 = threading.Thread(target=retrieve_raw_materials, args=(part_list,))
-    t2 = threading.Thread(target=set_up_L12_line)
-    threads.append(t1)
-    threads.append(t2)
+def process_spindle_order(part_list, product_id):
+    # Retrieve materials and set up line in parallel
+    thread_results = [None, None]
+    
+    def retrieve_materials():
+        thread_results[0] = RetrieveRawMaterials.call(part_list=part_list)
+    
+    def setup_line():
+        thread_results[1] = L12SetUp.call()
+    
+    t1 = threading.Thread(target=retrieve_materials)
+    t2 = threading.Thread(target=setup_line)
+    
     t1.start()
     t2.start()
-    for t in threads:
-        t.join()
-
-    # Assemble spindle
-    assembled = assemble_spindle(part_list)
-    if not assembled:
-        return "Error in assembling spindle"
-
-    # Test spindle
-    passed = test_spindle(product_id)
-    if not passed:
-        # Send to maintenance
-        print("Spindle sent to maintenance")
-        return "Process ended with maintenance"
-
-    return "Process successfully completed"
+    
+    t1.join()
+    t2.join()
+    
+    materials_retrieved, line_set_up = thread_results
+    
+    # Proceed only if both tasks were successful
+    if materials_retrieved and line_set_up:
+        # Assemble spindle
+        assembly_successful = L12AssembleSpindle.call(part_list=part_list)
+        
+        if assembly_successful:
+            # Test and run-in spindle
+            test_passed = TestSpindle.call(product_id=product_id)
+            
+            if not test_passed:
+                # Send to maintenance if test failed
+                print("Spindle failed the test, sending to maintenance.")
+            else:
+                print("Spindle passed the test.")
+        else:
+            print("Assembly of spindle failed.")
+    else:
+        print("Failed to retrieve materials or set up the line.")
 
 if __name__ == "__main__":
-    result = process()
-    print(result)
+    part_list = ["part1", "part2", "part3"]  # Example part list
+    product_id = 123  # Example product ID
+    process_spindle_order(part_list, product_id)

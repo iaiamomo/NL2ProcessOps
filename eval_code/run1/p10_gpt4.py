@@ -1,44 +1,55 @@
 from tools.crm_is import ReceiveOrder
-from tools.manufacturer import AssembleBicycle
+from tools.crm_is import AcceptOrder
 from tools.manufacturer import InformStorehouseEngineering
 from tools.manufacturer import SendRequirements
 from tools.manufacturer import OrderParts
-from tools.crm_is import DeliverProduct
-import threading
+from tools.manufacturer import AssembleBicycle
+from threading import Thread
 
+# Assuming the tools are already imported and available for use as described
 def process_order():
     part_list, product_id = ReceiveOrder.call()
-    order_accepted = True  # Assuming the order is accepted for the sake of this example
-
+    order_accepted = AcceptOrder.call(product_id=product_id)
+    
     if not order_accepted:
         return "Order Rejected"
-
+    
+    # Inform storehouse and engineering department in parallel
+    inform_thread = Thread(target=InformStorehouseEngineering.call, args=(part_list, product_id))
+    inform_thread.start()
+    inform_thread.join()
+    
+    # Process part list and prepare for assembling in parallel
     def process_part_list(part_list):
         for part in part_list:
-            part_available = True  # Assuming part availability check logic
+            # Assuming CheckPartAvailability is a tool that checks if a part is available and returns a boolean
+            part_available = CheckPartAvailability.call(part=part)
             if part_available:
                 ReservePart.call(part=part)
             else:
                 BackOrderPart.call(part=part)
-
-    def prepare_for_assembling(part_list, product_id):
-        InformStorehouseEngineering.call(part_list=part_list, product_id=product_id)
-
-    # Parallel execution of storehouse processing and engineering preparation
-    threads = []
-    thread1 = threading.Thread(target=process_part_list, args=(part_list,))
-    thread2 = threading.Thread(target=prepare_for_assembling, args=(part_list, product_id))
-    threads.append(thread1)
-    threads.append(thread2)
-    for thread in threads:
-        thread.start()
-    for thread in threads:
-        thread.join()
-
+    
+    def prepare_for_assembling():
+        # Assuming PrepareForAssembling is a tool that prepares everything for assembling
+        PrepareForAssembling.call()
+    
+    part_list_thread = Thread(target=process_part_list, args=(part_list,))
+    prepare_thread = Thread(target=prepare_for_assembling)
+    
+    part_list_thread.start()
+    prepare_thread.start()
+    
+    part_list_thread.join()
+    prepare_thread.join()
+    
+    # Assemble the bicycle
     AssembleBicycle.call(part_list=part_list)
-    DeliverProduct.call(product_id=product_id)
-
-    return "Order Processed and Bicycle Delivered"
+    
+    # Ship the bicycle
+    # Assuming ShipBicycle is a tool that ships the bicycle
+    ShipBicycle.call(product_id=product_id)
+    
+    return "Order Completed and Shipped"
 
 if __name__ == "__main__":
     result = process_order()

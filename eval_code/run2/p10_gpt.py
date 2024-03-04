@@ -7,7 +7,7 @@ from tools.worker import AssembleParts
 from threading import Thread
 
 # Assuming the tools are already imported as per the guidelines
-# from tools import AcceptOrder, InformStorehouseEngineering, AssembleBicycle
+# from tools import AcceptOrder, InformStorehouseEngineering, AssembleBicycle, OrderParts
 
 def process_order(product_id, part_list):
     # Accept or reject the order
@@ -18,43 +18,34 @@ def process_order(product_id, part_list):
     # Inform Storehouse and Engineering Department
     InformStorehouseEngineering.call(part_list=part_list, product_id=product_id)
 
-    # Process each part in the part list
+    # Process Part List (Simulated here as a loop, assuming a function exists to check each part's availability)
+    parts_processed = process_part_list(part_list)
+
+    # Prepare for Assembly and Assemble Bicycle in parallel
+    if parts_processed:
+        prepare_and_assemble(part_list)
+
+    return "Order Processed and Shipped"
+
+def process_part_list(part_list):
+    # Simulate checking each part's availability and ordering if not available
     for part in part_list:
-        # Assuming a function check_part_availability that returns True if part is available, False otherwise
-        part_available = check_part_availability(part)
-        if part_available:
-            reserve_part(part)
-        else:
-            back_order_part(part)
-
-    # Prepare for assembly (Assuming this is done implicitly in the process)
-    prepare_for_assembly()
-
-    # Assemble the bicycle
-    AssembleBicycle.call(part_list=part_list)
-
-    # Ship the bicycle to the customer
-    return "Bicycle Shipped to Customer"
-
-def check_part_availability(part):
-    # Placeholder function to simulate checking part availability
-    # In a real scenario, this would interact with the storehouse's inventory system
+        # Assuming a function exists to check part availability and order if necessary
+        # This is a placeholder for the actual logic
+        part_available = True  # Placeholder for actual check
+        if not part_available:
+            OrderParts.call(part_list=[part])
     return True
 
-def reserve_part(part):
-    # Placeholder function to simulate reserving a part
-    pass
-
-def back_order_part(part):
-    # Placeholder function to simulate back-ordering a part
-    pass
-
-def prepare_for_assembly():
-    # Placeholder function to simulate preparation for assembly
-    pass
+def prepare_and_assemble(part_list):
+    # Prepare for Assembly and Assemble Bicycle in parallel
+    # Assuming the preparation is part of the assembly process
+    assembly_thread = Thread(target=AssembleBicycle.call, args=(part_list,))
+    assembly_thread.start()
+    assembly_thread.join()
 
 if __name__ == "__main__":
     product_id = 123  # Example product ID
-    part_list = ['frame', 'wheels', 'brakes']  # Example part list
+    part_list = ['wheel', 'frame', 'pedal']  # Example part list
     result = process_order(product_id, part_list)
     print(result)

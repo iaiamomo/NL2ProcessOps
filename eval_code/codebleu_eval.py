@@ -1,15 +1,15 @@
 import pandas as pd
 from codebleu import calc_codebleu
 
-run = "copilot"
-models = ["copilot"]
+run = "run5"
+models = ["gpt4"]
 res = []
 for model in models:
     for i in range(1,11):
         process = f"p0{i}" if i < 10 else f"p{i}"
 
         filename = f"{run}/{process}_{model}.py"
-        filename = f"{run}/{process}.py"
+        #filename = f"{run}/{process}.py"
         with open(filename, "r") as file:
             prediction = file.read()
 

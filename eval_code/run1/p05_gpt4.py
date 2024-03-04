@@ -1,37 +1,35 @@
 from tools.mold_is import SensorMeasure
+from tools.vision_is import CheckMarkers
 from tools.mold_is import AdjustMold
 from tools.mold_is import AuthorizeProduction
-class ProcessControl:
-    def __init__(self):
-        self.temperature_standards = (100, 200)  # Example standard range
-        self.pressure_standards = (50, 150)  # Example standard range
-        self.fill_rate_standards = (10, 50)  # Example standard range
-
-    def capture_and_analyze_data(self):
-        temperature, pressure, fill_rate = SensorMeasure.call()
-        if not (self.temperature_standards[0] <= temperature <= self.temperature_standards[1]):
-            return False
-        if not (self.pressure_standards[0] <= pressure <= self.pressure_standards[1]):
-            return False
-        if not (self.fill_rate_standards[0] <= fill_rate <= self.fill_rate_standards[1]):
-            return False
+def check_parameters_against_standards(temperature, pressure, fill_rate):
+    """
+    This function simulates the analysis of the captured data against specified standards.
+    It returns True if the parameters are within acceptable ranges, and False if adjustments are needed.
+    """
+    # Placeholder for actual logic to determine if parameters are within acceptable ranges.
+    # For demonstration purposes, let's assume the standards are:
+    # Temperature: 200-250, Pressure: 100-150, Fill Rate: 50-100
+    if 200 <= temperature <= 250 and 100 <= pressure <= 150 and 50 <= fill_rate <= 100:
         return True
+    else:
+        return False
 
-    def adjust_machine_settings(self):
-        AdjustMold.call()
-
-    def authorize_production(self):
-        AuthorizeProduction.call()
-
-    def start_process(self):
-        while True:
-            parameters_acceptable = self.capture_and_analyze_data()
-            if not parameters_acceptable:
-                self.adjust_machine_settings()
-            else:
-                self.authorize_production()
-                break
+def process_injection_molding():
+    while True:
+        # Capture data from sensors
+        temperature, pressure, fill_rate = SensorMeasure.call()
+        
+        # Analyze data to check if parameters are within acceptable ranges
+        parameters_ok = check_parameters_against_standards(temperature, pressure, fill_rate)
+        
+        if not parameters_ok:
+            # Adjust machine settings if deviations are detected
+            AdjustMold.call()
+        else:
+            # Authorize production if parameters are acceptable
+            AuthorizeProduction.call()
+            break  # Exit the loop and end the process after authorizing production
 
 if __name__ == "__main__":
-    process_control = ProcessControl()
-    process_control.start_process()
+    process_injection_molding()

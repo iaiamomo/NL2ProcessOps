@@ -59,16 +59,16 @@ class ToolStore():
             for i in range(len(best_match)):
                 match_elem = best_match[i]
                 # if the first element is already above 0.4, we don't need to check the rest
-                if i == 0 and match_elem[1] >= 0.4:
+                if i == 0 and match_elem[1] >= 0.5:
                     break
                 # if the first element is below 0.4, we count it
                 # it the rest of the elements are below 0.2, we count them
-                elif i == 0 and match_elem[1] < 0.4:
+                elif i == 0 and match_elem[1] < 0.5:
                     tool_name = match_elem[0].page_content.split(' ')[0]
                     file_name = match_elem[0].page_content.split(' ')[1]
                     api_info = self.extract_input_output(tool_name, file_name, match_elem[1])
                     list_match.append(api_info)
-                elif i > 0 and match_elem[1] <= 0.2:
+                elif i > 0 and match_elem[1] <= 0.3:
                     tool_name = match_elem[0].page_content.split(' ')[0]
                     file_name = match_elem[0].page_content.split(' ')[1]
                     api_info = self.extract_input_output(tool_name, file_name, match_elem[1])

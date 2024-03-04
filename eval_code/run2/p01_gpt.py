@@ -2,40 +2,39 @@ from tools.working_station_is import EmptyScan
 from tools.working_station_is import ScanOrder
 from tools.working_station_is import DisplaysScanningUI
 from tools.worker import AssembleParts
+from tools.welding_machine import AssembleParts
+from tools.manufacturer import AssembleBicycle
 import threading
 
-# Assuming the tools are already imported and available for use as described
-# EmptyScan, ScanOrder, DisplaysScanningUI, AssembleParts
-
-def worker_assembles_and_scans():
-    # Worker assembles the part
-    AssembleParts.call()
-    # Worker scans the part after assembling
-    # Assuming there's a tool for scanning the part which is not explicitly mentioned
-    # This could be a placeholder for the actual scanning action
-    print("Worker scans the part after assembling")
-
+# Assuming the tools are already imported and available for use as described.
 def process():
-    # Empty the scan results when a pallet arrives
+    # Step 1: Empty Scan Results
     EmptyScan.call()
     
-    # Worker scans the order and gets the order_id
+    # Step 2: Scan Order
     order_id = ScanOrder.call()
     
-    # Display the scanning UI to the worker
+    # Step 3: Display Scanning UI
     DisplaysScanningUI.call(order_id=order_id)
     
-    # Worker assembles the part and scans it in parallel
-    # Creating a thread for the assembly and scanning process
-    assembly_and_scanning_thread = threading.Thread(target=worker_assembles_and_scans)
+    # Step 4: Parallel execution of Worker Assembles Part and Worker Scans Part
+    def worker_assembles_part():
+        AssembleParts.call()  # Assuming this is the correct call for "Worker Assembles Part"
     
-    # Starting the parallel process
-    assembly_and_scanning_thread.start()
+    def worker_scans_part():
+        # Assuming there's a missing tool for "Worker Scans Part", so we simulate it
+        pass  # Simulate the scanning part action by the worker
     
-    # Wait for the assembly and scanning process to complete
-    assembly_and_scanning_thread.join()
+    assemble_thread = threading.Thread(target=worker_assembles_part)
+    scan_thread = threading.Thread(target=worker_scans_part)
     
-    # Process ends after the part is assembled and scanned
+    assemble_thread.start()
+    scan_thread.start()
+    
+    assemble_thread.join()
+    scan_thread.join()
+    
+    # Assuming the process ends after the parallel tasks
     print("Process completed.")
 
 if __name__ == "__main__":

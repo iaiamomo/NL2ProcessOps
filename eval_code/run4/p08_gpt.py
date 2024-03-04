@@ -1,33 +1,38 @@
 from tools.worker import CheckTypeCardboard
-from tools.wms_is import OrderRawMaterial
-from tools.vision_is import AnalyzeWarehouse
 from tools.worker import StoreCardboardRoll
+from tools.vision_is import AnalyzeWarehouse
+from tools.wms_is import OrderRawMaterial
+from tools.wms_is import UpdateStock
 import numpy as np
 
-# Assuming the necessary tool classes are already imported as per the guidelines.
+# Assuming the necessary tool classes are imported as per the guidelines
+# CheckTypeCardboard, StoreCardboardRoll, AnalyzeWarehouse, OrderRawMaterial, UpdateStock
 
-def process_new_cardboard_roll(image: np.matrix):
-    # Check the type of cardboard roll
+def capture_image_of_warehouse():
+    # Placeholder function to simulate capturing an image of the warehouse
+    # In a real scenario, this would interface with a camera system
+    # Here, we return a dummy numpy matrix representing an image
+    return np.zeros((100, 100))  # Dummy image
+
+def process_new_cardboard_roll():
+    # Worker checks the type of cardboard roll
     type_cardboard = CheckTypeCardboard.call()
     
-    # Enter information in WMS system (This step is described in the process but no specific tool is provided for it. 
-    # Assuming it's part of the CheckTypeCardboard or an automated step not requiring explicit coding)
+    # Enter information in WMS System (Simulated by calling OrderRawMaterial for demonstration)
+    # In a real scenario, this would likely involve more detailed interaction with the WMS
+    OrderRawMaterial.call(part=type_cardboard)
     
-    # Capture image of warehouse and Analyze image to identify storage location
-    # Since the image is already provided as an argument, we skip the capture part and directly analyze
+    # Capture image of the warehouse
+    image = capture_image_of_warehouse()
+    
+    # Analyze image and identify storage location
     location = AnalyzeWarehouse.call(image=image, type_cardboard=type_cardboard)
     
-    # Store cardboard roll in identified location
+    # Worker stores the cardboard roll in the identified location in the warehouse
     StoreCardboardRoll.call(location=location)
     
-    # Update stock in WMS system (This step is described in the process but no specific tool is provided for it. 
-    # Assuming it's an automated step not requiring explicit coding or part of the StoreCardboardRoll)
-    
-    return "Process completed successfully."
+    # Update stock in WMS System
+    UpdateStock.call(product_type=type_cardboard)
 
 if __name__ == "__main__":
-    # Example usage
-    # Assuming an image of the warehouse is available as a numpy matrix
-    warehouse_image = np.matrix([[0, 0, 1], [1, 1, 0], [0, 1, 0]])
-    result = process_new_cardboard_roll(image=warehouse_image)
-    print(result)
+    process_new_cardboard_roll()

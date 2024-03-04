@@ -2,13 +2,13 @@ from tools.working_station_is import EmptyScan
 from tools.working_station_is import ScanOrder
 from tools.working_station_is import DisplaysScanningUI
 def process_pallet_arrival():
-    # Empty the scan results when a pallet arrives at the working station
+    # Empty the scan results when a pallet arrives
     EmptyScan.call()
     
-    # Worker scans the order and the system returns the order id
+    # Worker scans the order and gets the order ID
     order_id = ScanOrder.call()
     
-    # The system displays the scanning UI to the worker
+    # Display the scanning UI to the worker with the scanned order ID
     DisplaysScanningUI.call(order_id=order_id)
     
     # In parallel, the worker assembles the part
