@@ -14,7 +14,7 @@ The first stage of the proposed approach starts with a textual process descripti
 ├── eval_code           # sources for code generation evaluation
 |   ├── README.md       # evaluation results of code generation
 |   └── ...
-├── eval_retrieval      # sources for code generation evaluation
+├── eval_retrieval      # sources for retrieval evaluation
 |   ├── README.md       # evaluation results of retrieval
 |   └──...
 └── src                 # source code of proposed approach

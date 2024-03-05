@@ -2,12 +2,11 @@ import pandas as pd
 
 cases = ["task", "mod_task", "mod_task_pre"]
 models = ["gpt35", "gpt4"]
-version = "v1"
 
 res = []
 for case in cases:
     for model in models:
-        filename = f"data_{version}/eval_{case}_fs_{model}.csv"
+        filename = f"data/eval_{case}_fs_{model}.csv"
         dataset = pd.read_csv(filename)
 
         recall = 0

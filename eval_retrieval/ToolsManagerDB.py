@@ -9,7 +9,7 @@ class ToolStore():
         return cls.__name__ + " " + file_name + " " + cls.description['description']
 
     def __init__(self, openai_key):
-        self.tools_dir = ('./tools_v2')
+        self.tools_dir = ('./tools')
         self.openai_key = openai_key
         self.classes_tools = []
         self.tools = []

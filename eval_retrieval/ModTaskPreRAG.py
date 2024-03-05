@@ -295,12 +295,11 @@ if __name__ == "__main__":
     dotenv.load_dotenv()
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
     models = ["gpt-3.5-turbo-16k", "gpt-4-0125-preview"]
-    version = "v2"
 
     for model in models:
         llm = ProcessLLM(model=model, openai_key=OPENAI_API_KEY)
 
-        dataset = pd.read_csv(f"LLMtools2process_{version}/processes_tools.csv")
+        dataset = pd.read_csv(f"LLMtools2process/processes_tools.csv")
 
         res_eval = []
         for index, row in dataset.iterrows():

@@ -129,7 +129,7 @@ if __name__ == "__main__":
 
         llm = ProcessLLM(model=model, openai_key=OPENAI_API_KEY)
 
-        dataset = pd.read_csv("LLMtools2process_v2/processes_tools.csv")
+        dataset = pd.read_csv("LLMtools2process/processes_tools.csv")
 
         res_eval = []
         for index, row in dataset.iterrows():

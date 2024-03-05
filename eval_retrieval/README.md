@@ -4,7 +4,7 @@
 - [ModTaskPreRAG.py](ModTaskPreRAG.py): extract model and relative tasks and preprocessing of tasks from process description
 - [ToolsManagerDB.py](ToolsManagerDB.py): retrieval module implementation
 
-### Datasets
+### Dataset
 - [LLMtools2process_v2](eval_retrieval\LLMtools2process_v2\processes_tools.csv): set of 30 textual process descriptions generated with an [LLM](LLMtools2process_v2) from a set of 62 tools
 
 ### Results
