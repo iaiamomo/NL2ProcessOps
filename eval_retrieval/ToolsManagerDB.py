@@ -55,7 +55,6 @@ class ToolStore():
             # cosine distance is used to find the closest vector
             # best_match contains the list of the closest vectors (the first element is the closest one)
             best_match = self.db.similarity_search_with_score(keywords)
-            print(best_match)
             for i in range(len(best_match)):
                 match_elem = best_match[i]
                 # if the first element is already above 0.4, we don't need to check the rest

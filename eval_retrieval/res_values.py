@@ -6,8 +6,11 @@ models = ["gpt35", "gpt4"]
 res = []
 for case in cases:
     for model in models:
-        filename = f"data/eval_{case}_fs_{model}.csv"
-        dataset = pd.read_csv(filename)
+        filename = f"data/eval_{case}_{model}.csv"
+        try:
+            dataset = pd.read_csv(filename)
+        except:
+            continue
 
         recall = 0
         precision = 0
@@ -19,8 +22,8 @@ for case in cases:
         recall = recall / len(dataset)
         precision = precision / len(dataset)
 
-        res.append([case, model, recall, precision])
+        res.append([case, model, precision, recall])
 
-res_df = pd.DataFrame(res, columns=["case", "model", "recall", "precision"])
+res_df = pd.DataFrame(res, columns=["case", "model", "precision", "recall"])
 
 print(res_df)

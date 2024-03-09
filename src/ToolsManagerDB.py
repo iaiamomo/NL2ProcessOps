@@ -58,7 +58,7 @@ class ToolStore():
             # cosine distance is used to find the closest vector
             # best_match contains the list of the closest vectors (the first element is the closest one)
             best_match = self.db.similarity_search_with_score(keywords)
-            print(f"best_match: {best_match}")
+            #print(f"best_match: {best_match}")
             for i in range(len(best_match)):
                 match_elem = best_match[i]
                 # if the first element is already above 0.4, we don't need to check the rest
@@ -80,7 +80,7 @@ class ToolStore():
                     #print(f"\tname: {match_elem} score: {match_elem[1]}")
         except Exception as e:
             exception = str(e)
-            print(f"Exception: {exception}")
+            #print(f"Exception: {exception}")
             return {'api_name': self.__class__.__name__, 'input': input_parameters, 'output': None, 'exception': exception}
         else:
             return {'api_name': self.__class__.__name__, 'input': input_parameters, 'output': list_match, 'exception': None}
@@ -101,15 +101,6 @@ class ToolsManagerDB:
             response = self.tool_store.search(tool_keywords)['output']
             for elem in response:
                 print('The tool you want to use is: \n' + elem['name'] + '\n' + json.dumps(elem))
-            '''while True:
-                command = input('Please enter the PARAMETERS for the tool you want to use (\'exit\' to exit): \n')
-                if command == 'exit':
-                    break
-                else:
-                    command = command.replace(' ', '')
-                    processed_parameters = command.split(',')
-                    print(f"tool: {response['output']['name']} with ({processed_parameters})")'''
-
 
 if __name__ == '__main__':
     dotenv.load_dotenv()

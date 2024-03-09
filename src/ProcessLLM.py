@@ -44,9 +44,9 @@ class ProcessLLM:
                     tool_desc_str = json.dumps(tool_desc)
                     if tool_desc_str not in tool_list:
                         tool_list += f"{json.dumps(tool_desc)}\n"
-                    print(f"task: {task} tool: {elem['name']}")
+                    #print(f"task: {task} tool: {elem['name']}")
 
-        print(f"Tools: {tool_list}")
+        #print(f"Tools: {tool_list}")
 
         return tool_list
 
@@ -63,7 +63,7 @@ class ProcessLLM:
         if len(result_list) == 0:
             return False
         
-        print(f"Tasks: {result_list}")
+        #print(f"Tasks: {result_list}")
         
         return True
 
@@ -106,7 +106,7 @@ class ProcessLLM:
             with open("llm_process_code.py", "w+") as f:
                 f.write(py_file)
         except Exception as e:
-            print(e)
+            #print(e)
             error_python = True
 
         json_output = {
@@ -240,9 +240,9 @@ if __name__ == "__main__":
             continue
         res = llm.get_chain().invoke({"input": input_text})
         print(colored("Answer:\n", "green") + colored(res, "blue"))
-        print(colored("Do you want to simulate the process? (s)\nEnter a new process description? (p)\nQuit? (q)", "green"))
+        print(colored("Do you want to execute the process? (y)\nEnter a new process description? (p)\nQuit? (q)", "green"))
         user_r = input()
-        if user_r == "s":
+        if user_r == "y":
             print(colored("Executing...", "green"))
             try:
                 print("Checking the sintax of the python file...")
@@ -253,8 +253,8 @@ if __name__ == "__main__":
                     p = os.system("python llm_process_code.py")
                     print(colored(f"Process run with exit code {p}", "yellow"))
             except:
-                print(colored("Error simulating the process"), "red")
-            print(colored("Simulation done!", "green"))
+                print(colored("Error executin the process"), "red")
+            print(colored("Execution done!", "green"))
             print(colored("Enter a new process description? (p)\nQuit? (q)", "green"))
             user_r = input()
         if user_r == "p":

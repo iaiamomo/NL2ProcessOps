@@ -123,7 +123,7 @@ class CustomOutputParser(BaseOutputParser):
             raise ValueError("The string should contain exactly two triple backticks")
         code = text.split("```")[1]
         code = code.strip().strip("python").strip()
-        print(code)
+        #print(code)
         return code
 
 

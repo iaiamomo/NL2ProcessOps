@@ -2,9 +2,17 @@ import json
 import pandas as pd
 import numpy as np
 
-run = "run5"
-models = ["gpt4"]
-for model in models:
+runs = ["run1", "run2", "run3", "run4", "run5"]
+models = {
+    "run1": "gpt4",
+    "run2": "gpt",
+    "run3": "gpt4",
+    "run4": "gpt",
+    "run5": "gpt4"
+}
+
+for run in runs:
+    model = models[run]
     filename = f"{run}/eval_code_{model}.csv"
     dataset = pd.read_csv(filename)
 
