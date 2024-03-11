@@ -1,5 +1,7 @@
 # NL2ProcessOps
 
+## About
+
 NL2ProcessOps, a novel approach leveraging Large Language Models (LLMs) and concepts such as Retrieval Augmented Generation (RAG), agents, and tools for code generation to streamline process deployment operations. The proposed approach is designed to work with textual process descriptions and focuses on the different operations of process deployment, from extracting the control flow in terms of a process model, over retrieving required tools associated with each task, to generating executable script for manual refinement purposes and deployment in a process engine.
 
 #### Architecture
@@ -8,28 +10,46 @@ NL2ProcessOps, a novel approach leveraging Large Language Models (LLMs) and conc
 
 The first stage of the proposed approach starts with a textual process description that is given as input (1) to the [Tasks-Model extractor](src/TasksModelLLM.py). This component is an LLM prompted to extract the tasks and the control flow of the process and generates the model representation as a Mermaid.js. The list of tasks paired with the textual process description (i.e., `[proc_desc, tasks]`) is given as input (2a) to the [Tasks pre-processing](src/TasksPreProcessingLLM.py) component, starting the second stage of the proposed approach. At the same time, the process model paired with the textual process description (i.e., `[proc_desc, model]`) is given as input (2b) to the [Code generator](src/CodeLLM.py) component which, however, waits for the end of the second stage before moving on. The second stage of the proposed approach is inspired by the RAG concept to retrieve the relevant tools for the particular textual process description. The [Tasks pre-processing](src/TasksPreProcessingLLM.py) component leverages an LLM to refine the descriptions of the extracted tasks based on the textual process description. The refined list of tasks is then handled (3) by the [Tools retriever](src/ToolsManagerDB.py) component. The latter interacts (4) with the vector database **Tools DB** and retrieves the most similar embedded tools for each embedded task. **Tools DB** stores vectors consisting of the embeddings of the descriptions of the tools. The list of retrieved tools is provided (5) to the [Code generator](src/CodeLLM.py) component so that the third (and final) stage of the proposed approach begins. The [Code generator](src/CodeLLM.py) LLM that from the textual process description, process model and the list of tools implementing process tasks generates (6) a Python program that represents the process.
 
-## How to
+## Structure of the repository
 
-### Setup
-
-Create a new conda environment
-```bash
-conda create -n pyllm python=3.10
-conda activate pyllm
+```
+.
+├── eval_code           # sources for code generation evaluation
+|   ├── README.md       # evaluation results of code generation
+|   └── ...
+├── eval_human          # sources for the human evaluation
+|   ├── README.md       # evaluation results of human evaluation
+|   └── ...
+├── eval_retrieval      # sources for retrieval evaluation
+|   ├── README.md       # evaluation results of retrieval
+|   └──...
+├── src                 # source code of proposed approach
+|   └──...
+├── .env                # .env file with OpenAI API key
+└──...
 ```
 
-Install the dependencies
-```bash
-pip install -r requirements.py
-```
 
-Set up OpenAI API key. Create a `.env` file containing this line:
-```env
-OPENAI_API_KEY=<your key, should start with sk->
-```
+## Getting Started
+
+- Create a new [conda](https://docs.anaconda.com/free/miniconda/) environment:
+    ```bash
+    conda create -n pyllm python=3.10
+    conda activate pyllm
+    ```
+
+- Install the dependencies:
+    ```bash
+    pip install -r requirements.py
+    ```
+
+- Set up an [OpenAI API key](https://platform.openai.com/overview) and create a `.env` file in the root directory containing this line:
+    ```env
+    OPENAI_API_KEY=<your key, should start with sk->
+    ```
 
 
-### Usage
+## Usage
 
 - Run the LLM:
     ```bash
@@ -75,11 +95,11 @@ Given the **Example**, the LLM will generate a Python program as follows.
         print(result)
     ```
 
-### Experiments
+## Experiments
 
 To evaluate the proposed approach we perform separate assessments for the retrieval of appropriate tools and process code generation. We do not evaluate the process model generation stage as it is based on related work by authors in where the proposed approach has been already evaluated based on quantitative and qualitative assessments.
 
-#### Retrieval experiments
+### Retrieval experiments
 
 [eval_retrieval](eval_retrieval) folder contains the results of the experiments. The three strategies evaluated are: *(i)* an LLM - [TaskRAG.py](eval_retrieval/TaskRAG.py) - extracting the list of tasks from the textual process description (with few-shot prompting approach), *(ii)* an LLM - [ModTaskRAG.py](eval_retrieval/ModTaskRAG.py) -that extracts the control flow and the list of tasks from the textual process description, *(iii)* two separate LLMs - [ModTaskPreRAG.py](eval_retrieval/ModTaskPreRAG.py) - which extract the control flow and the list of tasks and then refine the description of the extracted tasks. 
 
@@ -95,7 +115,7 @@ To replicate the experiments:
     ```
 
 
-#### Code generation experiments
+### Code generation experiments
 
 [eval_code](eval_code) folder contains the results of the experiments. It contains several folders `runX` where `X` is the number of the run: *(i)* [run1](eval_code/run1) contains results with the pre-processing component using GPT-4, *(ii)* [run2](eval_code/run2) contains results with the pre-processing component using GPT-3.5 and GPT-4, *(iii)* [run3](eval_code/run3) contains results without the pre-processing component using GPT-4, *(iv)* [run4](eval_code/run4) contains results without the pre-processing component using GPT-3.5 and GPT-4, *(v)* [run5](eval_code/run5) contains results not including the process model in the prompt for the code generation component using GPT-4, *(vi)* [copilot](eval_code/copilot) contains results of the baseline GitHub Copilot.
 
@@ -122,16 +142,11 @@ cd eval_code
 python human_eval.py
 ```
 
+### Human evaluation
 
-## Structure of the repository
+[eval_human](eval_human) contains the sources of the human evaluation: the [questionnaire](eval_human/questionnaire.pdf) and the [results](eval_human/results.csv).
 
-```
-.
-├── eval_code           # sources for code generation evaluation
-|   ├── README.md       # evaluation results of code generation
-|   └── ...
-├── eval_retrieval      # sources for retrieval evaluation
-|   ├── README.md       # evaluation results of retrieval
-|   └──...
-└── src                 # source code of proposed approach
-```
+Evaluation is performed comparing GitHub Copilot and NL2ProcessOps results.
+
+## License
+Distributed under the MIT License. See [LICENSE](LICENSE) for more information.
