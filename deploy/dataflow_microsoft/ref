@@ -1,0 +1,23 @@
+digraph ref {
+	node [fontname="Courier New" shape=box]
+	subgraph cluster_0 {
+		cluster_0_0 [label="\ldef calibration_process():\l    while True:\l        image = CaptureImage.call()\l        if CheckMarkers.call(image=image):\l            SetSpeedDieMachine.call(speed=10000)\l            break\l" fillcolor=white style=filled]
+		cluster_0_0 -> cluster_0_1
+		cluster_0_1 [label="\l" fillcolor=black style=filled]
+		fontname="Courier New" label=__main__
+	}
+	subgraph cluster_1 {
+		cluster_1_0 [label="\l" fillcolor=white style=filled]
+		cluster_1_0 -> cluster_1_3
+		cluster_1_3 [label="True\l" fillcolor=white style=filled]
+		cluster_1_3 -> cluster_1_5 [label=True]
+		cluster_1_5 [label="image = CaptureImage.call()\lCheckMarkers.call(image=image)\l" fillcolor=white style=filled]
+		cluster_1_5 -> cluster_1_6 [label=True]
+		cluster_1_6 [label="SetSpeedDieMachine.call(speed=10000)\lbreak\l" fillcolor=white style=filled]
+		cluster_1_6 -> cluster_1_1
+		cluster_1_1 [label="\l" fillcolor=black style=filled]
+		cluster_1_5 -> cluster_1_3 [label=False]
+		cluster_1_3 -> cluster_1_1 [label=False]
+		fontname="Courier New" label=calibration_process
+	}
+}
