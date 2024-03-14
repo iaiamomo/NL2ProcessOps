@@ -4,6 +4,7 @@ tree-sitter-python
 history
 doc4tools
 eval_code/copilot_*.txt
+deploy
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
