@@ -3,8 +3,6 @@ from langchain.prompts import PromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 import dotenv
 import os
-import tokenize
-from io import StringIO
 
 
 TEMPLATE = """You are a very proficient assistant expert in Python programming.
@@ -18,46 +16,9 @@ You need to revise the Python code as follows:
 - in case of if statements, you need to put the condition inside the check() function. e.g., if "if a > b:" is called, you need to replace it with "check(a > b):"
 - do not add other code, just revise the code as described above
 
-Here is the Python code that you need to revise: {input}
+Here is the Python code that you need to revise: {code_r}
 Response:
 """
-
-def remove_comments_and_docstrings(source):
-    io_obj = StringIO(source)
-    out = ""
-    prev_toktype = tokenize.INDENT
-    last_lineno = -1
-    last_col = 0
-    for tok in tokenize.generate_tokens(io_obj.readline):
-        token_type = tok[0]
-        token_string = tok[1]
-        start_line, start_col = tok[2]
-        end_line, end_col = tok[3]
-        ltext = tok[4]
-        if start_line > last_lineno:
-            last_col = 0
-        if start_col > last_col:
-            out += (" " * (start_col - last_col))
-        # Remove comments:
-        if token_type == tokenize.COMMENT:
-            pass
-        # This series of conditionals removes docstrings:
-        elif token_type == tokenize.STRING:
-            if prev_toktype != tokenize.INDENT:
-        # This is likely a docstring; double-check we're not inside an operator:
-                if prev_toktype != tokenize.NEWLINE:
-                    if start_col > 0:
-                        out += token_string
-        else:
-            out += token_string
-        prev_toktype = token_type
-        last_col = end_col
-        last_lineno = end_line
-    temp=[]
-    for x in out.split('\n'):
-        if x.strip()!="":
-            temp.append(x)
-    return '\n'.join(temp)
 
 class DeployLLM():
 
@@ -80,8 +41,7 @@ if __name__ == "__main__":
     p_code = "p01_gpt4.py"
     with open(p_code, "r") as f:
         code = f.read()
-    new_code = remove_comments_and_docstrings(code)
     
     chain = llm.get_chain()
-    output = chain.invoke({"input": new_code})
+    output = chain.invoke({"code_r": code})
     print(output)
