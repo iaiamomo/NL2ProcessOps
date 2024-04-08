@@ -1,6 +1,6 @@
 from langchain_openai import ChatOpenAI
 from langchain.prompts import PromptTemplate
-from langchain_core.output_parsers import StrOutputParser
+from langchain_core.output_parsers import BaseOutputParser
 import dotenv
 import os
 
@@ -20,12 +20,28 @@ Here is the Python code that you need to revise: {code_r}
 Response:
 """
 
+class CustomOutputParser(BaseOutputParser):
+    """The output parser for the LLM."""
+    def parse(self, text: str) -> str:
+        text = text.strip("\n")
+        text = text.strip()
+        # count how many ``` are in the text
+        back_count = text.count("```")
+        if back_count != 2:
+            print(text)
+            raise ValueError("The string should contain exactly two triple backticks")
+        code = text.split("```")[1]
+        code = code.strip().strip("python").strip()
+        #print(code)
+        return code
+
+
 class DeployLLM():
 
     def __init__(self, model, openai_key, temperature=0.0):
         self.model = ChatOpenAI(model=model, openai_api_key=openai_key, temperature=temperature)
         self.prompt = PromptTemplate.from_template(TEMPLATE)
-        self.output_parser = StrOutputParser()
+        self.output_parser = CustomOutputParser()
 
     def get_chain(self):
         chain = self.prompt | self.model | self.output_parser
