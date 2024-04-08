@@ -7,7 +7,6 @@ import ast
 import json
 import os
 import dotenv
-from termcolor import colored
 from langchain_openai import OpenAIEmbeddings
 
 
@@ -84,7 +83,7 @@ class ProcessLLM:
 
                 module = tool["actor"]
                 class_name = tool["name"]
-                py_file += f"from tools.{module} import {class_name}\n"
+                py_file += f"from tools_plain.{module} import {class_name}\n"
             
             # add the python function
             py_file += "\n"
@@ -103,7 +102,7 @@ class ProcessLLM:
             if function_name not in lines_py_file[-1]:
                 py_file += f"\n\nif __name__ == '__main__':\n\t{function_name}()"'''
 
-            with open("llm_process_code.py", "w+") as f:
+            with open("j/llm_process_code.py", "w+") as f:
                 f.write(py_file)
         except Exception as e:
             #print(e)
@@ -227,39 +226,14 @@ class ProcessLLM:
 
 
 if __name__ == "__main__":
-    dotenv.load_dotenv()
+    dotenv.load_dotenv("exe.env")
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-    model = "gpt-3.5-turbo-16k"
     model = "gpt-4-0125-preview"
+
     llm = ProcessLLM(model, OPENAI_API_KEY)
 
-    while True:
-        print(colored("Enter a process description: ", "green"))
-        input_text = input()
-        if input_text == "":
-            continue
-        res = llm.get_chain().invoke({"input": input_text})
-        print(colored("Answer:\n", "green") + colored(res, "blue"))
-        print(colored("Do you want to execute the process? (y)\nEnter a new process description? (p)\nQuit? (q)", "green"))
-        user_r = input()
-        if user_r == "y":
-            print(colored("Executing...", "green"))
-            try:
-                print("Checking the sintax of the python file...")
-                p = os.system("python -m py_compile llm_process_code.py")
-                if p != 0:
-                    print(colored("The python file has some sintax errors"), "red")
-                else:
-                    p = os.system("python llm_process_code.py")
-                    print(colored(f"Process run with exit code {p}", "yellow"))
-            except:
-                print(colored("Error executin the process"), "red")
-            print(colored("Execution done!", "green"))
-            print(colored("Enter a new process description? (p)\nQuit? (q)", "green"))
-            user_r = input()
-        if user_r == "p":
-            user_r = "p"
-            continue
-        else:
-            print(colored("Quitting...", "green"))
-            break
+    process = "p01"
+    txt_process = open(f"../eval_code/data/{process}/{process}.txt", "r").read()
+
+    res = llm.get_chain().invoke({"input": txt_process})
+    print(res)
