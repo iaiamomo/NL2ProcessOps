@@ -10,7 +10,6 @@ import json
 import os
 import dotenv
 import glob
-import pandas as pd
 from io import StringIO
 import tokenize
 
@@ -129,7 +128,7 @@ class ProcessLLM:
         py_file += "\n"
         py_file += output_chain["code_r"]
 
-        with open("llm_process_code_r.py", "w+") as f:
+        with open("f/llm_process_code_r.py", "w+") as f:
             f.write(py_file)
 
         json_output = {
@@ -203,18 +202,8 @@ class ProcessLLM:
 
             # TODO: check if the function is called with the right parameters
             # TODO: check if the function is called and call it otherwise
-            # get the function name
-            '''function_name = ""
-            tree = ast.parse(py_file)
-            for node in ast.walk(tree):
-                if isinstance(node, ast.FunctionDef):
-                    function_name = node.name
-            # check if the function is called and call it otherwise
-            lines_py_file = py_file.strip("\n").split("\n")
-            if function_name not in lines_py_file[-1]:
-                py_file += f"\n\nif __name__ == '__main__':\n\t{function_name}()"'''
 
-            with open("llm_process_code.py", "w+") as f:
+            with open("f/llm_process_code.py", "w+") as f:
                 f.write(py_file)
         except Exception as e:
             print(e)
@@ -345,7 +334,40 @@ class ProcessLLM:
         return chain
 
 
-if __name__ == "__main__":
+def main_all():
+    dotenv.load_dotenv("exe.env")
+    OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+    models = ["gpt-4-0125-preview"]
+
+    processes = glob.glob("../eval_code/data/*")
+    processes = [os.path.basename(process) for process in processes]
+
+    for model in models:
+        llm = ProcessLLM(model, OPENAI_API_KEY)
+        res_eval = []
+        for process in processes:
+            txt_process = open(f"../eval_code/data/{process}/{process}.txt", "r").read()
+            try:
+                res = llm.get_chain().invoke({"input": txt_process})
+
+                try:
+                    os.mkdir(f"f/{process}")
+                except:
+                    pass
+
+                python_code = res["code"]
+                python_code_r = res["code_r"]
+
+                with open(f"f/{process}/{process}_code.py", "w+") as f:
+                    f.write(python_code)
+                with open(f"f/{process}/{process}_code_r.py", "w+") as f:
+                    f.write(python_code_r)
+
+            except Exception as e:
+                print(e)
+
+
+def main_1():
     dotenv.load_dotenv("exe.env")
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
     model = "gpt-4-0125-preview"
@@ -357,3 +379,7 @@ if __name__ == "__main__":
 
     res = llm.get_chain().invoke({"input": txt_process})
     print(res)
+
+
+if __name__ == "__main__":
+    main_all()
