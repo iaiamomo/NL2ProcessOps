@@ -3,11 +3,12 @@ from TasksModelLLM import MermaidLLM
 from TasksPreProcessingLLM import TaskRetrieverLLM
 from CodeLLM_j import CodeLLM
 from ToolsManagerDB import ToolStore
+from langchain_openai import OpenAIEmbeddings
 import ast
 import json
 import os
 import dotenv
-from langchain_openai import OpenAIEmbeddings
+import glob
 
 
 class ProcessLLM:
@@ -43,9 +44,6 @@ class ProcessLLM:
                     tool_desc_str = json.dumps(tool_desc)
                     if tool_desc_str not in tool_list:
                         tool_list += f"{json.dumps(tool_desc)}\n"
-                    #print(f"task: {task} tool: {elem['name']}")
-
-        #print(f"Tools: {tool_list}")
 
         return tool_list
 
@@ -61,8 +59,6 @@ class ProcessLLM:
             result_list = []
         if len(result_list) == 0:
             return False
-        
-        #print(f"Tasks: {result_list}")
         
         return True
 
@@ -91,21 +87,10 @@ class ProcessLLM:
 
             # TODO: check if the function is called with the right parameters
             # TODO: check if the function is called and call it otherwise
-            # get the function name
-            '''function_name = ""
-            tree = ast.parse(py_file)
-            for node in ast.walk(tree):
-                if isinstance(node, ast.FunctionDef):
-                    function_name = node.name
-            # check if the function is called and call it otherwise
-            lines_py_file = py_file.strip("\n").split("\n")
-            if function_name not in lines_py_file[-1]:
-                py_file += f"\n\nif __name__ == '__main__':\n\t{function_name}()"'''
 
             with open("j/llm_process_code.py", "w+") as f:
                 f.write(py_file)
         except Exception as e:
-            #print(e)
             error_python = True
 
         json_output = {
@@ -200,7 +185,7 @@ class ProcessLLM:
                 })
             | code_llm_chain_output
             | RunnableBranch(
-                (lambda x: not x["error_python"], RunnableLambda(lambda x: self.parse_output(x))),
+                (lambda x: not x["error_python"], RunnableLambda(lambda x: x)),
                 (lambda x: "There are some errors in the python code.")
             )
         )
@@ -224,16 +209,49 @@ class ProcessLLM:
 
         return chain
 
+def main_all():
+    dotenv.load_dotenv("exe.env")
+    OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+    models = ["gpt-4-0125-preview"]
 
-if __name__ == "__main__":
+    processes = glob.glob("../eval_code/data/*")
+    processes = [os.path.basename(process) for process in processes]
+
+    for model in models:
+        llm = ProcessLLM(model, OPENAI_API_KEY)
+        res_eval = []
+        for process in processes:
+            txt_process = open(f"../eval_code/data/{process}/{process}.txt", "r").read()
+            try:
+                res = llm.get_chain().invoke({"input": txt_process})
+
+                try:
+                    os.mkdir(f"j/{process}")
+                except:
+                    pass
+
+                python_code = res["code"]
+
+                with open(f"j/{process}/{process}_code.py", "w+") as f:
+                    f.write(python_code)
+
+            except Exception as e:
+                print(e)
+
+
+def main_1():
     dotenv.load_dotenv("exe.env")
     OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
     model = "gpt-4-0125-preview"
 
     llm = ProcessLLM(model, OPENAI_API_KEY)
 
-    process = "p01"
+    process = "p10"
     txt_process = open(f"../eval_code/data/{process}/{process}.txt", "r").read()
 
     res = llm.get_chain().invoke({"input": txt_process})
     print(res)
+
+
+if __name__ == "__main__":
+    main_all()

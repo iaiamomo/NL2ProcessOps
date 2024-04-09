@@ -42,8 +42,9 @@ Guidelines:
 - Variables names you use should be meaningful.
 - Double-check the generated code. It should generalize to any valid input, and not just the provided examples.
 - Make sure to address the control flow provided by the process model. Use conditional statements (if-else) for exclusive gateways and parallel execution (threads) for parallel gateways.
-- in case of invocation of threads, if the threds are executed in parallel, you need to add the invocation parallel() before the thread definition and execution, and end_parallel() after the thread execution.
-- in case of if statements, you need to put the condition inside the check() function. e.g., if "if a > b:" is called, you need to replace it with "check(a > b):".
+- In case of invocation of threads, if the threds are executed in parallel, you need to add the invocation parallel() before the thread definition and execution, and end_parallel() after the thread execution.
+- In case of if statements, you need to put the condition inside the check() function. e.g., if "if a > b:" is called, you need to replace it with "check(a > b):".
+- Do not define the parallel(), end_parallel() and check() functions.
 - The code needs to be self-contained, and executable as-is.
 - Do not add any other information after the ``` markdown end delimiters.
 
