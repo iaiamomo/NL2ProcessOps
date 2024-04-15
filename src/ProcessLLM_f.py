@@ -13,6 +13,8 @@ import glob
 from io import StringIO
 import tokenize
 
+folder_files = "f_new"
+
 
 class ProcessLLM:
 
@@ -112,6 +114,7 @@ class ProcessLLM:
         tools = output_chain["tools"]
         print(tools)
         tools_list = tools.split("}\n")
+        print(tools_list)
 
         py_file = ""
 
@@ -128,7 +131,7 @@ class ProcessLLM:
         py_file += "\n"
         py_file += output_chain["code_r"]
 
-        with open("f/llm_process_code_r.py", "w+") as f:
+        with open(f"{folder_files}/llm_process_code_r.py", "w+") as f:
             f.write(py_file)
 
         json_output = {
@@ -184,6 +187,7 @@ class ProcessLLM:
         try:
             tools = output_chain["tools"]
             tools_list = tools.split("}\n")
+            print(tools_list)
 
             py_file = ""
 
@@ -203,7 +207,7 @@ class ProcessLLM:
             # TODO: check if the function is called with the right parameters
             # TODO: check if the function is called and call it otherwise
 
-            with open("f/llm_process_code.py", "w+") as f:
+            with open(f"{folder_files}/llm_process_code.py", "w+") as f:
                 f.write(py_file)
         except Exception as e:
             print(e)
@@ -374,7 +378,7 @@ def main_1():
 
     llm = ProcessLLM(model, OPENAI_API_KEY)
 
-    process = "p01"
+    process = "p02"
     txt_process = open(f"../eval_code/data/{process}/{process}.txt", "r").read()
 
     res = llm.get_chain().invoke({"input": txt_process})
@@ -382,4 +386,4 @@ def main_1():
 
 
 if __name__ == "__main__":
-    main_all()
+    main_1()

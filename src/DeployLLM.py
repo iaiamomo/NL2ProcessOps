@@ -12,8 +12,10 @@ You are given in input a Python code that you need to revise.
 The Python code could contain thread execution, if statements, for loops, while loops, functions, classes, and other Python programming constructs.
 
 You need to revise the Python code as follows:
-- in case of invocation of threads, if the threds are executed in parallel, you need to add the invocation parallel() before the thread execution and end_parallel() after the thread execution.
-- in case of if statements, you need to put the condition inside the check() function. e.g., if "if a > b:" is called, you need to replace it with "check(a > b):"
+- in case of invocation of threads, if the threds are executed in parallel, you need to add the invocation beautiful_pipeline_parallel() before the thread execution and beautiful_pipeline_end_parallel() after the thread execution.
+- in case of if statements, you need to put the condition inside the beautiful_pipeline_check() function. e.g., if "if a > b:" is called, you need to replace it with "beautiful_pipeline_check(a > b):"
+- in case of while loops, you need to put the condition inside the beautiful_pipeline_loop_check() function. e.g., if "while a > b:" is called, you need to replace it with "beautiful_pipeline_loop_check(a > b):"
+- do not define the beautiful_pipeline_parallel(), beautiful_pipeline_end_parallel(), beautiful_pipeline_check(), and beautiful_pipeline_loop_check() functions - they are already defined
 - do not add other code, just revise the code as described above
 
 Here is the Python code that you need to revise: {code_r}

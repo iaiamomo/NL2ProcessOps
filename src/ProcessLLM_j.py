@@ -79,7 +79,7 @@ class ProcessLLM:
 
                 module = tool["actor"]
                 class_name = tool["name"]
-                py_file += f"from tools_plain.{module} import {class_name}\n"
+                py_file += f"from tools.{module} import {class_name}\n"
             
             # add the python function
             py_file += "\n"

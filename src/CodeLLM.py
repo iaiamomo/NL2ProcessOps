@@ -91,6 +91,7 @@ Guidelines:
 - Use the tools to execute the process tasks whenever possible. To use the tools you need to use the .call() static method with the proper input (e.g., the tool with name BookAppointment which does not take inputs should be called with BookAppointment.call()).
 - Consider the tools already imported. You don't need to implement the classes of the tools. You only need to use them with the .call() method.
 - Variables names you use should be meaningful.
+- Do not define nested functions.
 - Double-check the generated code. It should generalize to any valid input, and not just the provided examples.
 - Make sure to address the control flow of the process.
 - The code needs to be self-contained, and executable as-is.
