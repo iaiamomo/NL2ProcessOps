@@ -12,6 +12,8 @@ import dotenv
 import glob
 from io import StringIO
 import tokenize
+from log_generator import script_log_generator
+import subprocess
 
 folder_files = "f_new"
 
@@ -337,6 +339,26 @@ class ProcessLLM:
 
         return chain
 
+def code_script(py_code, tools_list):
+        tools_list = tools_list.split("}\n")
+
+        py_file = ""
+
+        # import all the used tools
+        for elem in range(len(tools_list)-1):
+            tool_str = tools_list[elem] + "}"
+            tool = json.loads(tool_str)
+
+            module = tool["actor"]
+            class_name = tool["name"]
+            py_file += f"from tools.{module} import {class_name}\n"
+        
+        # add the python function
+        py_file += "\n"
+        py_file += py_code
+
+        return py_file
+
 
 def main_all():
     dotenv.load_dotenv("exe.env")
@@ -355,17 +377,26 @@ def main_all():
                 res = llm.get_chain().invoke({"input": txt_process})
 
                 try:
-                    os.mkdir(f"f/{process}")
+                    os.mkdir(f"{folder_files}/{process}")
                 except:
                     pass
 
                 python_code = res["code"]
                 python_code_r = res["code_r"]
+                tools = res["tools"]
 
-                with open(f"f/{process}/{process}_code.py", "w+") as f:
-                    f.write(python_code)
-                with open(f"f/{process}/{process}_code_r.py", "w+") as f:
-                    f.write(python_code_r)
+                py_code = code_script(python_code, tools)
+                py_code_r = code_script(python_code_r, tools)
+                py_code_log = script_log_generator(py_code_r, './')
+
+                with open(f"{folder_files}/{process}/{process}_code.py", "w+") as f:
+                    f.write(py_code)
+                with open(f"{folder_files}/{process}/{process}_code_r.py", "w+") as f:
+                    f.write(py_code_r)
+                with open(f"{folder_files}/{process}/{process}_code_log.py", "w+") as f:
+                    f.write(py_code_log)
+                with open(f"{folder_files}/{process}/output_{process}.txt", "w+") as output:
+                    subprocess.call(["python", f"{folder_files}/{process}/{process}_code_log.py"], stdout=output)
 
             except Exception as e:
                 print(e)
@@ -386,4 +417,4 @@ def main_1():
 
 
 if __name__ == "__main__":
-    main_1()
+    main_all()
