@@ -1,0 +1,5 @@
+loop_count 1 - condition True - 9160
+{'name': 'CaptureImage', 'description': 'Capture of a photo of the cardboard from the camera.', 'more details': 'This tool takes no input and returns an image captured from the the camera. The image is returned as a numpy matrix.', 'input_parameters': [], 'output_parameters': ['image:np.matrix'], 'actor': 'camera'} - 9160
+{'name': 'CheckMarkers', 'description': 'Analysis of the markers on a cardboard image.', 'more details': 'This tool takes as input an image depicting a cardboard. It returns a boolean indicating if markers are present on the cardboard.', 'input_parameters': ['image:np.matrix'], 'output_parameters': ['markers_ok:bool'], 'actor': 'vision_is'} - 9160
+condition not markers_ok - 9160
+beautiful_pipeline_continue - 9160

@@ -1,0 +1,4 @@
+{'name': 'EmptyScan', 'description': 'The working station system empty the scan result.', 'more details': 'It takes no input. It returns no output.', 'input_parameters': [], 'output_parameters': [], 'actor': 'working_station_is'} - 3628
+{'name': 'ScanOrder', 'description': 'Worker scans the order.', 'more details': 'It takes no input. It returns the order id scanned.', 'input_parameters': [], 'output_parameters': ['order_id:int'], 'actor': 'working_station_is'} - 3628
+beautiful_pipeline_parallel - 3628
+beautiful_pipeline_end_parallel - 3628

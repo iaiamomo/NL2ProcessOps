@@ -1,0 +1,2 @@
+{'name': 'AcceptOrder', 'description': 'Sales department accepts the order.', 'more details': 'It takes the product id as input. It returns a boolean indicating if the order is accepted.', 'input_parameters': ['product_id:int'], 'output_parameters': ['order_accepted:bool'], 'actor': 'crm_is'} - 740
+condition not order_accepted - 740
