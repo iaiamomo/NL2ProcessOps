@@ -13,7 +13,7 @@ def script_log_generator(script_content, tool_reference):
         # return -> return True
         (r'return (.*(?!True|False))', r'return True'),
         # call in thread without args
-        (r'threading\.Thread\(target=(\w+).*\)', r'threading.Thread(target=\1)'),
+        #(r'threading\.Thread\(target=(\w+).*\)', r'threading.Thread(target=\1)'),
         # whatever function call without args
         (r'(?:\w+.*)? = (\w+(?!threading.Thread))\(.*\)', r'\1()'),
         # condition in quotes
@@ -43,7 +43,7 @@ def script_log_generator(script_content, tool_reference):
     new_script_content += "loop_count = 0\n"
     for line in script_content.split("\n"):
         new_script_content += line + "\n"
-        if "beautiful_pipeline_continue()" in line:
+        """ if "beautiful_pipeline_continue()" in line:
             if line.strip():
                 indent_count = len(line) - len(line.lstrip())
                 new_script_content += f"{' ' * indent_count}continue\n"
@@ -54,7 +54,7 @@ def script_log_generator(script_content, tool_reference):
                 indent_count = len(line) - len(line.lstrip())
                 new_script_content += f"{' ' * indent_count}break\n"
             else:
-                new_script_content += "break\n"
+                new_script_content += "break\n" """
 
     #print(new_script_content)
     return new_script_content
@@ -73,13 +73,14 @@ if __name__ == "__main__":
     for i in range(1, 11):
         proc_id = f"p0{i}" if i < 10 else "p10"
 
-        py_code_log = f"{folder_files}/{proc_id}/{proc_id}_code_r_modified"
-        run_script(proc_id, py_code_log, folder_files)
-
         py_code = f"{folder_files}/{proc_id}/{proc_id}_code_r"
+        py_code_log = f"{py_code}_modified"
+
         script_content = open(f"{py_code}.py", "r").read()
         new_script_content = script_log_generator(script_content, './')
         # Write the modified script to a new file
-        f = open(f"{py_code}_modified.py", "r")
-        #f.write(new_script_content)
+        f = open(f"{py_code_log}.py", "w")
+        f.write(new_script_content)
         f.close()
+
+        run_script(proc_id, py_code_log, folder_files)

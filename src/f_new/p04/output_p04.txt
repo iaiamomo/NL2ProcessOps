@@ -1,12 +1,12 @@
-{'name': 'SendSketches', 'description': 'Send the sketches of the project to the artist.', 'more details': 'It takes no input. It returns the description of the project.', 'input_parameters': [], 'output_parameters': ['project:str'], 'actor': 'manufacturer'} - 12808
-{'name': 'ChoosePlasticColor', 'description': 'Choose the color of the plastic.', 'more details': 'It takes no input. It returns the color of the plastic.', 'input_parameters': [], 'output_parameters': ['color:int'], 'actor': 'manufacturer'} - 12808
-{'name': 'CheckColorAvailability', 'description': 'Check the availability of the color.', 'more details': 'It takes the color as input. It returns the availability of the color.', 'input_parameters': ['color:int'], 'output_parameters': ['availability:bool'], 'actor': 'manufacturer'} - 12808
-condition color_availability - 12808
-{'name': 'CheckColorQuantity', 'description': 'Check the quantity of the color.', 'more details': 'It takes the color as input. It returns the quantity of the color in grams.', 'input_parameters': ['color:int'], 'output_parameters': ['quantity:int'], 'actor': 'manufacturer'} - 12808
-condition quantity < 100 - 12808
-condition otherwise - 12808
-{'name': 'OrderColor', 'description': 'Order the color.', 'more details': 'It takes the color as input. It does not return anything.', 'input_parameters': ['color:int'], 'output_parameters': [], 'actor': 'manufacturer'} - 12808
-{'name': 'TurnOn', 'description': 'Turn on the 3D printer.', 'more details': 'It takes no input. It does not return anything.', 'input_parameters': [], 'output_parameters': [], 'actor': 'printer_3d'} - 12808
-{'name': 'HeatUpBedExtruder', 'description': 'Heat up the bed and the extruder.', 'more details': 'It takes no input. It does not return anything.', 'input_parameters': [], 'output_parameters': [], 'actor': 'printer_3d'} - 12808
-{'name': 'GenerateGCode', 'description': 'Generate the GCode file for the printer.', 'more details': 'It takes the object as input. It returns the GCode file.', 'input_parameters': ['project:str'], 'output_parameters': ['gcode:str'], 'actor': 'manufacturer'} - 12808
-{'name': 'Print', 'description': 'Print the object.', 'more details': 'It takes the object as input. It does not return anything.', 'input_parameters': ['GCodeFile:str'], 'output_parameters': [], 'actor': 'printer_3d'} - 12808
+{'name': 'SendSketches', 'description': 'Send the sketches of the project to the artist.', 'more details': 'It takes no input. It returns the description of the project.', 'input_parameters': [], 'output_parameters': ['project:str'], 'actor': 'manufacturer'} - 3664
+{'name': 'ChoosePlasticColor', 'description': 'Choose the color of the plastic.', 'more details': 'It takes no input. It returns the color of the plastic.', 'input_parameters': [], 'output_parameters': ['color:int'], 'actor': 'manufacturer'} - 3664
+{'name': 'CheckColorAvailability', 'description': 'Check the availability of the color.', 'more details': 'It takes the color as input. It returns the availability of the color.', 'input_parameters': ['color:int'], 'output_parameters': ['availability:bool'], 'actor': 'manufacturer'} - 3664
+beautiful_pipeline_check color_availability - 3664
+{'name': 'CheckColorQuantity', 'description': 'Check the quantity of the color.', 'more details': 'It takes the color as input. It returns the quantity of the color in grams.', 'input_parameters': ['color:int'], 'output_parameters': ['quantity:int'], 'actor': 'manufacturer'} - 3664
+beautiful_pipeline_check quantity < 100 - 3664
+beautiful_pipeline_check otherwise - 3664
+{'name': 'OrderColor', 'description': 'Order the color.', 'more details': 'It takes the color as input. It does not return anything.', 'input_parameters': ['color:int'], 'output_parameters': [], 'actor': 'manufacturer'} - 3664
+{'name': 'TurnOn', 'description': 'Turn on the 3D printer.', 'more details': 'It takes no input. It does not return anything.', 'input_parameters': [], 'output_parameters': [], 'actor': 'printer_3d'} - 3664
+{'name': 'HeatUpBedExtruder', 'description': 'Heat up the bed and the extruder.', 'more details': 'It takes no input. It does not return anything.', 'input_parameters': [], 'output_parameters': [], 'actor': 'printer_3d'} - 3664
+{'name': 'GenerateGCode', 'description': 'Generate the GCode file for the printer.', 'more details': 'It takes the object as input. It returns the GCode file.', 'input_parameters': ['project:str'], 'output_parameters': ['gcode:str'], 'actor': 'manufacturer'} - 3664
+{'name': 'Print', 'description': 'Print the object.', 'more details': 'It takes the object as input. It does not return anything.', 'input_parameters': ['GCodeFile:str'], 'output_parameters': [], 'actor': 'printer_3d'} - 3664

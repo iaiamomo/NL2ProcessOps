@@ -1,5 +1,11 @@
-loop_count 1 - condition True - 9160
-{'name': 'CaptureImage', 'description': 'Capture of a photo of the cardboard from the camera.', 'more details': 'This tool takes no input and returns an image captured from the the camera. The image is returned as a numpy matrix.', 'input_parameters': [], 'output_parameters': ['image:np.matrix'], 'actor': 'camera'} - 9160
-{'name': 'CheckMarkers', 'description': 'Analysis of the markers on a cardboard image.', 'more details': 'This tool takes as input an image depicting a cardboard. It returns a boolean indicating if markers are present on the cardboard.', 'input_parameters': ['image:np.matrix'], 'output_parameters': ['markers_ok:bool'], 'actor': 'vision_is'} - 9160
-condition not markers_ok - 9160
-beautiful_pipeline_continue - 9160
+beautiful_pipeline_loop_check 1 - True - 19300
+{'name': 'CaptureImage', 'description': 'Capture of a photo of the cardboard from the camera.', 'more details': 'This tool takes no input and returns an image captured from the the camera. The image is returned as a numpy matrix.', 'input_parameters': [], 'output_parameters': ['image:np.matrix'], 'actor': 'camera'} - 19300
+{'name': 'CheckMarkers', 'description': 'Analysis of the markers on a cardboard image.', 'more details': 'This tool takes as input an image depicting a cardboard. It returns a boolean indicating if markers are present on the cardboard.', 'input_parameters': ['image:np.matrix'], 'output_parameters': ['markers_ok:bool'], 'actor': 'vision_is'} - 19300
+beautiful_pipeline_check not markers_ok - 19300
+beautiful_pipeline_continue - 19300
+{'name': 'SetSpeedDieMachine', 'description': 'set the speed of the die cutting machine.', 'more details': 'It takes as input the speed. It returns a boolean value, True if the speed has been set, False otherwise.', 'input_parameters': ['speed:int'], 'output_parameters': ['speed_set:bool'], 'actor': 'die_machine'} - 19300
+beautiful_pipeline_check speed_set - 19300
+Die cutting machine speed set to 10000 RPM successfully.
+beautiful_pipeline_check otherwise - 19300
+Failed to set die cutting machine speed to 10000 RPM.
+beautiful_pipeline_break - 19300

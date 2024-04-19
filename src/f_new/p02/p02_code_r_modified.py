@@ -15,11 +15,11 @@ def beautiful_pipeline_continue():
     print(f"beautiful_pipeline_continue - {threading.get_ident()}")
 
 def beautiful_pipeline_check(condition):
-    print(f"condition {condition} - {threading.get_ident()}")
+    print(f"beautiful_pipeline_check {condition} - {threading.get_ident()}")
     return True
 
 def beautiful_pipeline_check_elif(condition):
-    print(f"condition elif {condition} - {threading.get_ident()}")
+    print(f"beautiful_pipeline_check_elif {condition} - {threading.get_ident()}")
     return True
 
 def beautiful_pipeline_loop_check(condition):
@@ -29,7 +29,7 @@ def beautiful_pipeline_loop_check(condition):
         return False
     elif loop_count == 0:
         loop_count += 1
-        print(f"loop_count {loop_count} - condition {condition} - {threading.get_ident()}")
+        print(f"beautiful_pipeline_loop_check {loop_count} - {condition} - {threading.get_ident()}")
         return True
 loop_count = 0
 from tools.camera import CaptureImage
@@ -45,14 +45,12 @@ def calibration_process():
         CheckMarkers.fake_call()
         if beautiful_pipeline_check('not markers_ok'):
             beautiful_pipeline_continue()
-            continue
         SetSpeedDieMachine.fake_call()
         if beautiful_pipeline_check('speed_set'):
             print("Die cutting machine speed set to 10000 RPM successfully.")
         if beautiful_pipeline_check('otherwise'):
             print("Failed to set die cutting machine speed to 10000 RPM.")
         beautiful_pipeline_break()
-        break
 
 if __name__ == "__main__":
     calibration_process()

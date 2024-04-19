@@ -15,11 +15,11 @@ def beautiful_pipeline_continue():
     print(f"beautiful_pipeline_continue - {threading.get_ident()}")
 
 def beautiful_pipeline_check(condition):
-    print(f"condition {condition} - {threading.get_ident()}")
+    print(f"beautiful_pipeline_check {condition} - {threading.get_ident()}")
     return True
 
 def beautiful_pipeline_check_elif(condition):
-    print(f"condition elif {condition} - {threading.get_ident()}")
+    print(f"beautiful_pipeline_check_elif {condition} - {threading.get_ident()}")
     return True
 
 def beautiful_pipeline_loop_check(condition):
@@ -29,7 +29,7 @@ def beautiful_pipeline_loop_check(condition):
         return False
     elif loop_count == 0:
         loop_count += 1
-        print(f"loop_count {loop_count} - condition {condition} - {threading.get_ident()}")
+        print(f"beautiful_pipeline_loop_check {loop_count} - {condition} - {threading.get_ident()}")
         return True
 loop_count = 0
 from tools.manufacturer import GenerateRequirementTreeHouse
@@ -74,7 +74,7 @@ def buy_snacks():
 def tree_house_construction_process():
     collect_and_refine_requirements()
     beautiful_pipeline_parallel()
-    order_thread = threading.Thread(target=order_materials)
+    order_thread = threading.Thread(target=order_materials, args=(refined_part_list,))
     message_thread = threading.Thread(target=message_friends_for_help)
     order_thread.start()
     message_thread.start()

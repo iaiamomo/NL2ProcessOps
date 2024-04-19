@@ -1,8 +1,8 @@
-loop_count 1 - condition True - 14116
-{'name': 'SensorMeasure', 'description': 'Measure the temperature, pressure and fill rates of the mold.', 'more details': 'It takes no input and returns the temperature of the oven.', 'input_parameters': [], 'output_parameters': ['temperature:int', 'pressure:int', 'fill_rate:int'], 'actor': 'mold_is'} - 14116
-condition temperature > 100 and pressure > 200 and fill_rate > 50 - 14116
-condition not parameters_ok - 14116
-{'name': 'AdjustMold', 'description': 'Adjust the settings the mold.', 'more details': 'It takes no input and returns no output.', 'input_parameters': [], 'output_parameters': [], 'actor': 'mold_is'} - 14116
-condition otherwise - 14116
-{'name': 'AuthorizeProduction', 'description': 'Authorize the production of the mold.', 'more details': 'It takes no input and returns no output.', 'input_parameters': [], 'output_parameters': [], 'actor': 'mold_is'} - 14116
-beautiful_pipeline_break - 14116
+beautiful_pipeline_loop_check 1 - True - 13972
+{'name': 'SensorMeasure', 'description': 'Measure the temperature, pressure and fill rates of the mold.', 'more details': 'It takes no input and returns the temperature of the oven.', 'input_parameters': [], 'output_parameters': ['temperature:int', 'pressure:int', 'fill_rate:int'], 'actor': 'mold_is'} - 13972
+beautiful_pipeline_check temperature > 100 and pressure > 200 and fill_rate > 50 - 13972
+beautiful_pipeline_check not parameters_ok - 13972
+{'name': 'AdjustMold', 'description': 'Adjust the settings the mold.', 'more details': 'It takes no input and returns no output.', 'input_parameters': [], 'output_parameters': [], 'actor': 'mold_is'} - 13972
+beautiful_pipeline_check otherwise - 13972
+{'name': 'AuthorizeProduction', 'description': 'Authorize the production of the mold.', 'more details': 'It takes no input and returns no output.', 'input_parameters': [], 'output_parameters': [], 'actor': 'mold_is'} - 13972
+beautiful_pipeline_break - 13972
