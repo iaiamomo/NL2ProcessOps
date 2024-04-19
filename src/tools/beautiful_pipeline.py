@@ -16,6 +16,10 @@ def beautiful_pipeline_check(condition):
     print(f"condition {condition} - {threading.get_ident()}")
     return True
 
+def beautiful_pipeline_check_elif(condition):
+    print(f"condition elif {condition} - {threading.get_ident()}")
+    return True
+
 def beautiful_pipeline_loop_check(condition):
     global loop_count
     if loop_count == 1:
@@ -23,5 +27,5 @@ def beautiful_pipeline_loop_check(condition):
         return False
     elif loop_count == 0:
         loop_count += 1
-        print(f"loop_count {loop_count} - {threading.get_ident()}")
+        print(f"loop_count {loop_count} - condition {condition} - {threading.get_ident()}")
         return True
