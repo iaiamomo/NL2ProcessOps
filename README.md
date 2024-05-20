@@ -1,5 +1,7 @@
 # NL2ProcessOps
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.11219810.svg)](https://doi.org/10.5281/zenodo.11219810)
+
 ## About
 
 NL2ProcessOps is an approach based on *Large Language Models (LLMs)* able to work with textual process descriptions and to support the generation of the different operations of process deployment, from extracting the control flow in terms of a process model, over retrieving required tools (e.g., services) associated with each task, to generating executable code for manual refinement purposes and deployment in PEEs. In particular, we propose a pipeline that is able to generate an executable script representing the process (*process script*) that a designer can easily edit, in order to deploy the process into the PEE. The proposed approach is quantitatively and qualitatively evaluated through human and automated assessments, showing improvements over GitHub Copilot, a state-of-the-art LLM-based tool.
